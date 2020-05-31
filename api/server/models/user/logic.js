@@ -1,4 +1,5 @@
 const User = require('./index')
+const bcrypt = require('bcrypt')
 
 logic = {
 
@@ -8,7 +9,18 @@ logic = {
 
     createUser(userData) {
         let user = new User(userData)
-        return user.save()
+        return bcrypt.hash(user.password, 10)
+        .then((hash) => {
+            user.password = hash
+            return user.save()
+        })
+    },
+
+    authenticateUser(email, password) {
+        return User.findOne({email})
+            .then((user) => {
+
+            })
     },
 
     getUserById(userId, token) {
