@@ -1,14 +1,18 @@
 {
-  "name": "api",
+  "name": "Feastey",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "node ssr-server.js",
+    "build": "next build",
+    "start": "next start"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@zeit/next-sass": "^1.0.1",
     "bcrypt": "^4.0.1",
     "body-parser": "^1.19.0",
     "dotenv": "^8.2.0",
@@ -17,6 +21,7 @@
     "mongoose": "^5.9.16",
     "mongoose-unique-validator": "^2.0.3",
     "next": "^9.4.4",
+    "node-sass": "^4.14.1",
     "react": "^16.13.1",
     "react-dom": "^16.13.1"
   }
