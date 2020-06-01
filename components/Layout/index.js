@@ -2,13 +2,24 @@ import './index.scss'
 
 
 export default ((props) => {
-    console.log(props)
     return (
         <div className="app">
-            <header>
+            <header className="header">
                 <h1>FEASTEY</h1>
             </header>
-            {props.children}
+            <div className="content-container">
+                <div className="sidebar">
+                    <ul>
+                        <li>adsad</li>
+                        <li>adsad</li>
+                        <li>adsad</li>
+                        <li>adsad</li>
+                    </ul>
+                </div>
+                <div className="content">
+                    {props.children}
+                </div>
+            </div>
         </div>
     )
 })
