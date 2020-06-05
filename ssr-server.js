@@ -11,18 +11,17 @@ const nextApp = next({dev})
 const handle = nextApp.getRequestHandler()
 
 const { UserRouter } = require('./api/routes')
-
 mongoose.connect(db_url, {useNewUrlParser: true})
+.then(() => {
+    nextApp.prepare()
     .then(() => {
-        nextApp.prepare()
-            .then(() => {
 
                 const app = express()
 
                 app.use(bodyParser.json())
                 app.use(bodyParser.urlencoded({ extended: true }))
 
-                app.use('/api/Users', UserRouter)
+                app.use('/api/users', UserRouter)
 
                 //Handles react
                 app.get('*', (req, res) => {

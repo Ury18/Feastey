@@ -31,7 +31,7 @@ userRouter.route('/authenticate')
         logic.authenticateUser(email, password)
             .then((user) => {
                 const token = createToken(user._id)
-                res.json({ token })
+                res.json({ token, id:user._id })
             })
             .catch(({ message }) => {
                 res.status(401).json({ error: message })

@@ -1,0 +1,53 @@
+import Layout from '../app/components/Layout'
+import { useState } from 'react'
+import Cookie from "js-cookie"
+import { parseCookies } from '../app/middleware/parseCookies'
+
+const LogIn =  (props) => {
+
+    const [email, setEmail] = useState("")
+    const [password, setPassword] = useState("")
+
+    const logIn = (e, data) => {
+        e.preventDefault()
+
+        fetch('http://localhost:3000/api/users/authenticate', {
+            method: "POST",
+            headers: {
+                "content-type": "application/json"
+            },
+            body: JSON.stringify(data)
+        })
+            .then(res => res.json())
+            .then(res => {
+                console.log(res)
+                Cookie.set("authToken", res.token)
+                Cookie.set("userId", res.id)
+            })
+            .catch(err => {
+                console.log(err)
+            })
+    }
+
+    return (
+        <Layout {...props}>
+            <form onSubmit={(e) => logIn(e, { email, password })} style={{ maxWidth: "200px" }}>
+                <div style={{ display: "flex", flexDirection: "column" }}>
+                    <label>Email</label>
+                    <input onChange={(e) => setEmail(e.target.value)} type="email" name="email" />
+                </div>
+                <div style={{ display: "flex", flexDirection: "column" }}>
+                    <label>Password</label>
+                    <input onChange={(e) => setPassword(e.target.value)} type="password" name="password" />
+                </div>
+                <button type="submit">Send</button>
+            </form>
+        </Layout>
+    )
+}
+
+LogIn.getInitialProps = async (ctx) => {
+    return {}
+}
+
+export default LogIn
