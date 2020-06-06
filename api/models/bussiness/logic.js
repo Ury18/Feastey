@@ -27,6 +27,14 @@ logic = {
                     } else {
                         let bussiness = new Bussines({ ...data })
                         return bussiness.save()
+                            .then(bussiness => {
+                                return Bussines.findById(bussiness._id).select('-__v').lean()
+                                    .then(bussiness => {
+                                        bussiness.id = bussiness._id
+                                        delete bussiness._id
+                                        return bussiness
+                                    })
+                            })
                     }
                 })
                 .catch(({ message }) => {
