@@ -10,7 +10,7 @@ const dev = process.env.NODE_DEV !== 'production'
 const nextApp = next({dev})
 const handle = nextApp.getRequestHandler()
 
-const { UserRouter } = require('./api/routes')
+const { UserRouter, BussinessRouter } = require('./api/routes')
 mongoose.connect(db_url, {useNewUrlParser: true})
 .then(() => {
     nextApp.prepare()
@@ -22,6 +22,7 @@ mongoose.connect(db_url, {useNewUrlParser: true})
                 app.use(bodyParser.urlencoded({ extended: true }))
 
                 app.use('/api/users', UserRouter)
+                app.use('/api/bussiness', BussinessRouter)
 
                 //Handles react
                 app.get('*', (req, res) => {

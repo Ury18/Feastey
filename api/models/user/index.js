@@ -28,7 +28,17 @@ const User = new Schema({
 
     role: {
         type: String
-    }
+    },
+
+    favorites: [{
+        type: ObjectId,
+        ref: "Bussiness"
+    }],
+
+    myBussiness: [{
+        type: ObjectId,
+        ref: "Bussiness"
+    }],
 
 })
 

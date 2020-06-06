@@ -15,6 +15,10 @@ logic = {
     },
 
     createUser(userData, creatorId) {
+        if (!userData.role || !(userData.role == "admin") && userData.role !== "user" && userData.role !== "editor") {
+            userData.role = "user"
+        }
+
         let user = new User(userData)
 
         if (user.role == "admin") {
@@ -59,21 +63,21 @@ logic = {
                             })
                     }
                 })
-                .catch((err) => {
-                    throw Error(err)
+                .catch(({ message }) => {
+                    throw Error(message)
                 })
         } else {
             return bcrypt.hash(user.password, 10)
                 .then((hash) => {
                     user.password = hash
                     return user.save()
-                        .then(user =>  {
+                        .then(user => {
                             return User.findById(user._id).select('-__v').lean()
-                            .then(user => {
-                                user.id = user._id
-                                delete user._id
-                                return user
-                            })
+                                .then(user => {
+                                    user.id = user._id
+                                    delete user._id
+                                    return user
+                                })
 
                         })
                 })
@@ -101,15 +105,12 @@ logic = {
             })
     },
 
-    getUserById(userId, token) {
+    getUserById(userId) {
         return User.findById(userId).select('-__v').lean()
             .then((user) => {
-                if (!token) {
-                    newUser = { username: user.username, id: user._id }
-                    return newUser
-                } else {
-                    return user
-                }
+                user.id = user._id
+                delete user._id
+                return user
             })
             .catch(({ message }) => {
                 throw Error(message)
@@ -120,13 +121,15 @@ logic = {
         return User.findById(editorId).select('-__v').lean()
             .then((editorUser) => {
                 if (userId == editorId || editorUser && editorUser.role == "admin") {
-                    return User.findByIdAndUpdate(userId, content, function (err, result) {
-                        if (err) {
-                            throw Error(err.message)
-                        } else {
-                            return result
-                        }
-                    })
+                    return User.findByIdAndUpdate(userId, content)
+                        .then(() => {
+                            return User.findById(userId).select('-__v').lean()
+                                .then(user => {
+                                    user.id = user._id
+                                    delete user._id
+                                    return user
+                                })
+                        })
                 } else {
                     throw Error("You cannot modify this user")
                 }
