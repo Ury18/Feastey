@@ -9,7 +9,14 @@ userRouter.route('/')
         try {
             logic.getUsers()
                 .then((users) => {
-                    res.json(users)
+                    if(req.tokenUserRole == "admin") {
+                        res.status(200).json(users)
+                    } else {
+                        users.forEach(user => {
+                            delete user.password
+                        })
+                        res.status(200).json(users)
+                    }
                 })
                 .catch(({ message }) => {
                     res.json({ error: message })
@@ -20,7 +27,7 @@ userRouter.route('/')
     })
     .post(tokenVerifierMiddleware, (req, res) => {
         try {
-            logic.createUser(req.body, req.tokenUserId)
+            logic.createUser(req.body, req.tokenUserId, req.tokenUserRole)
                 .then((user) => {
                     res.status(201).send(user)
                 })
@@ -37,7 +44,6 @@ userRouter.route('/authenticate')
     .post((req, res) => {
         const { body: { email, password } } = req
         try {
-
             logic.authenticateUser(email, password)
                 .then((user) => {
                     const token = createToken(user._id)
@@ -78,8 +84,7 @@ userRouter.route('/:userId')
     })
     .put(tokenVerifierMiddleware, (req, res) => {
         try {
-
-            logic.editUserById(req.user.id, req.body, req.tokenUserId)
+            logic.editUserById(req.user.id, req.body, req.tokenUserId, req.tokenUserRole)
                 .then((user) => {
                     res.json(user)
                 })

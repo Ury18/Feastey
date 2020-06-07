@@ -14,20 +14,29 @@ logic = {
             })
     },
 
-    createBussiness(creatorId, data) {
+    getBussinessById(bussinessId) {
+        return Bussines.findById(bussinessId).select('-__v').lean()
+            .then(bussiness => {
+                bussiness.id = bussiness._id
+                delete bussiness._id
+                return bussiness
+            })
+    },
+
+    createBussiness(creatorId, creatorRole, data) {
         if (!data.owner) {
             throw Error("Owner is needed")
         }
 
         if (data.owner !== creatorId) {
-            return UserLogic.getUserById(creatorId)
-                .then(user => {
-                    if (user.role !== "admin") {
-                        throw Error("Insuficcient Permisions")
-                    } else {
-                        let bussiness = new Bussines({ ...data })
-                        return bussiness.save()
-                            .then(bussiness => {
+            if (creatorRole !== "admin") {
+                throw Error("Insuficcient Permisions")
+            } else {
+                let bussiness = new Bussines({ ...data })
+                return bussiness.save()
+                    .then(bussiness => {
+                        return UserLogic.addMyBussiness(data.owner, bussiness._id)
+                            .then(() => {
                                 return Bussines.findById(bussiness._id).select('-__v').lean()
                                     .then(bussiness => {
                                         bussiness.id = bussiness._id
@@ -35,23 +44,37 @@ logic = {
                                         return bussiness
                                     })
                             })
-                    }
-                })
-                .catch(({ message }) => {
-                    if (message == "Insuficcient Permisions") {
-                        throw Error(message)
-                    } else {
-                        throw Error("Creator user not found")
-                    }
-                })
+                            .catch(({ message }) => {
+                                throw Error(message)
+                            })
+                    })
+            }
         } else {
-            return UserLogic.getUserById(data.owner)
-                .then(user => {
-                    if (user.role == "editor") {
-                        let bussiness = new Bussines({ ...data })
-                        return bussiness.save()
+            if (creatorRole == "editor") {
+                let bussiness = new Bussines({ ...data })
+                return bussiness.save()
+                    .then(bussiness => {
+                        return Bussines.findById(bussiness._id).select('-__v').lean()
                             .then(bussiness => {
-                                return Bussines.findById(bussiness._id).select('-__v').lean()
+                                bussiness.id = bussiness._id
+                                delete bussiness._id
+                                return bussiness
+                            })
+                    })
+            } else {
+                throw Error("This user can't have any bussiness")
+            }
+        }
+    },
+
+    editBussiness(editorId, editorRole, bussinessId, data) {
+        return Bussines.findById(bussinessId)
+            .then(bussiness => {
+                if (bussiness.owner.toString() !== editorId) {
+                    if (editorRole == "admin") {
+                        return Bussines.update(data)
+                            .then(bussiness => {
+                                return Bussines.findById(bussinessId).select('-__v').lean()
                                     .then(bussiness => {
                                         bussiness.id = bussiness._id
                                         delete bussiness._id
@@ -59,13 +82,20 @@ logic = {
                                     })
                             })
                     } else {
-                        throw Error("This user can't have any bussiness")
+                        throw Error("Insufficient permisions")
                     }
-                })
-                .catch(() => {
-                    throw Error("User not found")
-                })
-        }
+                } else {
+                    return Bussines.update(data)
+                        .then(bussiness => {
+                            return Bussines.findById(bussinessId).select('-__v').lean()
+                                .then(bussiness => {
+                                    bussiness.id = bussiness._id
+                                    delete bussiness._id
+                                    return bussiness
+                                })
+                        })
+                }
+            })
     }
 
 }
