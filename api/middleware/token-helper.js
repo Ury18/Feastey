@@ -1,4 +1,5 @@
 const jwt = require('jsonwebtoken')
+const userLogic = require('../models/user/logic')
 
 const tokenHelper = {
     jwtSecret: "comercio",
@@ -26,15 +27,27 @@ const tokenHelper = {
             try {
                 const userId = this.verifyToken(token)
                 req.tokenUserId = userId
+
+                return userLogic.getUserById(userId)
+                    .then(user => {
+                        req.tokenUserRole = user.role
+                        next()
+                    })
+                    .catch(({message}) => {
+                        req.tokenUserRole = null
+                        next()
+                    })
+
             } catch ({ message }) {
                 req.tokenUserId = null
+                next()
             }
 
         } else {
             req.tokenUserId = null
+            next()
         }
 
-        next()
     }
 
 }

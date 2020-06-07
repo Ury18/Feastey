@@ -7,7 +7,6 @@ const userRouter = express.Router();
 userRouter.route('/')
     .get(tokenVerifierMiddleware, (req, res) => {
         try {
-
             logic.getUsers()
                 .then((users) => {
                     res.json(users)
@@ -21,7 +20,6 @@ userRouter.route('/')
     })
     .post(tokenVerifierMiddleware, (req, res) => {
         try {
-
             logic.createUser(req.body, req.tokenUserId)
                 .then((user) => {
                     res.status(201).send(user)
