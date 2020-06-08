@@ -32,12 +32,12 @@ const User = new Schema({
 
     favorites: [{
         type: ObjectId,
-        ref: "Bussiness"
+        ref: "Business"
     }],
 
-    myBussiness: [{
+    myBusiness: [{
         type: ObjectId,
-        ref: "Bussiness"
+        ref: "Business"
     }],
 
 })

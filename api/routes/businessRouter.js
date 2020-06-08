@@ -1,15 +1,15 @@
 const express = require('express')
-const logic = require('../models/bussiness/logic')
+const logic = require('../models/business/logic')
 const { tokenVerifierMiddleware } = require('../middleware/token-helper')
 
-const bussinessRouter = express.Router()
+const businessRouter = express.Router()
 
-bussinessRouter.route('/')
+businessRouter.route('/')
     .get((req, res) => {
         try {
-            logic.getBussiness()
-                .then((bussinesses) => {
-                    res.json(bussinesses)
+            logic.getBusiness()
+                .then((businesses) => {
+                    res.json(businesses)
                 })
                 .catch(({ message }) => {
                     res.status(400).json({ error: message })
@@ -24,9 +24,9 @@ bussinessRouter.route('/')
         }
 
         try {
-            logic.createBussiness(req.tokenUserId, req.tokenUserRole, req.body)
-                .then((bussiness) => {
-                    res.status(201).send(bussiness)
+            logic.createBusiness(req.tokenUserId, req.tokenUserRole, req.body)
+                .then((business) => {
+                    res.status(201).send(business)
                 })
                 .catch(({ message }) => {
                     res.status(400).json({ error: message })
@@ -36,11 +36,11 @@ bussinessRouter.route('/')
         }
     })
 
-bussinessRouter.use('/:bussinessId', (req, res, next) => {
+businessRouter.use('/:businessId', (req, res, next) => {
     try {
-        logic.getBussinessById(req.params.bussinessId)
-            .then((bussiness) => {
-                req.bussiness = bussiness
+        logic.getBusinessById(req.params.businessId)
+            .then((business) => {
+                req.business = business
                 next()
             })
             .catch(({ message }) => {
@@ -51,15 +51,15 @@ bussinessRouter.use('/:bussinessId', (req, res, next) => {
     }
 })
 
-bussinessRouter.route('/:bussinessId')
+businessRouter.route('/:businessId')
     .get((req,res) => {
-        res.status(201).json(req.bussiness)
+        res.status(201).json(req.business)
     })
     .put(tokenVerifierMiddleware, (req,res) => {
         try {
-            logic.editBussiness(req.tokenUserId, req.tokenUserRole, req.bussiness.id, req.body)
-                .then((bussiness) => {
-                    res.status(200).json(bussiness)
+            logic.editBusiness(req.tokenUserId, req.tokenUserRole, req.business.id, req.body)
+                .then((business) => {
+                    res.status(200).json(business)
                 })
                 .catch(({message}) => {
                     res.status(400).send({ error: message })
@@ -70,4 +70,4 @@ bussinessRouter.route('/:bussinessId')
         }
     })
 
-module.exports = bussinessRouter
+module.exports = businessRouter

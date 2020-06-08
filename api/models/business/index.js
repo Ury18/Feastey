@@ -1,7 +1,7 @@
 const mongoose = require('mongoose')
 const { Schema, ObjectId } = mongoose
 
-const Bussiness = new Schema({
+const Business = new Schema({
     owner: {
         type: ObjectId,
         ref: 'User',
@@ -33,4 +33,4 @@ const Bussiness = new Schema({
     }]
 })
 
-module.exports = mongoose.model("Bussiness", Bussiness)
+module.exports = mongoose.model("Business", Business)

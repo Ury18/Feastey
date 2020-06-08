@@ -1,4 +1,4 @@
 const UserRouter = require('./userRouter')
-const BussinessRouter = require('./bussinessRouter')
+const BusinessRouter = require('./businessRouter')
 
-module.exports = {UserRouter, BussinessRouter}
+module.exports = {UserRouter, BusinessRouter}

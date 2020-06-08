@@ -131,10 +131,10 @@ logic = {
         }
     },
 
-    addMyBussiness(userId, bussinesId) {
+    addMyBusiness(userId, businesId) {
         return User.findById(userId)
             .then(user => {
-                user.myBussiness.push(bussinesId)
+                user.myBusiness.push(businesId)
                 return user.save()
             })
     }
