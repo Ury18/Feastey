@@ -29,7 +29,7 @@ userRouter.route('/')
         try {
             logic.createUser(req.body, req.tokenUserId, req.tokenUserRole)
                 .then((user) => {
-                    res.status(201).send(user)
+                    res.status(200).send(user)
                 })
                 .catch(({ message }) => {
                     res.status(400).send({ error: message })

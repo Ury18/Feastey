@@ -13,7 +13,6 @@ MyApp.getInitialProps = async ({ Component, ctx }) => {
         pageProps = await Component.getInitialProps(ctx)
         pageProps.cookies = cookie
     }
-    // console.log(pageProps)
     return { pageProps }
 }
 

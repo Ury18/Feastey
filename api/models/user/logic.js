@@ -32,6 +32,7 @@ logic = {
                                     .then(user => {
                                         user.id = user._id
                                         delete user._id
+                                        delete user.password
                                         return user
                                     })
                             })
@@ -57,9 +58,9 @@ logic = {
                                                 .then(user => {
                                                     user.id = user._id
                                                     delete user._id
+                                                    delete user.password
                                                     return user
                                                 })
-
                                         })
                                 })
                         }
@@ -75,6 +76,7 @@ logic = {
                                 .then(user => {
                                     user.id = user._id
                                     delete user._id
+                                    delete user.password
                                     return user
                                 })
                         })

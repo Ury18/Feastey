@@ -1,0 +1,16 @@
+.header {
+    display: flex;
+    background-color: rgb(49, 49, 49);
+    min-height: 5em;
+    padding: 1em;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    justify-content: space-between;
+    align-items: center;
+
+    .logo {
+        max-width: 200px;
+
+    }
+}

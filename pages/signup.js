@@ -2,17 +2,19 @@ import Layout from '../app/components/Layout'
 import { useState } from 'react'
 import { parseCookies } from '../app/middleware/parseCookies'
 
-const Signup =  (props) => {
+const Signup = (props) => {
     const [username, setUsername] = useState("")
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
     const [passwordConfirmation, setPasswordConfirmation] = useState("")
+    const [errors, setErrors] = useState("")
 
     const registerUser = (e, data) => {
 
         e.preventDefault()
 
         if (data.password == data.passwordConfirmation) {
+            setErrors("")
 
             fetch('http://localhost:3000/api/users', {
                 method: "POST",
@@ -23,14 +25,18 @@ const Signup =  (props) => {
             })
                 .then(res => res.json())
                 .then(res => {
-                    console.log(res)
+                    if (res.error) {
+                        setErrors(res.error)
+                    } else {
+                        console.log(res)
+                    }
                 })
                 .catch(err => {
-                    console.log(err)
+                    setErrors(err.error)
                 })
 
         } else {
-            console.log("Missmatching password")
+            setErrors("Las contraseñas no coinciden")
         }
     }
 
@@ -53,6 +59,9 @@ const Signup =  (props) => {
                     <label>Password Confirmation</label>
                     <input onChange={(e) => setPasswordConfirmation(e.target.value)} type="password" name="passwordConfirmation" />
                 </div>
+
+                {errors && <p className="errors">{errors}</p>}
+
                 <button type="submit">Send</button>
             </form>
         </Layout>

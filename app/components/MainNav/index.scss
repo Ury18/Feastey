@@ -1,0 +1,35 @@
+.mainNav {
+        ul {
+            display: flex;
+            list-style: none;
+            padding-left: 0;
+
+            li {
+                margin: 0 1em;
+                a {
+                    color: #FFB135;
+                    text-decoration: none;
+                    transition: color 0.2s ease;
+                    position: relative;
+                    font-weight: 600;
+
+                    &:after {
+                        content: "";
+                        position: absolute;
+                        bottom: -5px;
+                        left: 0;
+                        width: 0;
+                        border-bottom: 2px solid #FFB135;
+                        transition: all 0.2s ease;
+                    }
+
+                    &:hover, &.active {
+
+                        &:after{
+                            width: 100%;
+                        }
+                    }
+                }
+            }
+        }
+    }
