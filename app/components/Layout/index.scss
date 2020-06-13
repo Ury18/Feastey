@@ -1,4 +1,7 @@
+//Muli
 @import url('https://fonts.googleapis.com/css2?family=Muli:ital,wght@0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+//Lobster
+@import url('https://fonts.googleapis.com/css2?family=Lobster&display=swap');
 
 * {
     margin: 0;
@@ -11,11 +14,28 @@ html,body,#__next {
     overflow: hidden;
 }
 
+h1 {
+    color: #FFB135;
+    margin: .5em;
+    font-size: 5em;
+    font-family: 'Lobster';
+    letter-spacing: 5px;
+    text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 2px 2px 0 #000;
+}
+
 form  {
+    justify-self: center;
+    margin: 0;
     display: flex;
     flex-direction: column;
     align-items: center;
-    max-width: none !important;
+    max-width: fit-content !important;
+    height: fit-content;
+    background-color: rgb(236, 236, 236);
+    padding: 2em;
+    -webkit-box-shadow: 0px 0px 22px -1px rgba(107,107,107,0.73);
+    -moz-box-shadow: 0px 0px 22px -1px rgba(107,107,107,0.73);
+    box-shadow: 0px 0px 22px -1px rgba(107,107,107,0.73);
 
     button {
         border: none;
@@ -38,6 +58,8 @@ form  {
 
     label {
         margin-bottom: 0.2em;
+        font-weight: 600;
+        color: #313131;
     }
 
     input{
@@ -45,7 +67,8 @@ form  {
         height: 25px;
         min-width: 400px;
         border-radius: 0.5em;
-        margin-bottom: 1em;
+        margin-bottom: 1.5em;
+        border: 2px solid rgb(218, 218, 218);
     }
 
     .errors {
@@ -65,7 +88,6 @@ form  {
     flex-direction: column;
 
     .content-container {
-        background-color: white;
         flex-grow: 1;
         display: flex;
         overflow: hidden;
@@ -73,11 +95,17 @@ form  {
 
         .content {
             display:flex ;
-            justify-content: center;
+            align-items: center;
+            flex-direction: column;
             padding: 1em;
             overflow-y: auto;
-            background-color: rgb(202, 202, 202);
+            // background-color: white;
+            background-color: #F0F1F5;
             flex-grow: 1;
+
+            &.centered {
+                justify-content: center;
+            }
         }
     }
 }

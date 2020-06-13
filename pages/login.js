@@ -30,8 +30,9 @@ const LogIn =  (props) => {
     }
 
     return (
-        <Layout {...props}>
+        <Layout {...props} contentClasses="centered">
             <form onSubmit={(e) => logIn(e, { email, password })} style={{ maxWidth: "200px" }}>
+                <h1>Inicia sessión</h1>
                 <div style={{ display: "flex", flexDirection: "column" }}>
                     <label>Email</label>
                     <input onChange={(e) => setEmail(e.target.value)} type="email" name="email" />

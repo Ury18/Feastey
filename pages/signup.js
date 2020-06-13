@@ -41,8 +41,9 @@ const Signup = (props) => {
     }
 
     return (
-        <Layout {...props}>
+        <Layout {...props} contentClasses="centered">
             <form onSubmit={(e) => registerUser(e, { username, email, password, passwordConfirmation })} style={{ maxWidth: "200px" }}>
+                <h1>Crea tu cuenta</h1>
                 <div style={{ display: "flex", flexDirection: "column" }}>
                     <label>Username</label>
                     <input onChange={(e) => setUsername(e.target.value)} type="text" name="text" />
