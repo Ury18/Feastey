@@ -22,13 +22,13 @@ const UserId = (props) => {
             <p>{id}</p>
             <div>
                 {mapData(data)}
-            </div>
+             </div>
         </Layout>
     )
 }
 
-UserId.getInitialProps = async (ctx) => {
-    const res = await fetch(`http://localhost:3000/api/Users/${context.params.id}`)
+UserId.getInitialProps = async (context) => {
+    const res = await fetch(`http://localhost:3000/api/users/${context.query.id}`)
     const data = await res.json()
     return { data }
 }

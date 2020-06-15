@@ -1,6 +1,6 @@
 import './index.scss'
 import Cookie from "js-cookie"
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useLayoutEffect } from 'react'
 import Header from '../Header'
 
 export default ((props) => {
@@ -21,4 +21,3 @@ export default ((props) => {
         </div>
     )
 })
-

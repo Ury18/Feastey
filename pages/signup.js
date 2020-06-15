@@ -3,6 +3,7 @@ import { useState } from 'react'
 import { parseCookies } from '../app/middleware/parseCookies'
 
 const Signup = (props) => {
+
     const [username, setUsername] = useState("")
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")

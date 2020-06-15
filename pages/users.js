@@ -17,7 +17,6 @@ function Users(props) {
 
     return (
         <Layout {...props}>
-            <p>{cookies.userId}</p>
             <div>
                 {mapData(data)}
             </div>

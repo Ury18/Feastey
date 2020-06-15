@@ -4,7 +4,7 @@ import Cookie from "js-cookie"
 import { parseCookies } from '../app/middleware/parseCookies'
 
 const LogIn =  (props) => {
-
+    const {cookie} = props
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
 
