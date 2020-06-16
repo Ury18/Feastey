@@ -1,4 +1,5 @@
 import { parseCookies } from '../app/middleware/parseCookies'
+import { wrapper } from '../app/redux/store'
 
 function MyApp({ Component, pageProps }) {
     return <Component {...pageProps} />
@@ -17,4 +18,4 @@ MyApp.getInitialProps = async ({ Component, ctx }) => {
 }
 
 
-export default MyApp
+export default wrapper.withRedux(MyApp)
