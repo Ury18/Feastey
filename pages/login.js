@@ -1,10 +1,12 @@
 import Layout from '../app/components/Layout'
 import { useState } from 'react'
 import Cookie from "js-cookie"
-import { parseCookies } from '../app/middleware/parseCookies'
+import Head from 'next/head'
+import { connect } from 'react-redux'
+import { updateUserData } from '../app/redux/user/action'
 
-const LogIn =  (props) => {
-    const {cookie} = props
+const LogIn = (props) => {
+    const { cookie } = props
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
 
@@ -31,6 +33,9 @@ const LogIn =  (props) => {
 
     return (
         <Layout {...props} contentClasses="centered">
+            <Head>
+                <title>Feastey - Inicia sesión</title>
+            </Head>
             <form onSubmit={(e) => logIn(e, { email, password })} style={{ maxWidth: "200px" }}>
                 <h1>Inicia sessión</h1>
                 <div style={{ display: "flex", flexDirection: "column" }}>
@@ -51,4 +56,9 @@ LogIn.getInitialProps = async (ctx) => {
     return {}
 }
 
-export default LogIn
+
+const mapDispatchToProps = (dispatch) => {
+    return { updateUserData: (data) => { dispatch(updateUserData({ ...data })) } }
+}
+
+export default connect((state => state), mapDispatchToProps)(LogIn)
