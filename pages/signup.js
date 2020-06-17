@@ -1,6 +1,7 @@
 import Layout from '../app/components/Layout'
 import { useState } from 'react'
-import { parseCookies } from '../app/middleware/parseCookies'
+import { connect } from 'react-redux'
+import { updateUserData } from '../app/redux/user/action'
 
 const Signup = (props) => {
 
@@ -74,5 +75,7 @@ Signup.getInitialProps = async (ctx) => {
     return {}
 }
 
-export default Signup
-
+const mapDispatchToProps = (dispatch) => {
+    return { updateUserData: (data) => { dispatch(updateUserData({ ...data })) } }
+}
+export default connect((state => state), mapDispatchToProps)(Signup)

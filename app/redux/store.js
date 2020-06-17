@@ -21,7 +21,6 @@ const reducer = (state, action) => {
             ...state,
             ...action.payload
         }
-        if (state.user) nextState.user = state.user
         return nextState
     } else {
         return combinedReducer(state, action)

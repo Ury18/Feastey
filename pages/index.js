@@ -1,11 +1,13 @@
 import Layout from '../app/components/Layout'
-import Router from 'next/router'
-import Link from 'next/link'
-import { parseCookies } from '../app/middleware/parseCookies'
+import { connect } from 'react-redux'
+import { updateUserData } from '../app/redux/user/action'
 
 const Index = (props) => {
+    const { updateUserData } = props
     return (
-        <Layout {...props} patata = "asdva">
+        <Layout {...props}>
+            <p>{props.user.name}</p>
+            <button onClick={() => updateUserData({ name: "Test2" })}>Set random name</button>
         </Layout>
     )
 }
@@ -14,6 +16,10 @@ Index.getInitialProps = async (ctx) => {
     return {}
 }
 
-export default Index
+const mapDispatchToProps = (dispatch) => {
+    return { updateUserData: (data) => { dispatch(updateUserData({ ...data })) } }
+}
+
+export default connect((state => state), mapDispatchToProps)(Index)
 
 
