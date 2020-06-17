@@ -2,20 +2,19 @@ import Layout from '../app/components/Layout'
 import Router from 'next/router'
 import Link from 'next/link'
 import { parseCookies } from '../app/middleware/parseCookies'
-import Discover from '../app/components/Discover'
+import SearchComponent from '../app/components/SearchComponent'
 
-const Index = (props) => {
+const Search = (props) => {
     return (
-        <Layout {...props} patata = "asdva">
-            <Discover/>
+        <Layout>
+            <SearchComponent></SearchComponent>
         </Layout>
     )
 }
 
-Index.getInitialProps = async (ctx) => {
+Search.getInitialProps = async (ctx) => {
     return {}
 }
 
-export default Index
-
+export default Search
 

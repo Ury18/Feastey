@@ -1,0 +1,33 @@
+.discover_mainContainer{
+    display: flex;
+    flex-flow: column;
+    align-items: center;
+    justify-content: center;
+    background-color: #e1e1e1;
+    padding:2em 10em;
+    border-radius: 1em;
+    box-shadow: 10px 10px 5px 0px rgba(0,0,0,0.20);
+
+    .discover_title{
+        margin:0;
+        padding-bottom:0.5em;
+    }
+
+    .discover_button{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background: white;
+        height: 10em;
+        width: 10em;
+        border-radius: 10em;
+        box-shadow: 10px 10px 5px 0px rgba(0,0,0,0.19);
+
+
+        .discover_icon{
+            color: orange;
+            height: 5.5em;
+            width: 5.5em;
+        }
+    }
+}
