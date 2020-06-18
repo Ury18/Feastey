@@ -27,7 +27,7 @@ const Business = new Schema({
         ref: 'File'
     }],
 
-    menus: [{
+    attachments: [{
         type: ObjectId,
         ref: 'File'
     }]

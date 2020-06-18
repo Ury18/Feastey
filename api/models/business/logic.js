@@ -1,10 +1,10 @@
-const Bussines = require('./index')
+const Busines = require('./index')
 const UserLogic = require('../user/logic')
 
 logic = {
 
     getBusiness() {
-        return Bussines.find({}).select('-__v').lean()
+        return Busines.find({}).select('-__v').lean()
             .then(businesses => {
                 businesses.forEach(business => {
                     business.id = business._id.toString()
@@ -15,7 +15,7 @@ logic = {
     },
 
     getBusinessById(businessId) {
-        return Bussines.findById(businessId).select('-__v').lean()
+        return Busines.findById(businessId).select('-__v').lean()
             .then(business => {
                 business.id = business._id
                 delete business._id
@@ -32,12 +32,12 @@ logic = {
             if (creatorRole !== "admin") {
                 throw Error("Insuficcient Permisions")
             } else {
-                let business = new Bussines({ ...data })
+                let business = new Busines({ ...data })
                 return business.save()
                     .then(business => {
                         return UserLogic.addMyBusiness(data.owner, business._id)
                             .then(() => {
-                                return Bussines.findById(business._id).select('-__v').lean()
+                                return Busines.findById(business._id).select('-__v').lean()
                                     .then(business => {
                                         business.id = business._id
                                         delete business._id
@@ -50,11 +50,11 @@ logic = {
                     })
             }
         } else {
-            if (creatorRole == "editor") {
-                let business = new Bussines({ ...data })
+            if (creatorRole == "businessOwner") {
+                let business = new Busines({ ...data })
                 return business.save()
                     .then(business => {
-                        return Bussines.findById(business._id).select('-__v').lean()
+                        return Busines.findById(business._id).select('-__v').lean()
                             .then(business => {
                                 business.id = business._id
                                 delete business._id
@@ -68,13 +68,13 @@ logic = {
     },
 
     editBusiness(editorId, editorRole, businessId, data) {
-        return Bussines.findById(businessId)
+        return Busines.findById(businessId)
             .then(business => {
                 if (business.owner.toString() !== editorId) {
                     if (editorRole == "admin") {
-                        return Bussines.update(data)
+                        return Busines.update(data)
                             .then(business => {
-                                return Bussines.findById(businessId).select('-__v').lean()
+                                return Busines.findById(businessId).select('-__v').lean()
                                     .then(business => {
                                         business.id = business._id
                                         delete business._id
@@ -85,9 +85,9 @@ logic = {
                         throw Error("Insufficient permisions")
                     }
                 } else {
-                    return Bussines.update(data)
+                    return Busines.update(data)
                         .then(business => {
-                            return Bussines.findById(businessId).select('-__v').lean()
+                            return Busines.findById(businessId).select('-__v').lean()
                                 .then(business => {
                                     business.id = business._id
                                     delete business._id

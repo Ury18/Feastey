@@ -27,8 +27,20 @@ const User = new Schema({
     },
 
     role: {
-        type: String
+        type: String,
+        enum:["user","businessOwner","admin"],
+        default:"user"
     },
+
+    recent: [{
+        type: ObjectId,
+        ref: "Business"
+    }],
+
+    liked: [{
+        type: ObjectId,
+        ref: "Business"
+    }],
 
     favorites: [{
         type: ObjectId,

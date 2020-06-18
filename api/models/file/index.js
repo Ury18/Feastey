@@ -10,6 +10,12 @@ const File = new Schema({
     url: {
         type: String,
         required: true
+    },
+
+    type: {
+        type: String,
+        required: true,
+        enum: ["pdf","img"]
     }
 })
 
