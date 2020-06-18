@@ -12,23 +12,88 @@
         padding: 0.2em;
         margin: 0;
 
+        .categories_title {
+            padding-bottom: 1em;
+        }
+
+        .category_formContainer {
+            display: flex;
+            justify-content: center;
+            padding-right: 1em;
+
+        }
+
         .category_form {
+            justify-self: center;
+            margin: 0;
             display: block;
+            flex-direction: column;
             align-items: center;
-            box-shadow: none;
+            max-width: fit-content !important;
+            height: fit-content;
             background-color: transparent;
             padding: 0;
-            margin-left:1em;
+            -webkit-box-shadow: none;
+            -moz-box-shadow: none;
+            box-shadow: none;
+        }
 
-            .category_input {
-                border: none;
-                height: 25px;
-                min-width: 0px;
-                border-radius: 0.5em;
-                margin: 0px;
-                border: 2px solid #dadada;
-                padding-right: 0.5em;
-            }
+        .category_formDiv {
+            display: flex;
+            align-items: center;
+        }
+
+        .category_input {
+            border: none;
+            height: 25px;
+            min-width: 0px;
+            border-radius: 0.5em;
+            margin: 0px;
+            border: 2px solid #dadada;
+            padding-right: 0.5em;
         }
     }
+
+    .searchBar_Container {
+
+        display: flex;
+        flex-direction: column;
+        padding-bottom: 1em;
+
+        .searchBar_Slider {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .nameAndAdressForm_Container {
+            display: flex;
+            flex-direction: column;
+            padding: 0em 10em;
+
+
+
+
+            .nameAdressInput_Container {
+                flex-direction: column;
+                align-items: flex-start;
+                padding-bottom: 0.5em;
+
+                .nameAdressInput {
+                    min-width: 100%;
+                }
+
+            }
+
+        }
+
+        .searchButton_Container {
+            display: flex;
+            justify-content: flex-end;
+        }
+
+
+
+    }
+
 }
