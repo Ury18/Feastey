@@ -20,7 +20,7 @@ export default ((props) => {
                             </div>
                             <div className="category_formDiv">
                                 <input className="category_input" type="checkbox" id="verdulería" name="verdulería" value="verdulería" />
-                                <label for="carnicería"> Verdulería</label>
+                                <label for="verdulería"> Verdulería</label>
                             </div>
                         </form>
                     </div>
@@ -33,12 +33,12 @@ export default ((props) => {
                     </div>
                     <div className="nameAndAdressForm_Container">
                         <div className="nameAdressInput_Container">
-                            <label for="bussinesName"> Bussines Name</label><br />
-                            <input className="nameAdressInput" type="text" id="bussinesName" name="bussinesName" value="" placeholder="Nombre del negocio... (opcional)" />
+                            <label for="businessName"> Business Name</label><br />
+                            <input className="nameAdressInput" type="text" id="businessName" name="businessName" value="" placeholder="Nombre del negocio... (opcional)" />
                         </div>
                         <div className="nameAdressInput_Container">
-                            <label for="bussinesName"> Adress</label><br />
-                            <input className="nameAdressInput" type="text" id="bussinesAdress" name="bussinesAdress" value="" placeholder="Barrio, Ciudad o CP... (opcional)" />
+                            <label for="businessAdress"> Adress</label><br />
+                            <input className="nameAdressInput" type="text" id="businessAdress" name="businessAdress" value="" placeholder="Barrio, Ciudad o CP... (opcional)" />
                         </div>
                         <div className="searchButton_Container">
                             <input className="" type="submit" value="Buscar" />

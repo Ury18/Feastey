@@ -15,7 +15,7 @@ export default ((props) => {
                 <div className="searchCard_infoContainer_Header">
                     <Link href="/detail">
                         <a>
-                            <h2>Bussines Title</h2>
+                            <h2>Business Title</h2>
                         </a>
                     </Link>
                     <div className="favorite_Container">
@@ -23,7 +23,7 @@ export default ((props) => {
                     </div>
                 </div>
                 <p>Adress</p>
-                <p className="searchCard_infoContainer_Description">Bussines description</p>
+                <p className="searchCard_infoContainer_Description">Business description</p>
                 <div className="cardFooter">
                     <p>Category</p>
                     <div className="likesContainer">
