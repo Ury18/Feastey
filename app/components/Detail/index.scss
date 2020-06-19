@@ -1,3 +1,53 @@
-.detail_MainContainer{
+.detail_MainContainer {
     display: flex;
+    padding-top: 5em;
+    width: 70%;
+    height: 100%;
+
+    .col1 {
+        .coverImage {
+            background-color: black;
+            width: 15em;
+            height: 15em;
+        }
+
+        .contactInfo_Container {
+            padding-top: 1em;
+        }
+    }
+
+    .col2 {
+        display: flex;
+        flex: 1;
+        flex-direction: column;
+        padding: 0 2em;
+
+        .titleAndFavSection_Container {
+            display: flex;
+            align-items: center;
+            position: relative;
+
+            .titleIcons {
+                display: flex;
+                position: absolute;
+                align-items: center;
+                right: 0;
+
+                .detailLikeIcon {
+                    max-width: 1em;
+                    max-height: 1em;
+                    margin-left:.5em ;
+
+                }
+
+                .detailFavIcon {
+                    max-width: 2em;
+                    max-height: 2em;
+                    margin-left:2em ;
+
+                }
+            }
+
+        }
+    }
 }
