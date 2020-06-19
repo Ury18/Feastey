@@ -1,9 +1,9 @@
-import Layout from '../app/components/Layout'
+import Layout from '../../app/components/Layout'
 import { useState } from 'react'
 import { connect } from 'react-redux'
-import { updateUserData } from '../app/redux/user/action'
+import { updateUserData } from '../../app/redux/user/action'
 
-const Signup = (props) => {
+const CreateBusiness = (props) => {
 
     const [username, setUsername] = useState("")
     const [email, setEmail] = useState("")
@@ -49,19 +49,19 @@ const Signup = (props) => {
                 <h1>Crea tu cuenta</h1>
                 <div style={{ display: "flex", flexDirection: "column" }}>
                     <label>Username</label>
-                    <input onChange={(e) => setUsername(e.target.value)} type="text" name="text" required/>
+                    <input onChange={(e) => setUsername(e.target.value)} type="text" name="text" />
                 </div>
                 <div style={{ display: "flex", flexDirection: "column" }}>
                     <label>Email</label>
-                    <input onChange={(e) => setEmail(e.target.value)} type="email" name="email" required/>
+                    <input onChange={(e) => setEmail(e.target.value)} type="email" name="email" />
                 </div>
                 <div style={{ display: "flex", flexDirection: "column" }}>
                     <label>Password</label>
-                    <input onChange={(e) => setPassword(e.target.value)} type="password" name="password" required/>
+                    <input onChange={(e) => setPassword(e.target.value)} type="password" name="password" />
                 </div>
                 <div style={{ display: "flex", flexDirection: "column" }}>
                     <label>Password Confirmation</label>
-                    <input onChange={(e) => setPasswordConfirmation(e.target.value)} type="password" name="passwordConfirmation" required/>
+                    <input onChange={(e) => setPasswordConfirmation(e.target.value)} type="password" name="passwordConfirmation" />
                 </div>
 
                 {errors && <p className="errors">{errors}</p>}
@@ -72,11 +72,11 @@ const Signup = (props) => {
     )
 }
 
-Signup.getInitialProps = async (ctx) => {
+CreateBusiness.getInitialProps = async (ctx) => {
     return {}
 }
 
 const mapDispatchToProps = (dispatch) => {
     return { updateUserData: (data) => { dispatch(updateUserData({ ...data })) } }
 }
-export default connect((state => state), mapDispatchToProps)(Signup)
+export default connect((state => state), mapDispatchToProps)(CreateBusiness)

@@ -1,4 +1,5 @@
-import Layout from '../app/components/Layout'
+import Layout from '../../app/components/Layout'
+import Link from 'next/link'
 
 function Users(props) {
 
@@ -7,7 +8,11 @@ function Users(props) {
     const mapData = (data) => {
         return data.map(item => {
             return <div key={item.id}>
-                <h1>{item.username}</h1>
+                <Link href={`users/${item.id}`}>
+                    <a>
+                        <h1>{item.username}</h1>
+                    </a>
+                </Link>
                 <p>{item.email}</p>
                 <p>{item.role}</p>
                 <p>{item.id}</p>

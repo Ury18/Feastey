@@ -27,7 +27,7 @@ userRouter.route('/')
     })
     .post(tokenVerifierMiddleware, (req, res) => {
         try {
-            logic.createUser(req.body, req.tokenUserId, req.tokenUserRole)
+            logic.createUser(req.body, req.tokenUserRole)
                 .then((user) => {
                     res.status(200).send(user)
                 })
@@ -76,7 +76,7 @@ userRouter.use('/:userId', (req, res, next) => {
 //Endpoints for /:userId
 userRouter.route('/:userId')
     .get(tokenVerifierMiddleware, (req, res) => {
-        if (req.tokenUserId == req.user.id) {
+        if (req.tokenUserId == req.user.id || req.tokenUserRole == "admin") {
             res.json(req.user)
         } else {
             res.json({ username: req.user.username, id: req.user.id })

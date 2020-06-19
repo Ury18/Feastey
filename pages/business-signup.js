@@ -3,13 +3,14 @@ import { useState } from 'react'
 import { connect } from 'react-redux'
 import { updateUserData } from '../app/redux/user/action'
 
-const Signup = (props) => {
+const SignupBusiness = (props) => {
 
     const [username, setUsername] = useState("")
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
     const [passwordConfirmation, setPasswordConfirmation] = useState("")
     const [errors, setErrors] = useState("")
+    const role ="businessOwner"
 
     const registerUser = (e, data) => {
 
@@ -45,11 +46,11 @@ const Signup = (props) => {
 
     return (
         <Layout {...props} contentClasses="centered">
-            <form onSubmit={(e) => registerUser(e, { username, email, password, passwordConfirmation })} style={{ maxWidth: "200px" }}>
-                <h1>Crea tu cuenta</h1>
+            <form onSubmit={(e) => registerUser(e, { username, email, password, passwordConfirmation, role })} style={{ maxWidth: "200px" }}>
+                <h1>Crea tu cuenta de profesional</h1>
                 <div style={{ display: "flex", flexDirection: "column" }}>
                     <label>Username</label>
-                    <input onChange={(e) => setUsername(e.target.value)} type="text" name="text" required/>
+                    <input onChange={(e) => setUsername(e.target.value)} type="text" name="text" required />
                 </div>
                 <div style={{ display: "flex", flexDirection: "column" }}>
                     <label>Email</label>
@@ -72,11 +73,11 @@ const Signup = (props) => {
     )
 }
 
-Signup.getInitialProps = async (ctx) => {
+SignupBusiness.getInitialProps = async (ctx) => {
     return {}
 }
 
 const mapDispatchToProps = (dispatch) => {
     return { updateUserData: (data) => { dispatch(updateUserData({ ...data })) } }
 }
-export default connect((state => state), mapDispatchToProps)(Signup)
+export default connect((state => state), mapDispatchToProps)(SignupBusiness)

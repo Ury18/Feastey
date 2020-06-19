@@ -6,9 +6,10 @@ import { connect } from 'react-redux'
 import { updateUserData } from '../app/redux/user/action'
 
 const LogIn = (props) => {
-    const { cookie } = props
+    const { cookie, updateUserData } = props
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
+    const [errors, setErrors] = useState("")
 
     const logIn = (e, data) => {
         e.preventDefault()
@@ -22,12 +23,17 @@ const LogIn = (props) => {
         })
             .then(res => res.json())
             .then(res => {
-                console.log(res)
-                Cookie.set("authToken", res.token)
-                Cookie.set("userId", res.id)
+                if (res.error) {
+                    setErrors(res.error)
+                } else {
+                    setErrors("")
+                    Cookie.set("authToken", res.token)
+                    Cookie.set("userId", res.id)
+                    updateUserData({id: res.id, token: res.token})
+                }
             })
             .catch(err => {
-                console.log(err)
+                setErrors(err.error)
             })
     }
 
@@ -46,6 +52,7 @@ const LogIn = (props) => {
                     <label>Password</label>
                     <input onChange={(e) => setPassword(e.target.value)} type="password" name="password" />
                 </div>
+                {errors && <p className="errors">{errors}</p>}
                 <button type="submit">Send</button>
             </form>
         </Layout>

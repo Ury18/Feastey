@@ -15,8 +15,18 @@ export default ((props) => {
                     </Link>
                 </li>
                 <li>
+                    <Link href="/business-signup">
+                        <a className={router.pathname == "/business-signup" ? "active" : ""}>Regsitrarse como profesional</a>
+                    </Link>
+                </li>
+                <li>
                     <Link href="/login">
                         <a className={router.pathname == "/login" ? "active" : ""}>Iniciar Sesión</a>
+                    </Link>
+                </li>
+                <li>
+                    <Link href="/users">
+                        <a className={router.pathname == "/users" ? "active" : ""}>Usuarios</a>
                     </Link>
                 </li>
             </ul>

@@ -72,7 +72,12 @@ logic = {
             .then(business => {
                 if (business.owner.toString() !== editorId) {
                     if (editorRole == "admin") {
-                        return Busines.update(data)
+                        var keys = Object.keys(data)
+                        for (var i = 0; i < keys.length; i++) {
+                            var key = keys[i]
+                            business[key] = data[key]
+                        }
+                        return business.save()
                             .then(business => {
                                 return Busines.findById(businessId).select('-__v').lean()
                                     .then(business => {
@@ -85,7 +90,12 @@ logic = {
                         throw Error("Insufficient permisions")
                     }
                 } else {
-                    return Busines.update(data)
+                    var keys = Object.keys(data)
+                    for (var i = 0; i < keys.length; i++) {
+                        var key = keys[i]
+                        business[key] = data[key]
+                    }
+                    return business.save()
                         .then(business => {
                             return Busines.findById(businessId).select('-__v').lean()
                                 .then(business => {

@@ -14,10 +14,7 @@ logic = {
             })
     },
 
-    createUser(userData, creatorId, creatorRole) {
-        if (!userData.role || !(userData.role == "admin") && userData.role !== "user" && userData.role !== "businessOwner") {
-            userData.role = "user"
-        }
+    createUser(userData, creatorRole) {
 
         let user = new User(userData)
 

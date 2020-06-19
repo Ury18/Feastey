@@ -12,14 +12,21 @@ MyApp.getInitialProps = async ({ Component, ctx }) => {
     const { store } = ctx
     let pageProps;
 
-    if(!process.browser) {
-        store.dispatch({ type: UPDATE_USER_DATA, data: { name: "Test" } })
-    }
+
 
     if (Component.getInitialProps) {
         const cookie = parseCookies(ctx.req)
         pageProps = await Component.getInitialProps(ctx)
         pageProps.cookies = cookie
+
+        if (!process.browser) {
+            var data = {
+                id: cookie.userId || "",
+                token: cookie.authToken || ""
+            }
+            store.dispatch({ type: UPDATE_USER_DATA, data })
+        }
+
     }
 
     return { pageProps }
