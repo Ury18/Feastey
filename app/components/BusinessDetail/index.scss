@@ -1,4 +1,4 @@
-.detail_MainContainer {
+.BusinessDetail_MainContainer {
     display: flex;
     padding-top: 5em;
     width: 70%;
@@ -33,14 +33,14 @@
                 align-items: center;
                 right: 0;
 
-                .detailLikeIcon {
+                .BusinessDetailLikeIcon {
                     max-width: 1em;
                     max-height: 1em;
                     margin-left:.5em ;
 
                 }
 
-                .detailFavIcon {
+                .BusinessDetailFavIcon {
                     max-width: 2em;
                     max-height: 2em;
                     margin-left:2em ;

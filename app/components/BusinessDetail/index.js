@@ -1,11 +1,20 @@
 import './index.scss'
 import Link from 'next/link'
+import { connect } from 'react-redux'
 
 const Detail = ((props) => {
 
+    const { business, user } = props
+
     return (
-        <div className="detail_MainContainer">
+        <div className="BusinessDetail_MainContainer">
             <div className="col1">
+                {(business.owner == user.id)
+                    &&
+                    <Link href={`/business/${business.id}/edit`}>
+                        <a>Edit</a>
+                    </Link>
+                }
                 <div className="coverImage"></div>
                 <div className="contactInfo_Container">
                     <p>Telf</p>
@@ -16,15 +25,15 @@ const Detail = ((props) => {
             </div>
             <div className="col2">
                 <div className="titleAndFavSection_Container">
-                    <h2>Business Name</h2>
+                    <h2>{business.name}</h2>
                     <p> Location Icon </p>
                     <div className="titleIcons">
                         <p>200</p>
-                        <img className="detailLikeIcon" src={require('../../img/feastey_likeIcon.png')} />
-                        <img className="detailFavIcon" src={require('../../img/feastey_favoriteIcon.png')} />
+                        <img className="BusinessDetailLikeIcon" src={require('../../img/feastey_likeIcon.png')} />
+                        <img className="BusinessDetailFavIcon" src={require('../../img/feastey_favoriteIcon.png')} />
                     </div>
                 </div>
-                <p>Adress</p>
+                <p>{business.location}</p>
                 <p>Bussiness Description</p>
                 <div className="section_Container">
                     <h2>Section Title</h2>
@@ -42,5 +51,7 @@ const Detail = ((props) => {
     )
 })
 
-
-export default Detail
+const mapDispatchToProps = (dispatch) => {
+    return { updateUserData: (data) => { dispatch(updateUserData({ ...data })) } }
+}
+export default connect((state => state), mapDispatchToProps)(Detail)

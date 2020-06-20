@@ -4,8 +4,12 @@ import Cookie from "js-cookie"
 import Head from 'next/head'
 import { connect } from 'react-redux'
 import { updateUserData } from '../app/redux/user/action'
+import { useRouter } from 'next/router'
 
 const LogIn = (props) => {
+
+    const router = useRouter()
+
     const { cookie, updateUserData } = props
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
@@ -26,10 +30,10 @@ const LogIn = (props) => {
                 if (res.error) {
                     setErrors(res.error)
                 } else {
-                    setErrors("")
                     Cookie.set("authToken", res.token)
                     Cookie.set("userId", res.id)
                     updateUserData({id: res.id, token: res.token})
+                    router.push('/')
                 }
             })
             .catch(err => {

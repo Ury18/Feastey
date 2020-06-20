@@ -10,7 +10,7 @@ const BusinessCard = (props) => {
     return (
         <div className="businessCard_Container">
             <div className="businessCard_imgContainer">
-                <Link href="/detail">
+                <Link href={`/business/${business.id}`}>
                     <a>
                         <div className="businessCard_img"></div>
                     </a>
@@ -18,7 +18,7 @@ const BusinessCard = (props) => {
             </div>
             <div className=" businessCard_infoContainer">
                 <div className="businessCard_infoContainer_Header">
-                    <Link href="/detail">
+                    <Link href={`/business/${business.id}`}>
                         <a>
                             <h2>{name}</h2>
                         </a>

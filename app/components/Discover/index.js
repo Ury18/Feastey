@@ -6,7 +6,7 @@ export default ((props) => {
     return (
         <div><div className="discover_mainContainer">
             <h1 className="discover_title">Descubre tu Barrio</h1>
-            <Link href="/search">
+            <Link href="/business">
                 <a>
                     <div className="discover_button">
                         <img className="discover_icon" src={require("../../img/feastey_searchIcon.png")} />

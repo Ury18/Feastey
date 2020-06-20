@@ -27,8 +27,8 @@ const UserId = (props) => {
     )
 }
 
-UserId.getInitialProps = async (context) => {
-    const res = await fetch(`http://localhost:3000/api/users/${context.query.id}`)
+UserId.getInitialProps = async (ctx) => {
+    const res = await fetch(`http://localhost:3000/api/users/${ctx.query.id}`)
     const data = await res.json()
     return { data }
 }

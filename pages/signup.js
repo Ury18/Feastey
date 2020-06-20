@@ -2,8 +2,11 @@ import Layout from '../app/components/Layout'
 import { useState } from 'react'
 import { connect } from 'react-redux'
 import { updateUserData } from '../app/redux/user/action'
+import { useRouter } from 'next/router'
 
 const Signup = (props) => {
+
+    const router = useRouter()
 
     const [username, setUsername] = useState("")
     const [email, setEmail] = useState("")
@@ -30,8 +33,7 @@ const Signup = (props) => {
                     if (res.error) {
                         setErrors(res.error)
                     } else {
-                        setErrors("")
-                        console.log(res)
+                        router.push('/')
                     }
                 })
                 .catch(err => {
