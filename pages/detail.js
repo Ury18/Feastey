@@ -5,7 +5,7 @@ import { connect } from 'react-redux'
 
 const DetailPage = (props) => {
     return (
-        <Layout {...props}>
+        <Layout>
             <Detail/>
         </Layout>
     )

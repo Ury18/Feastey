@@ -6,7 +6,7 @@ import { updateUserData } from '../app/redux/user/action'
 const Index = (props) => {
     const { updateUserData } = props
     return (
-        <Layout {...props}>
+        <Layout>
             <Discover/>
             <p>{props.user.name}</p>
             <button onClick={() => updateUserData({ name: "Test2" })}>Set random name</button>

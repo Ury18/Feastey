@@ -38,7 +38,7 @@ const LogIn = (props) => {
     }
 
     return (
-        <Layout {...props} contentClasses="centered">
+        <Layout contentClasses="centered">
             <Head>
                 <title>Feastey - Inicia sesión</title>
             </Head>

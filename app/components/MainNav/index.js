@@ -1,8 +1,9 @@
 import Link from 'next/link'
 import './index.scss'
 import { useRouter } from 'next/router'
+import { connect } from 'react-redux'
 
-export default ((props) => {
+const MainNav = ((props) => {
 
     const router = useRouter()
 
@@ -33,3 +34,9 @@ export default ((props) => {
         </nav>
     )
 })
+
+const mapDispatchToProps = (dispatch) => {
+    return { updateUserData: (data) => { dispatch(updateUserData({ ...data })) } }
+}
+
+export default connect((state => state), mapDispatchToProps)(MainNav)

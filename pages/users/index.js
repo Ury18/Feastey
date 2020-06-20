@@ -21,7 +21,7 @@ function Users(props) {
     }
 
     return (
-        <Layout {...props}>
+        <Layout>
             <div>
                 {mapData(data)}
             </div>
@@ -30,7 +30,7 @@ function Users(props) {
 }
 
 Users.getInitialProps = async (ctx) => {
-    const res = await fetch('http://localhost:3000/api/Users/')
+    const res = await fetch('http://localhost:3000/api/users/')
     const data = await res.json()
     return { data }
 }

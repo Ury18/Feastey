@@ -5,63 +5,58 @@ import { updateUserData } from '../../app/redux/user/action'
 
 const CreateBusiness = (props) => {
 
-    const [username, setUsername] = useState("")
-    const [email, setEmail] = useState("")
-    const [password, setPassword] = useState("")
-    const [passwordConfirmation, setPasswordConfirmation] = useState("")
+    const { user: { token, id } } = props
+
+    const [name, setName] = useState("")
+    const [description, setDescription] = useState("")
+    const [location, setLocation] = useState("")
     const [errors, setErrors] = useState("")
 
-    const registerUser = (e, data) => {
+    const createBusiness = (e, data) => {
 
         e.preventDefault()
+        setErrors("")
 
-        if (data.password == data.passwordConfirmation) {
-            setErrors("")
+        data.owner = id;
 
-            fetch('http://localhost:3000/api/users', {
-                method: "POST",
-                headers: {
-                    "content-type": "application/json"
-                },
-                body: JSON.stringify(data)
+        fetch('http://localhost:3000/api/business', {
+            method: "POST",
+            headers: {
+                "content-type": "application/json",
+                "authorization" : `Bearer ${token}`
+            },
+            body: JSON.stringify(data)
+        })
+            .then(res => res.json())
+            .then(res => {
+                if (res.error) {
+                    setErrors(res.error)
+                } else {
+                    setErrors("")
+                    console.log(res)
+                }
             })
-                .then(res => res.json())
-                .then(res => {
-                    if (res.error) {
-                        setErrors(res.error)
-                    } else {
-                        setErrors("")
-                        console.log(res)
-                    }
-                })
-                .catch(err => {
-                    setErrors(err.error)
-                })
-
-        } else {
-            setErrors("Las contraseñas no coinciden")
-        }
+            .catch(err => {
+                setErrors(err.error)
+            })
     }
 
     return (
-        <Layout {...props} contentClasses="centered">
-            <form onSubmit={(e) => registerUser(e, { username, email, password, passwordConfirmation })} style={{ maxWidth: "200px" }}>
-                <h1>Crea tu cuenta</h1>
+        <Layout contentClasses="centered">
+            <form onSubmit={(e) => createBusiness(e, { name, description, location })} style={{ maxWidth: "200px" }}>
+                <h1>Crea tu negocio</h1>
+
                 <div style={{ display: "flex", flexDirection: "column" }}>
-                    <label>Username</label>
-                    <input onChange={(e) => setUsername(e.target.value)} type="text" name="text" />
+                    <label>Nombre</label>
+                    <input onChange={(e) => setName(e.target.value)} type="text" />
                 </div>
                 <div style={{ display: "flex", flexDirection: "column" }}>
-                    <label>Email</label>
-                    <input onChange={(e) => setEmail(e.target.value)} type="email" name="email" />
+                    <label>Descripción</label>
+                    <input onChange={(e) => setDescription(e.target.value)} type="text" />
                 </div>
                 <div style={{ display: "flex", flexDirection: "column" }}>
-                    <label>Password</label>
-                    <input onChange={(e) => setPassword(e.target.value)} type="password" name="password" />
-                </div>
-                <div style={{ display: "flex", flexDirection: "column" }}>
-                    <label>Password Confirmation</label>
-                    <input onChange={(e) => setPasswordConfirmation(e.target.value)} type="password" name="passwordConfirmation" />
+                    <label>Dirección</label>
+                    <input onChange={(e) => setLocation(e.target.value)} type="text" />
                 </div>
 
                 {errors && <p className="errors">{errors}</p>}

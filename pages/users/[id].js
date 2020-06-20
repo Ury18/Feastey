@@ -18,7 +18,7 @@ const UserId = (props) => {
     }
 
     return (
-        <Layout {...props}>
+        <Layout>
             <p>{id}</p>
             <div>
                 {mapData(data)}

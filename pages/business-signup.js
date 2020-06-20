@@ -45,7 +45,7 @@ const SignupBusiness = (props) => {
     }
 
     return (
-        <Layout {...props} contentClasses="centered">
+        <Layout contentClasses="centered">
             <form onSubmit={(e) => registerUser(e, { username, email, password, passwordConfirmation, role })} style={{ maxWidth: "200px" }}>
                 <h1>Crea tu cuenta de profesional</h1>
                 <div style={{ display: "flex", flexDirection: "column" }}>
