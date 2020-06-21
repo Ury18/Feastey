@@ -15,7 +15,12 @@ const File = new Schema({
     type: {
         type: String,
         required: true,
-        enum: ["pdf","img"]
+        enum: ["pdf","png","jpg"]
+    },
+
+    file_title: {
+        type: String,
+        required: true
     }
 })
 

@@ -7,14 +7,14 @@ const mongoose = require('mongoose')
 
 const next = require('next')
 const dev = process.env.NODE_DEV !== 'production'
-const nextApp = next({dev})
+const nextApp = next({ dev })
 const handle = nextApp.getRequestHandler()
 
-const { UserRouter, BusinessRouter } = require('./api/routes')
-mongoose.connect(db_url, {useNewUrlParser: true})
-.then(() => {
-    nextApp.prepare()
+const { UserRouter, BusinessRouter, FileRouter } = require('./api/routes')
+mongoose.connect(db_url, { useNewUrlParser: true })
     .then(() => {
+        nextApp.prepare()
+            .then(() => {
 
                 const app = express()
 
@@ -23,6 +23,7 @@ mongoose.connect(db_url, {useNewUrlParser: true})
 
                 app.use('/api/users', UserRouter)
                 app.use('/api/business', BusinessRouter)
+                app.use('/api/file', FileRouter)
 
                 //Handles react
                 app.get('*', (req, res) => {
@@ -32,7 +33,7 @@ mongoose.connect(db_url, {useNewUrlParser: true})
                 app.listen(port, () => {
                     console.log(`Server Running in port ${port}`)
                 })
-        })
+            })
 
     })
 
