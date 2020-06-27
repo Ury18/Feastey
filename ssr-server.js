@@ -23,7 +23,7 @@ mongoose.connect(db_url, { useNewUrlParser: true })
 
                 app.use('/api/users', UserRouter)
                 app.use('/api/business', BusinessRouter)
-                app.use('/api/file', FileRouter)
+                app.use('/api/files', FileRouter)
 
                 //Handles react
                 app.get('*', (req, res) => {

@@ -14,26 +14,25 @@ MyApp.getInitialProps = async ({ Component, ctx }) => {
 
     const { store } = ctx
     let pageProps;
+    const cookie = parseCookies(ctx.req)
 
-    if (Component.getInitialProps) {
-        const cookie = parseCookies(ctx.req)
-        pageProps = await Component.getInitialProps(ctx)
+    if (!process.browser) {
+        var data = {}
 
-        if (!process.browser) {
-            var data = {}
-
-            if(cookie.userId) {
-                data.id = cookie.userId
-            }
-
-            if(cookie.authToken) {
-                data.token = cookie.authToken
-            }
-
-            store.dispatch({ type: UPDATE_COOKIES_DATA, data: cookie })
-            store.dispatch({ type: UPDATE_USER_DATA, data: data })
+        if (cookie.userId) {
+            data.id = cookie.userId
         }
 
+        if (cookie.authToken) {
+            data.token = cookie.authToken
+        }
+
+        store.dispatch({ type: UPDATE_COOKIES_DATA, data: cookie })
+        store.dispatch({ type: UPDATE_USER_DATA, data: data })
+    }
+
+    if (Component.getInitialProps) {
+        pageProps = await Component.getInitialProps(ctx)
     }
 
     return { pageProps }

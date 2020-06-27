@@ -1,14 +1,11 @@
 import './index.scss'
 import Cookie from "js-cookie"
-import { useState, useEffect, useLayoutEffect } from 'react'
+import { useState } from 'react'
 import Header from '../Header'
 
 export default ((props) => {
     const [userId, setUserId] = useState()
     const { contentClasses } = props
-    useEffect(() => {
-
-    })
 
     return (
         <div className="app">

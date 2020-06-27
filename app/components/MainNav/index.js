@@ -30,6 +30,11 @@ const MainNav = ((props) => {
                         <a className={router.pathname == "/users" ? "active" : ""}>Usuarios</a>
                     </Link>
                 </li>
+                <li>
+                    <Link href="/file">
+                        <a className={router.pathname == "/file" ? "active" : ""}>File</a>
+                    </Link>
+                </li>
             </ul>
         </nav>
     )

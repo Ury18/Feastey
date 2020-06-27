@@ -34,10 +34,10 @@ logic = {
     },
 
     async uploadFile(uploaderId, uploaderRole, data, file) {
-
         let { name, owner } = data
 
         if (uploaderRole !== "admin" && uploaderRole !== "businessOwner") {
+            console.log(uploaderRole)
             throw Error("Insufficient permissions")
         }
 

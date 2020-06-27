@@ -23,7 +23,6 @@ fileRouter.route('/')
         }
     })
     .post(tokenVerifierMiddleware, fileParser, (req, res) => {
-
         if (req.tokenUserRole !== "businessOwner" && req.tokenUserRole !== "admin") {
             res.status(400).send({ error: "Insuficient permissions" })
         }
