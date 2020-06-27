@@ -1,9 +1,15 @@
 const mongoose = require('mongoose')
-const { Schema } = mongoose
+const { Schema, ObjectId } = mongoose
 
 const File = new Schema({
     name: {
         type: String,
+        required: true
+    },
+
+    owner: {
+        type: ObjectId,
+        ref:'User',
         required: true
     },
 
@@ -15,7 +21,7 @@ const File = new Schema({
     type: {
         type: String,
         required: true,
-        enum: ["pdf","png","jpg"]
+        enum: ["application/pdf", "image/png", "image/jpeg"]
     },
 
     file_title: {
