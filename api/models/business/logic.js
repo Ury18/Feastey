@@ -1,4 +1,5 @@
 const Busines = require('./index')
+const FileLogic = require('../file/logic')
 const UserLogic = require('../user/logic')
 
 logic = {
@@ -24,18 +25,20 @@ logic = {
     },
 
     createBusiness(creatorId, creatorRole, data) {
-        if (!data.owner) {
+        const  {attachments, owner} = data
+
+        if (!owner) {
             throw Error("Owner is needed")
         }
 
-        if (data.owner !== creatorId) {
+        if (owner !== creatorId) {
             if (creatorRole !== "admin") {
                 throw Error("Insuficcient Permisions")
             } else {
                 let business = new Busines({ ...data })
                 return business.save()
                     .then(business => {
-                        return UserLogic.addMyBusiness(data.owner, business._id)
+                        return UserLogic.addMyBusiness(owner, business._id)
                             .then(() => {
                                 return Busines.findById(business._id).select('-__v').lean()
                                     .then(business => {

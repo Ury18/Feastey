@@ -27,9 +27,16 @@ const Business = new Schema({
         ref: 'File'
     }],
 
-    attachments: [{
-        type: ObjectId,
-        ref: 'File'
+    attachments : [{
+        name: {
+            type: String,
+            required: true
+        },
+
+        files: [{
+            type: ObjectId,
+            ref: 'File'
+        }]
     }]
 })
 
