@@ -31,8 +31,7 @@ const LogIn = (props) => {
                     setErrors(res.error)
                 } else {
                     Cookie.set("authToken", res.token)
-                    Cookie.set("userId", res.id)
-                    updateUserData({id: res.id, token: res.token})
+                    updateUserData({...res})
                     router.push('/')
                 }
             })

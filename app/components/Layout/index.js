@@ -1,5 +1,4 @@
 import './index.scss'
-import Cookie from "js-cookie"
 import { useState } from 'react'
 import Header from '../Header'
 

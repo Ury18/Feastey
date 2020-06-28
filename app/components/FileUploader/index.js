@@ -89,10 +89,6 @@ const FileUploader = ((props) => {
 
 })
 
-FileUploader.getInitialProps = async (ctx) => {
-    return {}
-}
-
 const mapDispatchToProps = (dispatch) => {
     return { updateUserData: (data) => { dispatch(updateUserData({ ...data })) } }
 }
