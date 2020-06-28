@@ -1,6 +1,7 @@
 const express = require('express')
 const logic = require('../models/user/logic')
-const { createToken, tokenVerifierMiddleware } = require('../middleware/token-helper')
+const { createToken, tokenVerifierMiddleware } = require('../middleware/token-helper');
+const user = require('../models/user');
 
 const userRouter = express.Router();
 
@@ -9,7 +10,7 @@ userRouter.route('/')
         try {
             logic.getUsers()
                 .then((users) => {
-                    if(req.tokenUserRole == "admin") {
+                    if (req.tokenUserRole == "admin") {
                         res.status(200).json(users)
                     } else {
                         users.forEach(user => {
@@ -46,14 +47,37 @@ userRouter.route('/authenticate')
         try {
             logic.authenticateUser(email, password)
                 .then((user) => {
-                    const token = createToken(user._id)
-                    res.json({ token, id: user._id })
+                    const token = createToken(user.id)
+                    user.token = token
+                    delete user.password
+                    res.json(user)
                 })
                 .catch(({ message }) => {
                     res.status(401).json({ error: message })
                 })
         } catch ({ message }) {
             res.status(400).send({ error: message })
+        }
+    })
+userRouter.route('/authenticate/renew')
+    .get(tokenVerifierMiddleware, (req, res) => {
+        if(req.tokenUserId) {
+            try {
+                logic.getUserById(req.tokenUserId)
+                .then((user) => {
+                    const token = createToken(user.id)
+                    user.token = token
+                    delete user.password
+                    res.json(user)
+                })
+                .catch(({ message }) => {
+                    res.status(401).send({ error: message })
+                })
+            } catch ({ message }) {
+                res.status(400).send({ error: message })
+            }
+        } else {
+            res.status(400).send({error: "Invalid user"})
         }
     })
 

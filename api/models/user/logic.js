@@ -87,6 +87,8 @@ logic = {
                 return bcrypt.compare(password, user.password)
                     .then((match) => {
                         if (match) {
+                            user.id = user._id
+                            delete user._id
                             return user
                         }
                         else {
