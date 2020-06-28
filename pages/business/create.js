@@ -3,6 +3,7 @@ import { useState } from 'react'
 import { connect } from 'react-redux'
 import { updateUserData } from '../../app/redux/user/action'
 import { useRouter } from 'next/router'
+import FileUploader from '../../app/components/FileUploader'
 
 const CreateBusiness = (props) => {
 
@@ -13,12 +14,12 @@ const CreateBusiness = (props) => {
     const [description, setDescription] = useState("")
     const [location, setLocation] = useState("")
     const [errors, setErrors] = useState("")
+    const [images, setImages] = useState("")
 
     const createBusiness = (e, data) => {
-
         e.preventDefault()
-        setErrors("")
 
+        setErrors("")
         data.owner = id;
 
         fetch('http://localhost:3000/api/business', {
@@ -42,11 +43,16 @@ const CreateBusiness = (props) => {
             })
     }
 
+    const renderImagesUploader = () => {
+        let imagesCards = images.map(image => {
+            <FileUploader />
+        })
+    }
+
     return (
         <Layout contentClasses="centered">
             <form onSubmit={(e) => createBusiness(e, { name, description, location })} style={{ maxWidth: "200px" }}>
                 <h1>Crea tu negocio</h1>
-
                 <div style={{ display: "flex", flexDirection: "column" }}>
                     <label>Nombre</label>
                     <input onChange={(e) => setName(e.target.value)} type="text" />
@@ -59,6 +65,12 @@ const CreateBusiness = (props) => {
                     <label>Dirección</label>
                     <input onChange={(e) => setLocation(e.target.value)} type="text" />
                 </div>
+
+                <div style={{ display: "flex", flexDirection: "column" }}>
+                    <label>Imagenes</label>
+                   <FileUploader/>
+                </div>
+
 
                 {errors && <p className="errors">{errors}</p>}
 

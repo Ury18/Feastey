@@ -1,16 +1,27 @@
 import './index.scss'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { connect } from 'react-redux'
 
 const FileUploader = ((props) => {
 
-    const { user: { token } } = props
-
+    const { user: { token }, data, uploadCallback, updateCallback } = props
 
     const [id, setId] = useState()
     const [name, setName] = useState()
     const [newName, setNewName] = useState()
     const [updated, setUpdated] = useState()
+    const [url, setUrl] = useState()
+    const [type, setType] = useState()
+
+    useEffect(() => {
+        if (data) {
+            setId(data.id)
+            setName(data.name)
+            setNewName(data.name)
+            setUpdated(true)
+            setUrl(data.url)
+        }
+    })
 
     function uploadFile(file) {
 
@@ -34,6 +45,15 @@ const FileUploader = ((props) => {
                     setName(res.name)
                     setNewName(res.name)
                     setUpdated(true)
+                    setType(res.type.split("/")[0])
+                    setTimeout(() => {
+                        setUrl(res.url)
+
+                    },1000)
+
+                    if(uploadCallback) {
+                        uploadCallback(res)
+                    }
                 }
             })
             .catch(err => {
@@ -44,7 +64,7 @@ const FileUploader = ((props) => {
     function updateName(e, value) {
         e.preventDefault()
         setNewName(value)
-        if (newName == name) {
+        if (value === name) {
             setUpdated(true)
         } else {
             setUpdated(false)
@@ -60,7 +80,7 @@ const FileUploader = ((props) => {
                 "authorization": `Bearer ${token}`,
                 "content-type": "application/json"
             },
-            body: JSON.stringify({name: newName})
+            body: JSON.stringify({ name: newName })
         })
             .then(res => res.json())
             .then(res => {
@@ -69,6 +89,10 @@ const FileUploader = ((props) => {
                 } else {
                     setName(res.name)
                     setUpdated(true)
+
+                    if(updateCallback) {
+                        updateCallback(res)
+                    }
                 }
             })
             .catch(err => {
@@ -79,10 +103,12 @@ const FileUploader = ((props) => {
     return (
         <div>
             {!id && <input type="file" accept=".pdf,.png,.jpg,.jpeg" multiple={false} onChange={e => uploadFile(e.target.files[0])} />}
-            {id && <div>
-                <input type="text" text={name} value={newName} onChange={e => updateName(e, e.target.value)} />
-                {!updated && <button onClick={e => updateFile(e)}>Guardar</button>}
-            </div>
+            {
+                id && <div>
+                    <input type="text" text={name} value={newName} onChange={e => updateName(e, e.target.value)} />
+                    {!updated && <button onClick={e => updateFile(e)}>Guardar</button>}
+                    {url && type =="image" && <img src={url} alt={name} loading="lazy" width="200px"/>}
+                </div>
             }
         </div>
     )
