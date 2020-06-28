@@ -1,3 +1,4 @@
+import Cookie from "js-cookie"
 import { parseCookies } from '../app/middleware/parseCookies'
 import { wrapper } from '../app/redux/store'
 import { userActionTypes } from '../app/redux/user/action'
@@ -16,26 +17,42 @@ MyApp.getInitialProps = async ({ Component, ctx }) => {
     let pageProps;
     const cookie = parseCookies(ctx.req)
 
-    if (!process.browser) {
-        var data = {}
-
-        if (cookie.userId) {
-            data.id = cookie.userId
-        }
-
-        if (cookie.authToken) {
-            data.token = cookie.authToken
-        }
-
-        store.dispatch({ type: UPDATE_COOKIES_DATA, data: cookie })
-        store.dispatch({ type: UPDATE_USER_DATA, data: data })
-    }
-
     if (Component.getInitialProps) {
         pageProps = await Component.getInitialProps(ctx)
     }
 
-    return { pageProps }
+    if (!process.browser) {
+        var data = {}
+
+        if (cookie.authToken) {
+            return fetch('http://localhost:3000/api/users/authenticate/renew', {
+                method: "GET",
+                headers: {
+                    "authorization": `Bearer ${cookie.authToken}`
+                }
+            })
+                .then(res => res.json())
+                .then(res => {
+                    if (res.error) {
+                        console.log(res.error)
+                        Cookie.remove("authToken")
+                        return { pageProps }
+                    } else {
+                        data = res
+                        store.dispatch({ type: UPDATE_USER_DATA, data })
+                        // store.dispatch({ type: UPDATE_COOKIES_DATA, data: cookie })
+                        return { pageProps }
+                    }
+                })
+                .catch(err => {
+                    console.log(err.error)
+                    Cookie.remove("authToken")
+                    return { pageProps }
+                })
+        } else {
+            return { pageProps }
+        }
+    }
 }
 
 
