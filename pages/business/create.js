@@ -1,83 +1,134 @@
 import Layout from '../../app/components/Layout'
-import { useState } from 'react'
+import { useState, useEffect, Component } from 'react'
 import { connect } from 'react-redux'
 import { updateUserData } from '../../app/redux/user/action'
-import { useRouter } from 'next/router'
+import Router from 'next/router'
 import FileUploader from '../../app/components/FileUploader'
 
-const CreateBusiness = (props) => {
+class CreateBusiness extends Component {
 
-    const router = useRouter()
-    const { user: { token, id } } = props
+    state = {
+        name: "",
+        description: "",
+        location: "",
+        errors: "",
+        images: []
+    }
 
-    const [name, setName] = useState("")
-    const [description, setDescription] = useState("")
-    const [location, setLocation] = useState("")
-    const [errors, setErrors] = useState("")
-    const [images, setImages] = useState("")
-
-    const createBusiness = (e, data) => {
+    createBusiness = (e) => {
         e.preventDefault()
 
-        setErrors("")
+        const { name, description, location, images } = this.state
+        const { id, token } = this.props.user
+
+        let newImages = []
+
+        for (var i = 0; i < images.length; i++) {
+            newImages.push(images[i].id)
+        }
+
+        let data = {
+            name,
+            description,
+            location,
+            images: newImages
+        }
+
+        this.setState({ errors: "" })
+
         data.owner = id;
 
         fetch('http://localhost:3000/api/business', {
             method: "POST",
             headers: {
                 "content-type": "application/json",
-                "authorization" : `Bearer ${token}`
+                "authorization": `Bearer ${token}`
             },
             body: JSON.stringify(data)
         })
             .then(res => res.json())
             .then(res => {
                 if (res.error) {
-                    setErrors(res.error)
+                    this.setState({ errors: res.error })
                 } else {
-                    router.push(`/business/${res.id}`)
+                    Router.push(`/business/${res.id}`)
                 }
             })
             .catch(err => {
-                setErrors(err.error)
+                this.setState({ errors: err.error })
             })
     }
 
-    const renderImagesUploader = () => {
-        let imagesCards = images.map(image => {
-            <FileUploader />
-        })
+    onUploadImage = (index, value) => {
+        const { images } = this.state
+        let newImages = images
+        newImages.push(value)
+        this.setState({ images: newImages })
     }
 
-    return (
-        <Layout contentClasses="centered">
-            <form onSubmit={(e) => createBusiness(e, { name, description, location })} style={{ maxWidth: "200px" }}>
-                <h1>Crea tu negocio</h1>
-                <div style={{ display: "flex", flexDirection: "column" }}>
-                    <label>Nombre</label>
-                    <input onChange={(e) => setName(e.target.value)} type="text" />
-                </div>
-                <div style={{ display: "flex", flexDirection: "column" }}>
-                    <label>Descripción</label>
-                    <input onChange={(e) => setDescription(e.target.value)} type="text" />
-                </div>
-                <div style={{ display: "flex", flexDirection: "column" }}>
-                    <label>Dirección</label>
-                    <input onChange={(e) => setLocation(e.target.value)} type="text" />
-                </div>
+    onUpdateImage = (index, value) => {
+        const { images } = this.state
+        let newImages = images
+        newImages[index] = value
+        this.setState({ images: newImages })
+    }
 
-                <div style={{ display: "flex", flexDirection: "column" }}>
-                    <label>Imagenes</label>
-                   <FileUploader/>
-                </div>
+    setInputValue = (name, value) => {
+        if (name && value) {
+            this.setState({ [name]: value })
+        }
+    }
+
+    renderImagesUploader = () => {
+        const { images } = this.state
+        const { onUpdateImage, onUploadImage } = this
+
+        let newImages = []
+
+        newImages = images.map((item, index) => {
+            return <FileUploader index={index} updateCallback={onUpdateImage} uploadCallback={onUploadImage} data={item} />
+        })
+
+        newImages.push(<FileUploader index={images.length} updateCallback={onUpdateImage} uploadCallback={onUploadImage} />)
+        return newImages
+    }
+
+    render() {
+        const { user: { token, id } } = this.props
+        const { name, description, location, images, errors } = this.state
+        const { renderImagesUploader, setInputValue, createBusiness } = this
+
+        return (
+            <Layout contentClasses="centered">
+                <form onSubmit={(e) => createBusiness(e)} style={{ maxWidth: "200px" }}>
+                    <h1>Crea tu negocio</h1>
+                    <div style={{ display: "flex", flexDirection: "column" }}>
+                        <label>Nombre</label>
+                        <input onChange={(e) => setInputValue(e.target.name, e.target.value)} name="name" type="text" />
+                    </div>
+                    <div style={{ display: "flex", flexDirection: "column" }}>
+                        <label>Descripción</label>
+                        <input onChange={(e) => setInputValue(e.target.name, e.target.value)} name="description" type="text" />
+                    </div>
+                    <div style={{ display: "flex", flexDirection: "column" }}>
+                        <label>Dirección</label>
+                        <input onChange={(e) => setInputValue(e.target.name, e.target.value)} name="location" type="text" />
+                    </div>
+
+                    <div style={{ display: "flex", flexDirection: "column" }}>
+                        <label>Imagenes</label>
+                        {renderImagesUploader()}
+                    </div>
 
 
-                {errors && <p className="errors">{errors}</p>}
+                    {errors && <p className="errors">{errors}</p>}
 
-                <button type="submit">Send</button>
-            </form>
-        </Layout>
-    )
+                    <button type="submit">Send</button>
+                </form>
+            </Layout>
+        )
+    }
+
 }
 
 CreateBusiness.getInitialProps = async (ctx) => {

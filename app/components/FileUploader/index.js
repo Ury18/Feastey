@@ -4,7 +4,7 @@ import { connect } from 'react-redux'
 
 const FileUploader = ((props) => {
 
-    const { user: { token }, data, uploadCallback, updateCallback } = props
+    const { user: { token }, data, uploadCallback, updateCallback, index } = props
 
     const [id, setId] = useState()
     const [name, setName] = useState()
@@ -17,8 +17,8 @@ const FileUploader = ((props) => {
         if (data) {
             setId(data.id)
             setName(data.name)
-            setNewName(data.name)
-            setUpdated(true)
+            setNewName(data.tempName)
+            setUpdated(newName == name)
             setUrl(data.url)
         }
     })
@@ -48,12 +48,11 @@ const FileUploader = ((props) => {
                     setType(res.type.split("/")[0])
                     setTimeout(() => {
                         setUrl(res.url)
-
-                    },1000)
-
-                    if(uploadCallback) {
-                        uploadCallback(res)
-                    }
+                        if (uploadCallback) {
+                            res.tempName = res.name
+                            uploadCallback(index, res)
+                        }
+                    }, 1000)
                 }
             })
             .catch(err => {
@@ -68,6 +67,10 @@ const FileUploader = ((props) => {
             setUpdated(true)
         } else {
             setUpdated(false)
+        }
+        if (updateCallback) {
+            data.tempName = value
+            updateCallback(index, data)
         }
     }
 
@@ -90,8 +93,9 @@ const FileUploader = ((props) => {
                     setName(res.name)
                     setUpdated(true)
 
-                    if(updateCallback) {
-                        updateCallback(res)
+                    if (updateCallback) {
+                        res.tempName = res.name
+                        updateCallback(index, res)
                     }
                 }
             })
@@ -105,9 +109,9 @@ const FileUploader = ((props) => {
             {!id && <input type="file" accept=".pdf,.png,.jpg,.jpeg" multiple={false} onChange={e => uploadFile(e.target.files[0])} />}
             {
                 id && <div>
-                    <input type="text" text={name} value={newName} onChange={e => updateName(e, e.target.value)} />
+                    <input type="text" value={newName} onChange={e => updateName(e, e.target.value)} />
                     {!updated && <button onClick={e => updateFile(e)}>Guardar</button>}
-                    {url && type =="image" && <img src={url} alt={name} loading="lazy" width="200px"/>}
+                    {url && type == "image" && <img src={url} alt={name} loading="lazy" width="200px" />}
                 </div>
             }
         </div>
