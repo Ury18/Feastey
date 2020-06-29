@@ -1,12 +1,13 @@
 import Layout from '../../app/components/Layout'
 import Link from 'next/link'
+import { connect } from 'react-redux'
 
 function Users(props) {
 
-    const { data, cookies } = props
+    const { users, cookies } = props
 
-    const mapData = (data) => {
-        return data.map(item => {
+    const mapData = (users) => {
+        return users.map(item => {
             return <div key={item.id}>
                 <Link href={`users/${item.id}`}>
                     <a>
@@ -23,7 +24,7 @@ function Users(props) {
     return (
         <Layout>
             <div>
-                {mapData(data)}
+                {mapData(users)}
             </div>
         </Layout>
     )
@@ -31,8 +32,13 @@ function Users(props) {
 
 Users.getInitialProps = async (ctx) => {
     const res = await fetch('http://localhost:3000/api/users/')
-    const data = await res.json()
-    return { data }
+    const users = await res.json()
+    return { users }
 }
 
-export default Users
+const mapDispatchToProps = (dispatch) => {
+    return { updateUserData: (data) => { dispatch(updateUserData({ ...data })) } }
+}
+
+export default connect((state => state), mapDispatchToProps)(Users)
+

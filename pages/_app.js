@@ -52,6 +52,8 @@ MyApp.getInitialProps = async ({ Component, ctx }) => {
         } else {
             return { pageProps }
         }
+    } else {
+        return { pageProps }
     }
 }
 
