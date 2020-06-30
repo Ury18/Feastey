@@ -2,6 +2,8 @@ import Layout from '../app/components/Layout'
 import Discover from '../app/components/Discover'
 import { connect } from 'react-redux'
 import { updateUserData } from '../app/redux/user/action'
+import Cookie from "js-cookie"
+
 
 const Index = (props) => {
     const { updateUserData } = props
@@ -9,7 +11,7 @@ const Index = (props) => {
         <Layout>
             <Discover/>
             <p>{props.user.name}</p>
-            <button onClick={() => updateUserData({ name: "Test2" })}>Set random name</button>
+            <button onClick={() => Cookie.remove("authToken", {path: "/"})}>Delete Cookie</button>
         </Layout>
     )
 }
