@@ -19,14 +19,14 @@ class AttachmentsSection extends Component {
 
     onUploadFile = (value) => {
         const { files } = this.state
-        const { updateCallback } = this.props
+        const { uploadCallback } = this.props
 
         let newFiles = files
         newFiles.push(value)
         this.setState({ files: newFiles },
             () => {
-                if (updateCallback) {
-                    updateCallback(this.state)
+                if (uploadCallback) {
+                    uploadCallback(this.state)
                 }
             })
     }
@@ -34,9 +34,8 @@ class AttachmentsSection extends Component {
     onUpdateFile = (fileIndex, value) => {
         const { files } = this.state
         const { updateCallback, index } = this.props
-        console.log(index)
         let newFiles = files
-        newFiles[index] = value
+        newFiles[fileIndex] = value
 
         this.setState({ files: newFiles },
             () => {
