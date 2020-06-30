@@ -4,6 +4,7 @@ import { connect } from 'react-redux'
 import { updateUserData } from '../../app/redux/user/action'
 import Router from 'next/router'
 import FileUploader from '../../app/components/FileUploader'
+import AttachmentsSection from '../../app/components/AttachmentsSection'
 
 class CreateBusiness extends Component {
 
@@ -12,7 +13,8 @@ class CreateBusiness extends Component {
         description: "",
         location: "",
         errors: "",
-        images: []
+        images: [],
+        attachments: []
     }
 
     createBusiness = (e) => {
@@ -59,18 +61,33 @@ class CreateBusiness extends Component {
             })
     }
 
-    onUploadImage = (index, value) => {
+    onUploadImage = (value) => {
         const { images } = this.state
         let newImages = images
         newImages.push(value)
         this.setState({ images: newImages })
     }
 
+
     onUpdateImage = (index, value) => {
         const { images } = this.state
         let newImages = images
         newImages[index] = value
         this.setState({ images: newImages })
+    }
+
+    onUploadAttachment = (value) => {
+        const { attachments } = this.state
+        let newAttachments = attachments
+        newAttachments.push(value)
+        this.setState({ attachments: newAttachments })
+    }
+
+    onUpdateAttachment = (index, value) => {
+        const { attachments } = this.state
+        let newAttachments = attachments
+        newAttachments[index] = value
+        this.setState({ attachments: newAttachments })
     }
 
     setInputValue = (name, value) => {
@@ -93,10 +110,24 @@ class CreateBusiness extends Component {
         return newImages
     }
 
+    renderAttachmentsSection = () => {
+        const { attachments } = this.state
+        const { onUpdateAttachment, onUploadAttachment } = this
+
+        let newAttachments = []
+
+        newAttachments = attachments.map((item, index) => {
+            return <AttachmentsSection index={index} updateCallback={onUpdateAttachment} uploadCallback={onUploadAttachment} data={item} />
+        })
+
+        newAttachments.push(<AttachmentsSection index={attachments.length} updateCallback={onUpdateAttachment} uploadCallback={onUploadAttachment} />)
+        return newAttachments
+    }
+
     render() {
         const { user: { token, id } } = this.props
         const { name, description, location, images, errors } = this.state
-        const { renderImagesUploader, setInputValue, createBusiness } = this
+        const { renderImagesUploader, setInputValue, createBusiness, renderAttachmentsSection } = this
 
         return (
             <Layout contentClasses="centered">
@@ -120,6 +151,12 @@ class CreateBusiness extends Component {
                         {renderImagesUploader()}
                     </div>
 
+                    <div style={{ display: "flex", flexDirection: "column" }}>
+                        <h2>Attachments</h2>
+                        {renderAttachmentsSection()}
+
+
+                    </div>
 
                     {errors && <p className="errors">{errors}</p>}
 

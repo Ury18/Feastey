@@ -50,7 +50,7 @@ const FileUploader = ((props) => {
                         setUrl(res.url)
                         if (uploadCallback) {
                             res.tempName = res.name
-                            uploadCallback(index, res)
+                            uploadCallback(res)
                         }
                     }, 1000)
                 }
