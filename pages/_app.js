@@ -1,4 +1,3 @@
-import Cookie from "js-cookie"
 import { parseCookies } from '../app/middleware/parseCookies'
 import { wrapper } from '../app/redux/store'
 import { userActionTypes } from '../app/redux/user/action'
@@ -35,7 +34,6 @@ MyApp.getInitialProps = async ({ Component, ctx }) => {
                 .then(res => {
                     if (res.error) {
                         console.log(res.error)
-                        Cookie.remove("authToken", {path: "/"})
                         return { pageProps }
                     } else {
                         data = res
@@ -46,7 +44,6 @@ MyApp.getInitialProps = async ({ Component, ctx }) => {
                 })
                 .catch(err => {
                     console.log(err.error)
-                    Cookie.remove("authToken", {path: "/"})
                     return { pageProps }
                 })
         } else {

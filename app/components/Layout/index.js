@@ -1,11 +1,16 @@
 import './index.scss'
-import { useState } from 'react'
+import { useEffect } from 'react'
 import Header from '../Header'
+import { connect } from 'react-redux'
+import Cookie from "js-cookie"
 
-export default ((props) => {
-    const [userId, setUserId] = useState()
+const Layout = ((props) => {
     const { contentClasses } = props
-
+    useEffect(() => {
+        if(!props.user.token) {
+            Cookie.remove("authToken")
+        }
+    })
     return (
         <div className="app">
             <Header />
@@ -17,3 +22,9 @@ export default ((props) => {
         </div>
     )
 })
+
+const mapDispatchToProps = (dispatch) => {
+    return { updateUserData: (data) => { dispatch(updateUserData({ ...data })) } }
+}
+
+export default connect((state => state), mapDispatchToProps)(Layout)
