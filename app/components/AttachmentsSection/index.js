@@ -25,7 +25,7 @@ class AttachmentsSection extends Component {
         newFiles.push(value)
         this.setState({ files: newFiles },
             () => {
-                if (uploadCallback) {
+                if (uploadCallback && newFiles.length < 2) {
                     uploadCallback(this.state)
                 }
             })

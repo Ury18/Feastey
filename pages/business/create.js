@@ -20,20 +20,39 @@ class CreateBusiness extends Component {
     createBusiness = (e) => {
         e.preventDefault()
 
-        const { name, description, location, images } = this.state
+        const { name, description, location, images, attachments } = this.state
         const { id, token } = this.props.user
 
-        let newImages = []
+        let imageList = []
 
         for (var i = 0; i < images.length; i++) {
-            newImages.push(images[i].id)
+            imageList.push(images[i].id)
+        }
+
+        let attachmentsClean = []
+
+        for (var i = 0; i < attachments.length; i++) {
+            let attachment = {}
+            attachment.name = attachments[i].name
+
+            let files = attachments[i].files
+            let cleanFiles = []
+
+            for (var j = 0; j < files.length; j++) {
+                cleanFiles.push(files[j].id)
+            }
+
+            attachment.files = cleanFiles
+
+            attachmentsClean.push(attachment)
         }
 
         let data = {
             name,
             description,
             location,
-            images: newImages
+            images: imageList,
+            attachments: attachmentsClean
         }
 
         this.setState({ errors: "" })
@@ -135,15 +154,15 @@ class CreateBusiness extends Component {
                     <h1>Crea tu negocio</h1>
                     <div style={{ display: "flex", flexDirection: "column" }}>
                         <label>Nombre</label>
-                        <input onChange={(e) => setInputValue(e.target.name, e.target.value)} name="name" type="text" />
+                        <input onChange={(e) => setInputValue(e.target.name, e.target.value)} name="name" type="text" required/>
                     </div>
                     <div style={{ display: "flex", flexDirection: "column" }}>
                         <label>Descripción</label>
-                        <input onChange={(e) => setInputValue(e.target.name, e.target.value)} name="description" type="text" />
+                        <input onChange={(e) => setInputValue(e.target.name, e.target.value)} name="description" type="text" required/>
                     </div>
                     <div style={{ display: "flex", flexDirection: "column" }}>
                         <label>Dirección</label>
-                        <input onChange={(e) => setInputValue(e.target.name, e.target.value)} name="location" type="text" />
+                        <input onChange={(e) => setInputValue(e.target.name, e.target.value)} name="location" type="text" required/>
                     </div>
 
                     <div style={{ display: "flex", flexDirection: "column" }}>
