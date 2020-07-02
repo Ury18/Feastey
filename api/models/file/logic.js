@@ -137,20 +137,33 @@ logic = {
     deleteFile(deleterId, deleterRole, fileId) {
         return File.findById(fileId)
             .then(file => {
-                const bucket = admin.storage().bucket()
-                const stored_file = bucket.file(file.file_title)
-                return stored_file.delete()
-                    .then(() => {
-                        return file.remove()
+                if(file) {
+                    if (deleterRole == "admin" || deleterId == file.owner) {
+                        const bucket = admin.storage().bucket()
+                        const stored_file = bucket.file(file.file_title)
+                        return stored_file.delete()
+                        .then(() => {
+                            return file.remove()
                             .then(() => {
                                 return { message: "File deleted" }
                             })
-                    })
-
+                        })
+                    } else {
+                        throw Error("Insufficient Permissions")
+                    }
+                } else {
+                    return"File not found"
+                }
             })
             .catch(({ message }) => {
                 throw Error(message)
             })
+    },
+
+    async deleteMultipleFiles(deleterId, deleterRole, fileIds) {
+        return await fileIds.map((item) => {
+            return this.deleteFile(deleterId, deleterRole, item)
+        })
     }
 
 }

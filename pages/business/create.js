@@ -17,6 +17,47 @@ class CreateBusiness extends Component {
         attachments: []
     }
 
+    componentDidMount() {
+        this.setCloseWindowEvent()
+    }
+
+    setCloseWindowEvent = () => {
+        window.addEventListener("beforeunload", (e) => {
+            e.preventDefault()
+            return this.onWindowClose(e)
+        })
+    }
+
+    onWindowClose = (e) => {
+        const { name, description, location, images, attachments } = this.state
+        const { id, token } = this.props.user
+
+        let files = []
+
+        for (var i = 0; i < images.length; i++) {
+            files.push(images[i].id)
+        }
+
+        for (var i = 0; i < attachments.length; i++) {
+            let attachment = {}
+
+            let thisFiles = attachments[i].files
+
+            for (var j = 0; j < thisFiles.length; j++) {
+                files.push(thisFiles[j].id)
+            }
+        }
+
+        let blob = new Blob(
+            [JSON.stringify({ files, authToken: token })],
+            {
+                type: 'application/json; charset=UTF-8'
+            }
+        )
+
+        navigator.sendBeacon('http://localhost:3000/api/files/delete-multiple', blob)
+    }
+
     createBusiness = (e) => {
         e.preventDefault()
 
@@ -154,15 +195,15 @@ class CreateBusiness extends Component {
                     <h1>Crea tu negocio</h1>
                     <div style={{ display: "flex", flexDirection: "column" }}>
                         <label>Nombre</label>
-                        <input onChange={(e) => setInputValue(e.target.name, e.target.value)} name="name" type="text" required/>
+                        <input onChange={(e) => setInputValue(e.target.name, e.target.value)} name="name" type="text" required />
                     </div>
                     <div style={{ display: "flex", flexDirection: "column" }}>
                         <label>Descripción</label>
-                        <input onChange={(e) => setInputValue(e.target.name, e.target.value)} name="description" type="text" required/>
+                        <input onChange={(e) => setInputValue(e.target.name, e.target.value)} name="description" type="text" required />
                     </div>
                     <div style={{ display: "flex", flexDirection: "column" }}>
                         <label>Dirección</label>
-                        <input onChange={(e) => setInputValue(e.target.name, e.target.value)} name="location" type="text" required/>
+                        <input onChange={(e) => setInputValue(e.target.name, e.target.value)} name="location" type="text" required />
                     </div>
 
                     <div style={{ display: "flex", flexDirection: "column" }}>

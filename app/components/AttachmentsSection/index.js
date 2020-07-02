@@ -19,7 +19,7 @@ class AttachmentsSection extends Component {
 
     onUploadFile = (value) => {
         const { files } = this.state
-        const { uploadCallback } = this.props
+        const { uploadCallback, updateCallback, index } = this.props
 
         let newFiles = files
         newFiles.push(value)
@@ -27,6 +27,8 @@ class AttachmentsSection extends Component {
             () => {
                 if (uploadCallback && newFiles.length < 2) {
                     uploadCallback(this.state)
+                } else {
+                    updateCallback(index, this.state)
                 }
             })
     }

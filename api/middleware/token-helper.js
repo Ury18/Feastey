@@ -18,31 +18,36 @@ const tokenHelper = {
         return sub
     },
 
+    propagateRequestInfo(req, res, next, token) {
+        try {
+            const userId = this.verifyToken(token)
+            req.tokenUserId = userId
+
+            return userLogic.getUserById(userId)
+                .then(user => {
+                    req.tokenUserRole = user.role
+                    next()
+                })
+                .catch(({ message }) => {
+                    req.tokenUserRole = null
+                    next()
+                })
+
+        } catch ({ message }) {
+            req.tokenUserId = null
+            next()
+        }
+    },
+
     tokenVerifierMiddleware(req, res, next) {
-        const { headers: { authorization } } = req
+        const { headers: { authorization }, body } = req
 
         if (authorization) {
             const token = authorization.substring(7)
-
-            try {
-                const userId = this.verifyToken(token)
-                req.tokenUserId = userId
-
-                return userLogic.getUserById(userId)
-                    .then(user => {
-                        req.tokenUserRole = user.role
-                        next()
-                    })
-                    .catch(({message}) => {
-                        req.tokenUserRole = null
-                        next()
-                    })
-
-            } catch ({ message }) {
-                req.tokenUserId = null
-                next()
-            }
-
+            this.propagateRequestInfo(req,res,next,token)
+        } else if (req.body && req.body.authToken) {
+            const token = req.body.authToken
+            this.propagateRequestInfo(req, res, next, token)
         } else {
             req.tokenUserId = null
             next()
