@@ -157,10 +157,10 @@ class CreateBusiness extends Component {
         let newImages = []
 
         newImages = images.map((item, index) => {
-            return <FileUploader index={index} updateCallback={onUpdateImage} uploadCallback={onUploadImage} data={item} />
+            return <FileUploader key={index} index={index} updateCallback={onUpdateImage} uploadCallback={onUploadImage} data={item} />
         })
 
-        newImages.push(<FileUploader index={images.length} updateCallback={onUpdateImage} uploadCallback={onUploadImage} />)
+        newImages.push(<FileUploader key={images.length} index={images.length} updateCallback={onUpdateImage} uploadCallback={onUploadImage} />)
         return newImages
     }
 
@@ -171,10 +171,10 @@ class CreateBusiness extends Component {
         let newAttachments = []
 
         newAttachments = attachments.map((item, index) => {
-            return <AttachmentsSection index={index} updateCallback={onUpdateAttachment} uploadCallback={onUploadAttachment} data={item} />
+            return <AttachmentsSection key={index} index={index} updateCallback={onUpdateAttachment} uploadCallback={onUploadAttachment} data={item} />
         })
 
-        newAttachments.push(<AttachmentsSection index={attachments.length} updateCallback={onUpdateAttachment} uploadCallback={onUploadAttachment} />)
+        newAttachments.push(<AttachmentsSection key={attachments.length} index={attachments.length} updateCallback={onUpdateAttachment} uploadCallback={onUploadAttachment} />)
         return newAttachments
     }
 
@@ -208,8 +208,6 @@ class CreateBusiness extends Component {
                     <div style={{ display: "flex", flexDirection: "column" }}>
                         <h2>Attachments</h2>
                         {renderAttachmentsSection()}
-
-
                     </div>
 
                     {errors && <p className="errors">{errors}</p>}
