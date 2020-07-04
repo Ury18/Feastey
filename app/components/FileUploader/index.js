@@ -15,9 +15,8 @@ const FileUploader = ((props) => {
 
     useEffect(() => {
         if (data) {
-            let fileId = data.id  || data._id;
             let tempName = data.tempName || data.name
-            setId(fileId)
+            setId(data.id )
             setName(data.name)
             setNewName(tempName)
             setUpdated(newName == name)
