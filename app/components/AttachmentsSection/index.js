@@ -56,14 +56,15 @@ class AttachmentsSection extends Component {
     renderFilesUploader = () => {
         const { files } = this.state
         const { onUpdateFile, onUploadFile } = this
+        const { tempFileCallback } = this.props
 
         let newFiles = []
 
         newFiles = files.map((item, index) => {
-            return <FileUploader index={index} updateCallback={onUpdateFile} uploadCallback={onUploadFile} data={item} />
+            return <FileUploader key={index} index={index} updateCallback={onUpdateFile} uploadCallback={onUploadFile} data={item} tempFileCallback={tempFileCallback}/>
         })
 
-        newFiles.push(<FileUploader index={files.length} updateCallback={onUpdateFile} uploadCallback={onUploadFile} />)
+        newFiles.push(<FileUploader key={files.length} index={files.length} updateCallback={onUpdateFile} uploadCallback={onUploadFile} tempFileCallback={tempFileCallback}/>)
         return newFiles
     }
 

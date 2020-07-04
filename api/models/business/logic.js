@@ -16,7 +16,7 @@ logic = {
     },
 
     getBusinessById(businessId) {
-        return Busines.findById(businessId).select('-__v').lean()
+        return Busines.findById(businessId).populate("images").populate("attachments.files").select('-__v').lean()
             .then(business => {
                 business.id = business._id
                 delete business._id

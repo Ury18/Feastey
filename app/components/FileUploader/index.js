@@ -4,7 +4,7 @@ import { connect } from 'react-redux'
 
 const FileUploader = ((props) => {
 
-    const { user: { token }, data, uploadCallback, updateCallback, index } = props
+    const { user: { token }, data, uploadCallback, updateCallback, tempFileCallback, index } = props
 
     const [id, setId] = useState()
     const [name, setName] = useState()
@@ -15,11 +15,14 @@ const FileUploader = ((props) => {
 
     useEffect(() => {
         if (data) {
-            setId(data.id)
+            let fileId = data.id  || data._id;
+            let tempName = data.tempName || data.name
+            setId(fileId)
             setName(data.name)
-            setNewName(data.tempName)
+            setNewName(tempName)
             setUpdated(newName == name)
             setUrl(data.url)
+            setType(data.type.split("/")[0])
         }
     })
 
@@ -51,6 +54,9 @@ const FileUploader = ((props) => {
                         if (uploadCallback) {
                             res.tempName = res.name
                             uploadCallback(res)
+                        }
+                        if(tempFileCallback) {
+                            tempFileCallback(res)
                         }
                     }, 1000)
                 }
