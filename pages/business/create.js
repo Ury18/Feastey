@@ -18,14 +18,7 @@ class CreateBusiness extends Component {
     }
 
     componentDidMount() {
-        this.setCloseWindowEvent()
-    }
-
-    setCloseWindowEvent = () => {
-        window.addEventListener("beforeunload", (e) => {
-            e.preventDefault()
-            return this.onWindowClose(e)
-        })
+        window.addEventListener("beforeunload", this.onWindowClose)
     }
 
     onWindowClose = (e) => {
@@ -113,6 +106,7 @@ class CreateBusiness extends Component {
                 if (res.error) {
                     this.setState({ errors: res.error })
                 } else {
+                    window.removeEventListener("beforeunload", this.onWindowClose)
                     Router.push(`/business/${res.id}`)
                 }
             })
