@@ -20,12 +20,31 @@ logic = {
             .then(business => {
                 business.id = business._id
                 delete business._id
+
+                business.images.forEach(image => {
+                    image.id = image._id
+                    delete image.__v
+                    delete image._id
+                })
+
+                business.attachments.forEach(attachment => {
+                    attachment.id = attachment._id
+                    delete attachment.__v
+                    delete attachment._id
+
+                    attachment.files.forEach(file => {
+                        file.id = file._id
+                        delete file.__v
+                        delete file._id
+                    })
+                })
+
                 return business
             })
     },
 
     createBusiness(creatorId, creatorRole, data) {
-        const  {attachments, owner} = data
+        const { attachments, owner } = data
 
         if (!owner) {
             throw Error("Owner is needed")
