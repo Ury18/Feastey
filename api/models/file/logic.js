@@ -46,7 +46,7 @@ logic = {
         }
 
         let type = file.mimetype
-        const contentType = type == "application/pdf" ? 'pdf' : type == 'image/png' ? 'png' : 'image/jpeg'
+        const contentType = type == "application/pdf" ? 'pdf' : type == 'image/png' ? 'png' : 'jpeg'
 
         let date = new Date();
         let curr_date = date.getDate();
