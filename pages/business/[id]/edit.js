@@ -71,7 +71,6 @@ class EditBusiness extends Component {
 
             attachmentsClean.push(attachment)
         }
-
         let data = {
             name,
             description,
@@ -80,6 +79,7 @@ class EditBusiness extends Component {
             attachments: attachmentsClean,
             owner: user.id
         }
+
         fetch(`http://localhost:3000/api/business/${id}`, {
             method: "PUT",
             headers: {
@@ -94,6 +94,7 @@ class EditBusiness extends Component {
                     this.setState({ errors: res.error })
                 } else {
                     this.setState({ errors: "" })
+                    window.removeEventListener("beforeunload", this.onWindowClose)
                     Router.push(`/business/${res.id}`)
                 }
             })
@@ -178,7 +179,7 @@ class EditBusiness extends Component {
 
     render() {
         const { name, description, location, attachments, errors } = this.state
-        const { setInputValue, editBusiness, renderAttachmentsSection, renderImagesUploader, onUploadAttachment, onUpdateAttachment } = this
+        const { setInputValue, editBusiness, renderAttachmentsSection, renderImagesUploader} = this
         return (
             <Layout contentClasses="centered">
                 <form onSubmit={(e) => editBusiness(e)} style={{ maxWidth: "200px" }}>
