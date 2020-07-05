@@ -42,9 +42,23 @@ class AttachmentsSection extends Component {
         this.setState({ files: newFiles },
             () => {
                 if (updateCallback) {
-                    updateCallback(index,this.state)
+                    updateCallback(index, this.state)
                 }
             })
+    }
+
+    onDeleteFile = (e, fileIndex) => {
+        e.preventDefault()
+
+        const { updateCallback, deleteCallback, index } = this.props
+        const { files } = this.state
+        let newFiles = files
+        let deleteFileId = files[fileIndex].id
+        newFiles.splice(fileIndex, 1)
+        this.setState({ files: newFiles })
+        if (deleteCallback) deleteCallback(deleteFileId)
+        if (updateCallback) updateCallback(index, this.state)
+
     }
 
     setInputValue = (name, value) => {
@@ -55,16 +69,16 @@ class AttachmentsSection extends Component {
 
     renderFilesUploader = () => {
         const { files } = this.state
-        const { onUpdateFile, onUploadFile } = this
+        const { onUpdateFile, onUploadFile, onDeleteFile } = this
         const { tempFileCallback } = this.props
 
         let newFiles = []
 
         newFiles = files.map((item, index) => {
-            return <FileUploader key={index} index={index} updateCallback={onUpdateFile} uploadCallback={onUploadFile} data={item} tempFileCallback={tempFileCallback}/>
+            return <FileUploader key={index} index={index} updateCallback={onUpdateFile} uploadCallback={onUploadFile} data={item} tempFileCallback={tempFileCallback} deleteCallback={onDeleteFile} />
         })
 
-        newFiles.push(<FileUploader key={files.length} index={files.length} updateCallback={onUpdateFile} uploadCallback={onUploadFile} tempFileCallback={tempFileCallback}/>)
+        newFiles.push(<FileUploader updateCallback={onUpdateFile} uploadCallback={onUploadFile} tempFileCallback={tempFileCallback} deleteCallback={onDeleteFile} />)
         return newFiles
     }
 

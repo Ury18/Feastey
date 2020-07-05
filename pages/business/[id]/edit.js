@@ -16,7 +16,8 @@ class EditBusiness extends Component {
         errors: "",
         images: [],
         attachments: [],
-        tempFiles: []
+        tempFiles: [],
+        deletedFiles: []
     }
 
     componentDidMount = () => {
@@ -42,7 +43,7 @@ class EditBusiness extends Component {
     editBusiness = (e) => {
         e.preventDefault()
 
-        const { id, name, description, location, images, attachments } = this.state
+        const { id, name, description, location, images, attachments,deletedFiles } = this.state
         const { user } = this.props
         const { token } = user
 
@@ -95,6 +96,17 @@ class EditBusiness extends Component {
                 } else {
                     this.setState({ errors: "" })
                     window.removeEventListener("beforeunload", this.onWindowClose)
+
+                    let blob = new Blob(
+                        [JSON.stringify({ files: deletedFiles, authToken: token })],
+                        {
+                            type: 'application/json; charset=UTF-8'
+                        }
+                    )
+
+                    navigator.sendBeacon('http://localhost:3000/api/files/delete-multiple', blob)
+
+
                     Router.push(`/business/${res.id}`)
                 }
             })
@@ -111,6 +123,22 @@ class EditBusiness extends Component {
 
         this.setState({ images: newImages })
     }
+    onUpdateImage = (index, value) => {
+        const { images } = this.state
+        let newImages = images
+        newImages[index] = value
+        this.setState({ images: newImages })
+    }
+
+    onDeleteImage = (e, index) => {
+        e.preventDefault()
+        const { images, deletedFiles } = this.state
+        deletedFiles.push(images[index].id)
+        let newImages = images
+        newImages.splice(index, 1)
+
+        this.setState({ images: newImages, deletedFiles })
+    }
 
     addNewTempFile = (value) => {
         const { tempFiles } = this.state
@@ -120,13 +148,6 @@ class EditBusiness extends Component {
 
         this.setState({ tempFiles: newTempFiles })
 
-    }
-
-    onUpdateImage = (index, value) => {
-        const { images } = this.state
-        let newImages = images
-        newImages[index] = value
-        this.setState({ images: newImages })
     }
 
     onUploadAttachment = (value) => {
@@ -143,31 +164,38 @@ class EditBusiness extends Component {
         this.setState({ attachments: newAttachments })
     }
 
+    onDeleteAttachment = (value) => {
+        const { deletedFiles } = this.state
+        deletedFiles.push(value)
+
+        this.setState({ deletedFiles })
+    }
+
     renderImagesUploader = () => {
         const { images } = this.state
-        const { onUpdateImage, onUploadImage, addNewTempFile } = this
+        const { onUpdateImage, onUploadImage, addNewTempFile, onDeleteImage } = this
 
         let newImages = []
 
         newImages = images.map((item, index) => {
-            return <FileUploader key={index} index={index} updateCallback={onUpdateImage} uploadCallback={onUploadImage} tempFileCallback={addNewTempFile} data={item} />
+            return <FileUploader key={index} index={index} updateCallback={onUpdateImage} uploadCallback={onUploadImage} tempFileCallback={addNewTempFile} data={item} deleteCallback={onDeleteImage}/>
         })
 
-        newImages.push(<FileUploader key={images.length} index={images.length} updateCallback={onUpdateImage} uploadCallback={onUploadImage} tempFileCallback={addNewTempFile} />)
+        newImages.push(<FileUploader updateCallback={onUpdateImage} uploadCallback={onUploadImage} tempFileCallback={addNewTempFile} deleteCallback={onDeleteImage} />)
         return newImages
     }
 
     renderAttachmentsSection = () => {
         const { attachments } = this.state
-        const { onUpdateAttachment, onUploadAttachment, addNewTempFile } = this
+        const { onUpdateAttachment, onUploadAttachment, addNewTempFile, onDeleteAttachment } = this
 
         let newAttachments = []
 
         newAttachments = attachments.map((item, index) => {
-            return <AttachmentsSection key={index} index={index} updateCallback={onUpdateAttachment} uploadCallback={onUploadAttachment} tempFileCallback={addNewTempFile} data={item} />
+            return <AttachmentsSection key={index} index={index} updateCallback={onUpdateAttachment} uploadCallback={onUploadAttachment} tempFileCallback={addNewTempFile} deleteCallback={onDeleteAttachment} data={item} />
         })
 
-        newAttachments.push(<AttachmentsSection index={attachments.length} updateCallback={onUpdateAttachment} uploadCallback={onUploadAttachment} tempFileCallback={addNewTempFile} />)
+        newAttachments.push(<AttachmentsSection updateCallback={onUpdateAttachment} uploadCallback={onUploadAttachment} tempFileCallback={addNewTempFile} deleteCallback={onDeleteAttachment} />)
         return newAttachments
     }
 

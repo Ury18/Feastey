@@ -4,7 +4,7 @@ import { connect } from 'react-redux'
 
 const FileUploader = ((props) => {
 
-    const { user: { token }, data, uploadCallback, updateCallback, tempFileCallback, index } = props
+    const { user: { token }, data, uploadCallback, updateCallback, tempFileCallback, deleteCallback, index } = props
 
     const [id, setId] = useState()
     const [name, setName] = useState()
@@ -16,7 +16,7 @@ const FileUploader = ((props) => {
     useEffect(() => {
         if (data) {
             let tempName = data.tempName || data.name
-            setId(data.id )
+            setId(data.id)
             setName(data.name)
             setNewName(tempName)
             setUpdated(newName == name)
@@ -54,7 +54,7 @@ const FileUploader = ((props) => {
                             res.tempName = res.name
                             uploadCallback(res)
                         }
-                        if(tempFileCallback) {
+                        if (tempFileCallback) {
                             tempFileCallback(res)
                         }
                     }, 1000)
@@ -115,6 +115,7 @@ const FileUploader = ((props) => {
             {
                 id && <div>
                     <input type="text" value={newName} onChange={e => updateName(e, e.target.value)} />
+                    <button onClick={e => deleteCallback(e, index) }>DELETE</button>
                     {!updated && <button onClick={e => updateFile(e)}>Guardar</button>}
                     {url && type == "image" && <img src={url} alt={name} loading="lazy" width="200px" />}
                 </div>
