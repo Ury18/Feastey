@@ -3,14 +3,16 @@
     padding-top: 5em;
     width: 70%;
     height: 100%;
+    
+    .coverImage {
+        img {
 
-    .col1 {
-        .coverImage {
-            background-color: black;
             width: 15em;
             height: 15em;
         }
+    }
 
+    .col1 {
         .contactInfo_Container {
             padding-top: 1em;
         }
