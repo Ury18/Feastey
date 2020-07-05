@@ -137,22 +137,22 @@ logic = {
     deleteFile(deleterId, deleterRole, fileId) {
         return File.findById(fileId)
             .then(file => {
-                if(file) {
+                if (file) {
                     if (deleterRole == "admin" || deleterId == file.owner) {
                         const bucket = admin.storage().bucket()
                         const stored_file = bucket.file(file.file_title)
                         return stored_file.delete()
-                        .then(() => {
-                            return file.remove()
                             .then(() => {
-                                return { message: "File deleted" }
+                                return file.remove()
+                                    .then(() => {
+                                        return { message: "File deleted" }
+                                    })
                             })
-                        })
                     } else {
                         throw Error("Insufficient Permissions")
                     }
                 } else {
-                    return"File not found"
+                    return "File not found"
                 }
             })
             .catch(({ message }) => {
@@ -163,6 +163,16 @@ logic = {
     async deleteMultipleFiles(deleterId, deleterRole, fileIds) {
         return await fileIds.map((item) => {
             return this.deleteFile(deleterId, deleterRole, item)
+        })
+    },
+
+    async deleteAllFiles(deleterRole) {
+        if (deleterRole !== "admin") {
+            throw Error("Inscufficient permissions")
+        }
+        let files = await File.find({}).select("-__v").lean()
+        return await files.map((item) => {
+            return this.deleteFile(null,deleterRole, item._id)
         })
     }
 
