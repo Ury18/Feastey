@@ -4,6 +4,7 @@ import Router from 'next/router'
 import Layout from '../../../app/components/Layout'
 import AttachmentsSection from '../../../app/components/AttachmentsSection'
 import FileUploader from '../../../app/components/FileUploader'
+import GoogleMap from '../../../app/components/GoogleMap'
 import { updateUserData } from '../../../app/redux/user/action'
 
 class EditBusiness extends Component {
@@ -12,7 +13,10 @@ class EditBusiness extends Component {
         id: "",
         name: "",
         description: "",
-        location: "",
+        location: {
+            address: "",
+            location: []
+        },
         errors: "",
         images: [],
         attachments: [],
@@ -23,6 +27,11 @@ class EditBusiness extends Component {
     componentDidMount = () => {
         const { business } = this.props
         this.setState({ ...business })
+        let location = {
+            address: business.location.address,
+            location: business.location.location.coordinates
+        }
+        this.setState({ location, address: location.address })
         window.addEventListener("beforeunload", this.onWindowClose)
     }
 
@@ -31,7 +40,7 @@ class EditBusiness extends Component {
         const { id, token } = this.props.user
 
         let blob = new Blob(
-            [JSON.stringify({ files:tempFiles, authToken: token })],
+            [JSON.stringify({ files: tempFiles, authToken: token })],
             {
                 type: 'application/json; charset=UTF-8'
             }
@@ -43,7 +52,7 @@ class EditBusiness extends Component {
     editBusiness = (e) => {
         e.preventDefault()
 
-        const { id, name, description, location, images, attachments,deletedFiles } = this.state
+        const { id, name, description, location, images, attachments, deletedFiles } = this.state
         const { user } = this.props
         const { token } = user
 
@@ -72,10 +81,19 @@ class EditBusiness extends Component {
 
             attachmentsClean.push(attachment)
         }
+
+        let newLocation = {
+            address: location.address,
+            location: {
+                type: "Point",
+                coordinates: location.location
+            }
+        }
+
         let data = {
             name,
             description,
-            location,
+            location: newLocation,
             images: imageList,
             attachments: attachmentsClean,
             owner: user.id
@@ -178,7 +196,7 @@ class EditBusiness extends Component {
         let newImages = []
 
         newImages = images.map((item, index) => {
-            return <FileUploader key={index} index={index} updateCallback={onUpdateImage} uploadCallback={onUploadImage} tempFileCallback={addNewTempFile} data={item} deleteCallback={onDeleteImage}/>
+            return <FileUploader key={index} index={index} updateCallback={onUpdateImage} uploadCallback={onUploadImage} tempFileCallback={addNewTempFile} data={item} deleteCallback={onDeleteImage} />
         })
 
         newImages.push(<FileUploader updateCallback={onUpdateImage} uploadCallback={onUploadImage} tempFileCallback={addNewTempFile} deleteCallback={onDeleteImage} />)
@@ -199,6 +217,25 @@ class EditBusiness extends Component {
         return newAttachments
     }
 
+    onAcceptAddress = (e) => {
+        const { location, address } = this.state
+
+        e.preventDefault()
+
+        fetch(`https://cors-anywhere.herokuapp.com/${process.env.GOOGLE_MAPS_GEOCODE_URL}address=${address}&key=${process.env.GOOGLE_MAPS_KEY}`, {
+            headers: {
+                "content-type": "application/json"
+            }
+        })
+            .then(response => response.json())
+            .then(response => {
+                location.address = address
+                let geolocation = response.results[0].geometry.location
+                location.location = [geolocation.lng, geolocation.lat]
+                this.setState({ location })
+            })
+    }
+
     setInputValue = (name, value) => {
         if (name && value) {
             this.setState({ [name]: value })
@@ -206,8 +243,8 @@ class EditBusiness extends Component {
     }
 
     render() {
-        const { name, description, location, attachments, errors } = this.state
-        const { setInputValue, editBusiness, renderAttachmentsSection, renderImagesUploader} = this
+        const { name, description, location, address, errors } = this.state
+        const { setInputValue, editBusiness, renderAttachmentsSection, renderImagesUploader, onAcceptAddress } = this
         return (
             <Layout contentClasses="centered">
                 <form onSubmit={(e) => editBusiness(e)} style={{ maxWidth: "200px" }}>
@@ -215,16 +252,22 @@ class EditBusiness extends Component {
 
                     <div style={{ display: "flex", flexDirection: "column" }}>
                         <label>Nombre</label>
-                        <input onChange={(e) => setInputValue(e.target.name, e.target.value)} type="text" value={name} name="name" />
+                        <input onChange={(e) => setInputValue(e.target.name, e.target.value)} type="text" defaultValue={name} name="name" />
                     </div>
                     <div style={{ display: "flex", flexDirection: "column" }}>
                         <label>Descripción</label>
-                        <input onChange={(e) => setInputValue(e.target.name, e.target.value)} type="text" value={description} name="description" />
+                        <input onChange={(e) => setInputValue(e.target.name, e.target.value)} type="text" defaultValue={description} name="description" />
                     </div>
                     <div style={{ display: "flex", flexDirection: "column" }}>
                         <label>Dirección</label>
-                        <input onChange={(e) => setInputValue(e.target.name, e.target.value)} type="text" value={location} name="location" />
+                        <div>
+                            <input onChange={(e) => setInputValue(e.target.name, e.target.value)} defaultValue={address} name="address" type="text" required />
+                            {address && address !== location.address && <button onClick={(e) => onAcceptAddress(e)}>Aceptar</button>}
+                        </div>
                     </div>
+                    {location && location.location && location.location.length > 0 && <div className="map-container">
+                        <GoogleMap class="map" lng={location.location[0]} lat={location.location[1]} />
+                    </div>}
                     <div style={{ display: "flex", flexDirection: "column" }}>
                         <label>Imagenes</label>
                         {renderImagesUploader()}

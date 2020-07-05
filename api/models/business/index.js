@@ -18,8 +18,20 @@ const Business = new Schema({
     },
 
     location: {
-        type: String,
-        required: true
+        address: {
+            type: String,
+        },
+        location: {
+            type: {
+                type: String,
+                enum: ['Point'],
+                required: true
+            },
+            coordinates : {
+                type: [Number],
+                required: true
+            }
+        }
     },
 
     images: [{
