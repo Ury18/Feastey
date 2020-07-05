@@ -52,6 +52,22 @@ fileRouter.route('/delete-multiple')
         }
     })
 
+fileRouter.route('/delete-all')
+    .get(tokenVerifierMiddleware, (req,res) => {
+        try {
+            logic.deleteAllFiles(req.tokenUserRole)
+            .then((value) => {
+                res.status(201).send(value)
+            })
+            .catch(({ message }) => {
+                res.status(400).json({ error: message })
+            })
+        } catch ({message}){
+            res.status(400).send({ error: message })
+        }
+    })
+
+
 fileRouter.use('/:fileId', (req, res, next) => {
     try {
         logic.getFile(req.params.fileId)

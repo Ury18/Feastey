@@ -14,7 +14,8 @@ class CreateBusiness extends Component {
         location: "",
         errors: "",
         images: [],
-        attachments: []
+        attachments: [],
+        deletedFiles: []
     }
 
     componentDidMount() {
@@ -22,9 +23,8 @@ class CreateBusiness extends Component {
     }
 
     onWindowClose = (e) => {
-        const { name, description, location, images, attachments } = this.state
+        const { name, description, location, images, attachments, deletedFiles } = this.state
         const { id, token } = this.props.user
-
         let files = []
 
         for (var i = 0; i < images.length; i++) {
@@ -40,7 +40,7 @@ class CreateBusiness extends Component {
                 files.push(thisFiles[j].id)
             }
         }
-
+        files = files.concat(deletedFiles)
         let blob = new Blob(
             [JSON.stringify({ files, authToken: token })],
             {
@@ -54,7 +54,7 @@ class CreateBusiness extends Component {
     createBusiness = (e) => {
         e.preventDefault()
 
-        const { name, description, location, images, attachments } = this.state
+        const { name, description, location, images, attachments, deletedFiles } = this.state
         const { id, token } = this.props.user
 
         let imageList = []
@@ -107,6 +107,16 @@ class CreateBusiness extends Component {
                     this.setState({ errors: res.error })
                 } else {
                     window.removeEventListener("beforeunload", this.onWindowClose)
+
+                    let blob = new Blob(
+                        [JSON.stringify({ files: deletedFiles, authToken: token })],
+                        {
+                            type: 'application/json; charset=UTF-8'
+                        }
+                    )
+
+                    navigator.sendBeacon('http://localhost:3000/api/files/delete-multiple', blob)
+
                     Router.push(`/business/${res.id}`)
                 }
             })
@@ -122,12 +132,22 @@ class CreateBusiness extends Component {
         this.setState({ images: newImages })
     }
 
-
     onUpdateImage = (index, value) => {
         const { images } = this.state
         let newImages = images
         newImages[index] = value
         this.setState({ images: newImages })
+    }
+
+    onDeleteImage = (e, index) => {
+        e.preventDefault()
+
+        const { images, deletedFiles } = this.state
+        deletedFiles.push(images[index].id)
+        let newImages = images
+        newImages.splice(index, 1)
+
+        this.setState({ images: newImages, deletedFiles })
     }
 
     onUploadAttachment = (value) => {
@@ -144,6 +164,13 @@ class CreateBusiness extends Component {
         this.setState({ attachments: newAttachments })
     }
 
+    onDeleteAttachment = (value) => {
+        const { deletedFiles } = this.state
+        deletedFiles.push(value)
+
+        this.setState({ deletedFiles })
+    }
+
     setInputValue = (name, value) => {
         if (name && value) {
             this.setState({ [name]: value })
@@ -152,29 +179,29 @@ class CreateBusiness extends Component {
 
     renderImagesUploader = () => {
         const { images } = this.state
-        const { onUpdateImage, onUploadImage } = this
+        const { onUpdateImage, onUploadImage, onDeleteImage } = this
 
         let newImages = []
 
         newImages = images.map((item, index) => {
-            return <FileUploader index={index} updateCallback={onUpdateImage} uploadCallback={onUploadImage} data={item} />
+            return <FileUploader key={index} index={index} updateCallback={onUpdateImage} uploadCallback={onUploadImage} data={item} deleteCallback={onDeleteImage} />
         })
 
-        newImages.push(<FileUploader index={images.length} updateCallback={onUpdateImage} uploadCallback={onUploadImage} />)
+        newImages.push(<FileUploader updateCallback={onUpdateImage} uploadCallback={onUploadImage} deleteCallback={onDeleteImage} />)
         return newImages
     }
 
     renderAttachmentsSection = () => {
         const { attachments } = this.state
-        const { onUpdateAttachment, onUploadAttachment } = this
+        const { onUpdateAttachment, onUploadAttachment, onDeleteAttachment } = this
 
         let newAttachments = []
 
         newAttachments = attachments.map((item, index) => {
-            return <AttachmentsSection index={index} updateCallback={onUpdateAttachment} uploadCallback={onUploadAttachment} data={item} />
+            return <AttachmentsSection key={index} index={index} updateCallback={onUpdateAttachment} uploadCallback={onUploadAttachment} data={item} deleteCallback={onDeleteAttachment}/>
         })
 
-        newAttachments.push(<AttachmentsSection index={attachments.length} updateCallback={onUpdateAttachment} uploadCallback={onUploadAttachment} />)
+        newAttachments.push(<AttachmentsSection key={attachments.length} index={attachments.length} updateCallback={onUpdateAttachment} uploadCallback={onUploadAttachment} deleteCallback={onDeleteAttachment}/>)
         return newAttachments
     }
 
@@ -208,8 +235,6 @@ class CreateBusiness extends Component {
                     <div style={{ display: "flex", flexDirection: "column" }}>
                         <h2>Attachments</h2>
                         {renderAttachmentsSection()}
-
-
                     </div>
 
                     {errors && <p className="errors">{errors}</p>}
