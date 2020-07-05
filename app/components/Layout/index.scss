@@ -19,6 +19,14 @@ html,body,#__next {
     overflow: hidden;
 }
 
+.map-container {
+    >div {
+        width: 20em;
+        height: 20em;
+        position: relative;
+    }
+}
+
 h1 {
     color: #FFB135;
     margin: .5em;
