@@ -1,11 +1,10 @@
 import './index.scss'
 import Link from 'next/link'
 import { connect } from 'react-redux'
-
+import GoogleMap from '../GoogleMap'
 const Detail = ((props) => {
 
     const { business, user } = props
-
 
     const renderAttachmentsList = () => {
         const { attachments } = business
@@ -35,7 +34,6 @@ const Detail = ((props) => {
             return <li><div className="coverImage"><img title={image.name} alt={image.name} src={image.url}></img></div></li>
         })
     }
-
 
     return (
         <div className="BusinessDetail_MainContainer">
@@ -74,7 +72,10 @@ const Detail = ((props) => {
                         <img className="BusinessDetailFavIcon" src={require('../../img/feastey_favoriteIcon.png')} />
                     </div>
                 </div>
-                <p>{business.location}</p>
+                <p>{business.location.address}</p>
+                <div className="map-container">
+                    <GoogleMap class="map" lng={business.location.location.coordinates[0]} lat={business.location.location.coordinates[1]} />
+                </div>
                 <p>{business.description}</p>
                 <ul className="section_Container">
                     {renderAttachmentsList()}

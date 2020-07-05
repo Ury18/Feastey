@@ -27,7 +27,7 @@ const BusinessCard = (props) => {
                         <img className="favoriteIconCard" src={require('../../img/feastey_favoriteIcon.png')}></img>
                     </div>
                 </div>
-                <p>{location}</p>
+                <p>{location.address}</p>
                 {description && <p className="businessCard_infoContainer_Description">{description}</p>}
                 <div className="cardFooter">
                     <p>Category</p>
