@@ -1,11 +1,11 @@
-const Busines = require('./index')
+const Business = require('./index')
 const FileLogic = require('../file/logic')
 const UserLogic = require('../user/logic')
 
 logic = {
 
     getBusiness() {
-        return Busines.find({}).select('-__v').lean()
+        return Business.find({}).select('-__v').lean()
             .then(businesses => {
                 businesses.forEach(business => {
                     business.id = business._id.toString()
@@ -16,7 +16,7 @@ logic = {
     },
 
     getBusinessById(businessId) {
-        return Busines.findById(businessId).populate("images").populate("attachments.files").select('-__v').lean()
+        return Business.findById(businessId).populate("images").populate("attachments.files").select('-__v').lean()
             .then(business => {
                 business.id = business._id
                 delete business._id
@@ -43,6 +43,29 @@ logic = {
             })
     },
 
+    getBusinessByDistance(data) {
+        const { location, distance } = data
+        return Business.createIndexes({ location: { location: "2dsphere" } })
+
+            .then(() => {
+
+                return Business.aggregate([
+                    {
+                        $geoNear: {
+                            near: { type: "Point", coordinates: location },
+                            distanceField: "distance",
+                            maxDistance: distance,
+                            spherical: true
+                        }
+                    }
+                ])
+                    .then((businesses) => {
+                        return businesses
+                    })
+            })
+
+    },
+
     createBusiness(creatorId, creatorRole, data) {
         const { attachments, owner } = data
 
@@ -54,12 +77,12 @@ logic = {
             if (creatorRole !== "admin") {
                 throw Error("Insuficcient Permisions")
             } else {
-                let business = new Busines({ ...data })
+                let business = new Business({ ...data })
                 return business.save()
                     .then(business => {
                         return UserLogic.addMyBusiness(owner, business._id)
                             .then(() => {
-                                return Busines.findById(business._id).select('-__v').lean()
+                                return Business.findById(business._id).select('-__v').lean()
                                     .then(business => {
                                         business.id = business._id
                                         delete business._id
@@ -73,10 +96,10 @@ logic = {
             }
         } else {
             if (creatorRole == "businessOwner") {
-                let business = new Busines({ ...data })
+                let business = new Business({ ...data })
                 return business.save()
                     .then(business => {
-                        return Busines.findById(business._id).select('-__v').lean()
+                        return Business.findById(business._id).select('-__v').lean()
                             .then(business => {
                                 business.id = business._id
                                 delete business._id
@@ -90,7 +113,7 @@ logic = {
     },
 
     editBusiness(editorId, editorRole, businessId, data) {
-        return Busines.findById(businessId)
+        return Business.findById(businessId)
             .then(business => {
                 if (business.owner.toString() !== editorId) {
                     if (editorRole == "admin") {
@@ -101,7 +124,7 @@ logic = {
                         }
                         return business.save()
                             .then(business => {
-                                return Busines.findById(businessId).select('-__v').lean()
+                                return Business.findById(businessId).select('-__v').lean()
                                     .then(business => {
                                         business.id = business._id
                                         delete business._id
@@ -119,7 +142,7 @@ logic = {
                     }
                     return business.save()
                         .then(business => {
-                            return Busines.findById(businessId).select('-__v').lean()
+                            return Business.findById(businessId).select('-__v').lean()
                                 .then(business => {
                                     business.id = business._id
                                     delete business._id

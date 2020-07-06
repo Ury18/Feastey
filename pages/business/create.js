@@ -86,7 +86,7 @@ class CreateBusiness extends Component {
 
             attachmentsClean.push(attachment)
         }
-        debugger
+
         let newLocation = {
             address: location.address,
             location: {

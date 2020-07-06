@@ -17,20 +17,20 @@ const Business = new Schema({
         type: String,
     },
 
+    address: {
+        type: String,
+    },
+
+
     location: {
-        address: {
+        type: {
             type: String,
+            enum: ['Point'],
+            required: true
         },
-        location: {
-            type: {
-                type: String,
-                enum: ['Point'],
-                required: true
-            },
-            coordinates : {
-                type: [Number],
-                required: true
-            }
+        coordinates: {
+            type: [Number],
+            required: true
         }
     },
 
@@ -39,7 +39,7 @@ const Business = new Schema({
         ref: 'File'
     }],
 
-    attachments : [{
+    attachments: [{
         name: {
             type: String,
             required: true
@@ -52,4 +52,5 @@ const Business = new Schema({
     }]
 })
 
+Business.index({ location: "2dsphere" })
 module.exports = mongoose.model("Business", Business)
