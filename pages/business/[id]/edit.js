@@ -13,10 +13,9 @@ class EditBusiness extends Component {
         id: "",
         name: "",
         description: "",
-        location: {
-            address: "",
-            location: []
-        },
+        address: "",
+        location: [],
+        finalAddress: "",
         errors: "",
         images: [],
         attachments: [],
@@ -27,11 +26,8 @@ class EditBusiness extends Component {
     componentDidMount = () => {
         const { business } = this.props
         this.setState({ ...business })
-        let location = {
-            address: business.location.address,
-            location: business.location.location.coordinates
-        }
-        this.setState({ location, address: location.address })
+        let location = business.location.coordinates
+        this.setState({ location, finalAddress:business.address })
         window.addEventListener("beforeunload", this.onWindowClose)
     }
 
@@ -52,7 +48,7 @@ class EditBusiness extends Component {
     editBusiness = (e) => {
         e.preventDefault()
 
-        const { id, name, description, location, images, attachments, deletedFiles } = this.state
+        const { id, name, description, location, images, attachments, deletedFiles, finalAddress } = this.state
         const { user } = this.props
         const { token } = user
 
@@ -83,16 +79,14 @@ class EditBusiness extends Component {
         }
 
         let newLocation = {
-            address: location.address,
-            location: {
-                type: "Point",
-                coordinates: location.location
-            }
+            type: "Point",
+            coordinates: location
         }
 
         let data = {
             name,
             description,
+            address: finalAddress,
             location: newLocation,
             images: imageList,
             attachments: attachmentsClean,
@@ -218,7 +212,7 @@ class EditBusiness extends Component {
     }
 
     onAcceptAddress = (e) => {
-        const { location, address } = this.state
+        let { location, address, finalAddress } = this.state
 
         e.preventDefault()
 
@@ -229,10 +223,10 @@ class EditBusiness extends Component {
         })
             .then(response => response.json())
             .then(response => {
-                location.address = address
+                finalAddress = address
                 let geolocation = response.results[0].geometry.location
-                location.location = [geolocation.lng, geolocation.lat]
-                this.setState({ location })
+                location = [geolocation.lng, geolocation.lat]
+                this.setState({ location, finalAddress })
             })
     }
 
@@ -243,7 +237,7 @@ class EditBusiness extends Component {
     }
 
     render() {
-        const { name, description, location, address, errors } = this.state
+        const { name, description, location, address, errors, finalAddress } = this.state
         const { setInputValue, editBusiness, renderAttachmentsSection, renderImagesUploader, onAcceptAddress } = this
         return (
             <Layout contentClasses="centered">
@@ -262,11 +256,11 @@ class EditBusiness extends Component {
                         <label>Dirección</label>
                         <div>
                             <input onChange={(e) => setInputValue(e.target.name, e.target.value)} defaultValue={address} name="address" type="text" required />
-                            {address && address !== location.address && <button onClick={(e) => onAcceptAddress(e)}>Aceptar</button>}
+                            {address && address !== finalAddress && <button onClick={(e) => onAcceptAddress(e)}>Aceptar</button>}
                         </div>
                     </div>
-                    {location && location.location && location.location.length > 0 && <div className="map-container">
-                        <GoogleMap class="map" lng={location.location[0]} lat={location.location[1]} />
+                    {location && location.length > 0 && <div className="map-container">
+                        <GoogleMap class="map" lng={location[0]} lat={location[1]} />
                     </div>}
                     <div style={{ display: "flex", flexDirection: "column" }}>
                         <label>Imagenes</label>

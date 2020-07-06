@@ -21,7 +21,6 @@ const Business = new Schema({
         type: String,
     },
 
-
     location: {
         type: {
             type: String,

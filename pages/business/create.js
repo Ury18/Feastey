@@ -13,10 +13,8 @@ class CreateBusiness extends Component {
         name: "",
         description: "",
         address: "",
-        location: {
-            address: "",
-            location: []
-        },
+        location: [],
+        finalAddress: "",
         errors: "",
         images: [],
         attachments: [],
@@ -60,7 +58,7 @@ class CreateBusiness extends Component {
     createBusiness = (e) => {
         e.preventDefault()
 
-        const { name, description, location, images, attachments, deletedFiles } = this.state
+        const { name, description, location, images, attachments, deletedFiles, finalAddress } = this.state
         const { id, token } = this.props.user
 
         let imageList = []
@@ -88,15 +86,14 @@ class CreateBusiness extends Component {
         }
 
         let newLocation = {
-            address: location.address,
-            location: {
-                type : "Point",
-                coordinates:location.location
-            }
+            type: "Point",
+            coordinates: location
         }
+
         let data = {
             name,
             description,
+            address: finalAddress,
             location: newLocation,
             images: imageList,
             attachments: attachmentsClean
@@ -185,7 +182,7 @@ class CreateBusiness extends Component {
     }
 
     onAcceptAddress = (e) => {
-        const { location, address } = this.state
+        let { location, address, finalAddress } = this.state
 
         e.preventDefault()
 
@@ -196,10 +193,10 @@ class CreateBusiness extends Component {
         })
             .then(response => response.json())
             .then(response => {
-                location.address = address
+                finalAddress = address
                 let geolocation = response.results[0].geometry.location
-                location.location = [geolocation.lng, geolocation.lat]
-                this.setState({ location })
+                location = [geolocation.lng, geolocation.lat]
+                this.setState({ location, finalAddress })
             })
 
     }
@@ -240,8 +237,8 @@ class CreateBusiness extends Component {
 
     render() {
         const { user: { token, id } } = this.props
-        const { location, errors, address } = this.state
-        const { renderImagesUploader, setInputValue, createBusiness, renderAttachmentsSection,onAcceptAddress } = this
+        const { location, errors, address, finalAddress } = this.state
+        const { renderImagesUploader, setInputValue, createBusiness, renderAttachmentsSection, onAcceptAddress } = this
 
         return (
             <Layout contentClasses="centered">
@@ -259,12 +256,12 @@ class CreateBusiness extends Component {
                         <label>Dirección</label>
                         <div>
                             <input onChange={(e) => setInputValue(e.target.name, e.target.value)} name="address" type="text" required />
-                            {address && address !== location.address && <button onClick={(e) => onAcceptAddress(e)}>Aceptar</button>}
+                            {address && address !== finalAddress && <button onClick={(e) => onAcceptAddress(e)}>Aceptar</button>}
                         </div>
                     </div>
 
-                    {location && location.location.length > 0 && <div className="map-container">
-                        <GoogleMap class="map" lng={location.location[0]} lat={location.location[1]} />
+                    {location && location.length > 0 && <div className="map-container">
+                        <GoogleMap class="map" lng={location[0]} lat={location[1]} />
                     </div>}
 
                     <div style={{ display: "flex", flexDirection: "column" }}>

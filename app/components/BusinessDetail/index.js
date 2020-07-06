@@ -72,9 +72,9 @@ const Detail = ((props) => {
                         <img className="BusinessDetailFavIcon" src={require('../../img/feastey_favoriteIcon.png')} />
                     </div>
                 </div>
-                <p>{business.location.address}</p>
+                <p>{business.address}</p>
                 <div className="map-container">
-                    <GoogleMap class="map" lng={business.location.location.coordinates[0]} lat={business.location.location.coordinates[1]} />
+                    <GoogleMap class="map" lng={business.location.coordinates[0]} lat={business.location.coordinates[1]} />
                 </div>
                 <p>{business.description}</p>
                 <ul className="section_Container">
