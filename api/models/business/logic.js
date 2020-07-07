@@ -45,23 +45,19 @@ logic = {
 
     getBusinessByDistance(data) {
         const { location, distance } = data
-        return Business.createIndexes({ location: { location: "2dsphere" } })
-
-            .then(() => {
-
-                return Business.aggregate([
-                    {
-                        $geoNear: {
-                            near: { type: "Point", coordinates: location },
-                            distanceField: "distance",
-                            maxDistance: distance,
-                            spherical: true
-                        }
-                    }
-                ])
-                    .then((businesses) => {
-                        return businesses
-                    })
+        return Business.aggregate([{
+            $geoNear: {
+                near: {
+                    type: "Point",
+                    coordinates: [parseFloat(location[0]), parseFloat(location[1])]
+                },
+                distanceField: "dist.calculated",
+                maxDistance: 10 * 1609,
+                spherical: true
+            }
+        }])
+            .then((businesses) => {
+                return businesses
             })
 
     },

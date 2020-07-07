@@ -22,8 +22,7 @@ const Business = new Schema({
     },
 
     location: {
-        type: {
-            type: String,
+        type: {type: String,
             enum: ['Point'],
             required: true
         },
