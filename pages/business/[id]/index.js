@@ -10,7 +10,6 @@ const UserId = (props) => {
 
     return (
         <Layout>
-            <p>{id}</p>
             <DetailBusiness business={business}/>
         </Layout>
     )

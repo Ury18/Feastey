@@ -51,12 +51,19 @@ logic = {
                     type: "Point",
                     coordinates: [parseFloat(location[0]), parseFloat(location[1])]
                 },
-                distanceField: "dist.calculated",
-                maxDistance: 10 * 1609,
+                distanceField: "dist",
+                maxDistance: distance * 1000,
+                distanceMultiplier : 1/1000,
                 spherical: true
             }
         }])
             .then((businesses) => {
+                businesses.forEach(business =>{
+                    business.id = business._id
+                    delete business._id
+                    delete business.__v
+                })
+
                 return businesses
             })
 
