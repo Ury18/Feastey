@@ -10,7 +10,7 @@ const dev = process.env.NODE_DEV !== 'production'
 const nextApp = next({ dev })
 const handle = nextApp.getRequestHandler()
 
-const { UserRouter, BusinessRouter, FileRouter } = require('./api/routes')
+const { UserRouter, BusinessRouter, FileRouter, CategoryRouter } = require('./api/routes')
 mongoose.connect(db_url, { useNewUrlParser: true })
     .then(() => {
         nextApp.prepare()
@@ -24,6 +24,7 @@ mongoose.connect(db_url, { useNewUrlParser: true })
                 app.use('/api/users', UserRouter)
                 app.use('/api/business', BusinessRouter)
                 app.use('/api/files', FileRouter)
+                app.use('/api/categories', CategoryRouter)
 
                 //Handles react
                 app.get('*', (req, res) => {
