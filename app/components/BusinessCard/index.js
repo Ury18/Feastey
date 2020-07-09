@@ -5,7 +5,7 @@ const BusinessCard = (props) => {
 
     const { business } = props
 
-    const { name, description, location } = business
+    const { name, description, location, address } = business
 
     return (
         <div className="businessCard_Container">
@@ -27,7 +27,7 @@ const BusinessCard = (props) => {
                         <img className="favoriteIconCard" src={require('../../img/feastey_favoriteIcon.png')}></img>
                     </div>
                 </div>
-                <p>{location.address}</p>
+                <p>{address}</p>
                 {description && <p className="businessCard_infoContainer_Description">{description}</p>}
                 <div className="cardFooter">
                     <p>Category</p>

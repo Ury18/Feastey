@@ -44,8 +44,8 @@ logic = {
     },
 
     getBusinessByDistance(data) {
-        const { location, distance } = data
-        return Business.aggregate([{
+        let { location, distance, page, count } = data
+        const aggregate = Business.aggregate([{
             $geoNear: {
                 near: {
                     type: "Point",
@@ -57,7 +57,17 @@ logic = {
                 spherical: true
             }
         }])
+
+        if(!page) page = 1
+        if(!count) count = 1
+
+        const options = {
+            page:page,
+            limit: count
+        }
+        return Business.aggregatePaginate(aggregate, options)
             .then((businesses) => {
+                businesses = businesses.docs
                 businesses.forEach(business =>{
                     business.id = business._id
                     delete business._id

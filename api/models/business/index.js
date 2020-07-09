@@ -1,4 +1,5 @@
 const mongoose = require('mongoose')
+const aggregatePaginate = require('mongoose-aggregate-paginate-v2')
 const { Schema, ObjectId } = mongoose
 
 const Business = new Schema({
@@ -51,4 +52,5 @@ const Business = new Schema({
 })
 
 Business.index({ location: "2dsphere" })
+Business.plugin(aggregatePaginate)
 module.exports = mongoose.model("Business", Business)

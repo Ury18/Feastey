@@ -1,24 +1,60 @@
 import Layout from '../../app/components/Layout'
 import BusinessList from '../../app/components/BusinessList'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import Router from 'next/router'
 
 
 const AllBusiness = (props) => {
     const { businessList } = props
 
-    const [checker, setChecker] = useState(true)
+    const [page, setPage] = useState(props.queryPage)
     const [businesses, setBusinesses] = useState(businessList)
     const [location, setLocation] = useState()
-    const [distance, setDistance] = useState()
+    const [distance, setDistance] = useState(props.queryDistance)
     const [errors, setErrors] = useState("")
 
+    useEffect(() => {
+        getBussinessesByDistance(null, true)
+    }, [])
 
-    const handleCheker = () => {
-        setChecker(!checker)
+    const loadMore = async (e) => {
+        e.preventDefault()
+        // let newPage = parseFloat(page) + 1
+        let newPage = page + 1
+        console.log(location, distance, newPage)
+
+        let res = await fetch('http://localhost:3000/api/business/geobusiness', {
+            method: "POST",
+            headers: {
+                "content-type": "application/json"
+            },
+            body: JSON.stringify({ location, distance, page: newPage })
+        })
+        res = await res.json()
+        if (res.error) {
+            setErrors(res.error)
+        } else {
+            setErrors("")
+            if (res.length > 0) {
+                res.forEach(element => {
+                    businesses.push(element)
+                });
+                setBusinesses(businesses)
+                setPage(newPage)
+                Router.replace(Router.pathname + `?distance=${distance}&page=${newPage}`)
+            }
+        }
     }
 
-    const getBussinessesByDistance = async (e, location, distance) => {
-        e.preventDefault()
+    const getBussinessesByDistance = async (e, firstLoad) => {
+        if (e) e.preventDefault()
+
+        let newPage = 1
+        let count = 1
+
+        if (firstLoad) {
+            count = count * page
+        }
 
         const options = {
             enableHighAccuracy: true,
@@ -39,7 +75,7 @@ const AllBusiness = (props) => {
                 headers: {
                     "content-type": "application/json"
                 },
-                body: JSON.stringify({ location, distance })
+                body: JSON.stringify({ location, distance, page: newPage, count })
             })
 
             res = await res.json()
@@ -48,6 +84,12 @@ const AllBusiness = (props) => {
             } else {
                 setErrors("")
                 setBusinesses(res)
+                if (firstLoad) {
+                    Router.replace(Router.pathname + `?distance=${distance}&page=${page}`)
+                } else {
+                    Router.replace(Router.pathname + `?distance=${distance}&page=${newPage}`)                  
+                    setPage(newPage)
+                }
             }
         }
 
@@ -60,24 +102,22 @@ const AllBusiness = (props) => {
     }
     return (
         <Layout>
-            <p>Show all business</p>
-            <input type="checkbox" checked={checker} onClick={(e) => handleCheker()} />
-
             <form>
                 <p>Distance</p>
-                <input type="number" onChange={(e) => setDistance(e.target.value)}></input>
+                <input type="number" defaultValue={distance} onChange={(e) => setDistance(e.target.value)}></input>
                 <p>km</p>
-                <input type="submit" value="submit" onClick={(e) => getBussinessesByDistance(e, location, distance)} />
+                <input type="submit" value="submit" onClick={(e) => getBussinessesByDistance(e)} />
             </form>
-            {checker && < BusinessList businessList={businesses} />}
+            <BusinessList businessList={businesses} />
+            <button onClick={(e) => loadMore(e)}>Más</button>
         </Layout>
     )
 }
 
 AllBusiness.getInitialProps = async (ctx) => {
-    const res = await fetch('http://localhost:3000/api/business/')
-    const businessList = await res.json()
-    return { businessList}
+    const queryPage = parseFloat(ctx.query.page) || 1
+    const queryDistance = parseFloat(ctx.query.distance) || 5
+    return { queryPage, queryDistance }
 }
 
 export default AllBusiness
