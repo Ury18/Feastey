@@ -25,6 +25,7 @@ const Business = new Schema({
     location: {
         type: {type: String,
             enum: ['Point'],
+            default:'Point',
             required: true
         },
         coordinates: {
