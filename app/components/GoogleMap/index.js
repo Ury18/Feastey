@@ -1,8 +1,6 @@
 import { Map, InfoWindow, Marker, GoogleApiWrapper } from 'google-maps-react';
 import React, { Component } from 'react'
 
-const { GOOGLE_MAPS_KEY } = process.env
-
 export const MapContainer = (props) => {
 
     return (
@@ -13,5 +11,5 @@ export const MapContainer = (props) => {
 }
 
 export default GoogleApiWrapper({
-    apiKey: (GOOGLE_MAPS_KEY)
+    apiKey: (process.env.GOOGLE_MAPS_KEY)
 })(MapContainer)

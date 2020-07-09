@@ -24,7 +24,7 @@ MyApp.getInitialProps = async ({ Component, ctx }) => {
         var data = {}
 
         if (cookie.authToken) {
-            return fetch('http://localhost:3000/api/users/authenticate/renew', {
+            return fetch(`${process.env.FEASTEY_API_URL}/users/authenticate/renew`, {
                 method: "GET",
                 headers: {
                     "authorization": `Bearer ${cookie.authToken}`

@@ -21,7 +21,7 @@ const Signup = (props) => {
         if (data.password == data.passwordConfirmation) {
             setErrors("")
 
-            fetch('http://localhost:3000/api/users', {
+            fetch(`${process.env.FEASTEY_API_URL}/users`, {
                 method: "POST",
                 headers: {
                     "content-type": "application/json"

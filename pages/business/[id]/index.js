@@ -10,13 +10,13 @@ const UserId = (props) => {
 
     return (
         <Layout>
-            <DetailBusiness business={business}/>
+            <DetailBusiness business={business} />
         </Layout>
     )
 }
 
 UserId.getInitialProps = async (ctx) => {
-    const res = await fetch(`http://localhost:3000/api/business/${ctx.query.id}`)
+    const res = await fetch(`${process.env.FEASTEY_API_URL}/business/${ctx.query.id}`)
     const business = await res.json()
     return { business }
 }

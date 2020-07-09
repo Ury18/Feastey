@@ -18,7 +18,7 @@ const LogIn = (props) => {
     const logIn = (e, data) => {
         e.preventDefault()
 
-        fetch('http://localhost:3000/api/users/authenticate', {
+        fetch(`${process.env.FEASTEY_API_URL}/users/authenticate`, {
             method: "POST",
             headers: {
                 "content-type": "application/json"
@@ -31,7 +31,7 @@ const LogIn = (props) => {
                     setErrors(res.error)
                 } else {
                     Cookie.set("authToken", res.token)
-                    updateUserData({...res})
+                    updateUserData({ ...res })
                     router.push('/')
                 }
             })

@@ -3,8 +3,6 @@ import GoogleMap from '../app/components/GoogleMap'
 import { connect } from 'react-redux'
 import { useState } from 'react'
 
-
-
 const Map = (props) => {
     const { updateUserData } = props
 

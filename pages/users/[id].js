@@ -1,6 +1,5 @@
 import Layout from '../../app/components/Layout'
 import { useRouter } from 'next/router'
-import { parseCookies } from '../../app/middleware/parseCookies'
 
 const UserId = (props) => {
 
@@ -22,13 +21,13 @@ const UserId = (props) => {
             <p>{id}</p>
             <div>
                 {mapData(data)}
-             </div>
+            </div>
         </Layout>
     )
 }
 
 UserId.getInitialProps = async (ctx) => {
-    const res = await fetch(`http://localhost:3000/api/users/${ctx.query.id}`)
+    const res = await fetch(`${process.env.FEASTEY_API_URL}/users/${ctx.query.id}`)
     const data = await res.json()
     return { data }
 }
