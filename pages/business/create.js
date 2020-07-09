@@ -19,6 +19,7 @@ class CreateBusiness extends Component {
         images: [],
         attachments: [],
         deletedFiles: [],
+        category: ""
 
     }
 
@@ -52,13 +53,13 @@ class CreateBusiness extends Component {
             }
         )
 
-        navigator.sendBeacon('http://localhost:3000/api/files/delete-multiple', blob)
+        navigator.sendBeacon(`${process.env.FEASTEY_API_URL}/files/delete-multiple`, blob)
     }
 
     createBusiness = (e) => {
         e.preventDefault()
 
-        const { name, description, location, images, attachments, deletedFiles, finalAddress } = this.state
+        const { name, description, location, images, attachments, deletedFiles, finalAddress, category } = this.state
         const { id, token } = this.props.user
 
         let imageList = []
@@ -96,14 +97,15 @@ class CreateBusiness extends Component {
             address: finalAddress,
             location: newLocation,
             images: imageList,
-            attachments: attachmentsClean
+            attachments: attachmentsClean,
+            category
         }
 
         this.setState({ errors: "" })
 
         data.owner = id;
 
-        fetch('http://localhost:3000/api/business', {
+        fetch(`${process.env.FEASTEY_API_URL}/business`, {
             method: "POST",
             headers: {
                 "content-type": "application/json",
@@ -125,7 +127,7 @@ class CreateBusiness extends Component {
                         }
                     )
 
-                    navigator.sendBeacon('http://localhost:3000/api/files/delete-multiple', blob)
+                    navigator.sendBeacon(`${process.env.FEASTEY_API_URL}/files/delete-multiple`, blob)
 
                     Router.push(`/business/${res.id}`)
                 }
@@ -202,7 +204,7 @@ class CreateBusiness extends Component {
     }
 
     setInputValue = (name, value) => {
-        if (name && value) {
+        if (name) {
             this.setState({ [name]: value })
         }
     }
@@ -235,10 +237,18 @@ class CreateBusiness extends Component {
         return newAttachments
     }
 
+    renderCategoriesOptions = () => {
+        const { categories } = this.props
+
+        return categories.map((item) => {
+            return <option value={item.id}>{item.name}</option>
+        })
+    }
+
     render() {
         const { user: { token, id } } = this.props
         const { location, errors, address, finalAddress } = this.state
-        const { renderImagesUploader, setInputValue, createBusiness, renderAttachmentsSection, onAcceptAddress } = this
+        const { renderImagesUploader, setInputValue, createBusiness, renderAttachmentsSection, onAcceptAddress, renderCategoriesOptions } = this
 
         return (
             <Layout contentClasses="centered">
@@ -249,15 +259,22 @@ class CreateBusiness extends Component {
                         <input onChange={(e) => setInputValue(e.target.name, e.target.value)} name="name" type="text" required />
                     </div>
                     <div style={{ display: "flex", flexDirection: "column" }}>
-                        <label>Descripción</label>
-                        <input onChange={(e) => setInputValue(e.target.name, e.target.value)} name="description" type="text" required />
-                    </div>
-                    <div style={{ display: "flex", flexDirection: "column" }}>
                         <label>Dirección</label>
                         <div>
                             <input onChange={(e) => setInputValue(e.target.name, e.target.value)} name="address" type="text" required />
                             {address && address !== finalAddress && <button onClick={(e) => onAcceptAddress(e)}>Aceptar</button>}
                         </div>
+                    </div>
+                    <div>
+                        <label>Categoría</label>
+                        <select name="category" onChange={(e) => setInputValue(e.target.name, e.target.value)}>
+                            <option value={""}>Ninguna</option>
+                            {renderCategoriesOptions()}
+                        </select>
+                    </div>
+                    <div style={{ display: "flex", flexDirection: "column" }}>
+                        <label>Descripción</label>
+                        <input onChange={(e) => setInputValue(e.target.name, e.target.value)} name="description" type="text" required />
                     </div>
 
                     {location && location.length > 0 && <div className="map-container">
@@ -285,7 +302,10 @@ class CreateBusiness extends Component {
 }
 
 CreateBusiness.getInitialProps = async (ctx) => {
-    return {}
+    let categories = await fetch(`${process.env.FEASTEY_API_URL}/categories`)
+    categories = await categories.json()
+    return { categories }
+
 }
 
 const mapDispatchToProps = (dispatch) => {

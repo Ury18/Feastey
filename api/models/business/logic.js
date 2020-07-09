@@ -1,6 +1,6 @@
 const Business = require('./index')
-const FileLogic = require('../file/logic')
 const UserLogic = require('../user/logic')
+const { Types: { ObjectId } } = require('mongoose')
 
 logic = {
 
@@ -44,31 +44,46 @@ logic = {
     },
 
     getBusinessByDistance(data) {
-        let { location, distance, page, count } = data
-        const aggregate = Business.aggregate([{
-            $geoNear: {
-                near: {
-                    type: "Point",
-                    coordinates: [parseFloat(location[0]), parseFloat(location[1])]
-                },
-                distanceField: "dist",
-                maxDistance: distance * 1000,
-                distanceMultiplier : 1/1000,
-                spherical: true
+        let { location, distance, page, count, category } = data
+        let filters = []
+        filters.push(
+            {
+                $geoNear: {
+                    near: {
+                        type: "Point",
+                        coordinates: [parseFloat(location[0]), parseFloat(location[1])]
+                    },
+                    distanceField: "dist",
+                    maxDistance: distance * 1000,
+                    distanceMultiplier: 1 / 1000,
+                    spherical: true
+                }
             }
-        }])
+        )
 
-        if(!page) page = 1
-        if(!count) count = 1
+        if (category) {
+            filters.push(
+                {
+                    $match: {
+                        category: ObjectId(category)
+                    }
+                }
+            )
+        }
+
+        const aggregate = Business.aggregate(filters)
+
+        if (!page) page = 1
+        if (!count) count = 1
 
         const options = {
-            page:page,
+            page: page,
             limit: count
         }
         return Business.aggregatePaginate(aggregate, options)
             .then((businesses) => {
                 businesses = businesses.docs
-                businesses.forEach(business =>{
+                businesses.forEach(business => {
                     business.id = business._id
                     delete business._id
                     delete business.__v

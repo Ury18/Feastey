@@ -3,13 +3,13 @@ import BusinessList from '../../app/components/BusinessList'
 import { useState, useEffect } from 'react'
 import Router from 'next/router'
 
-
 const AllBusiness = (props) => {
     const { businessList } = props
 
     const [page, setPage] = useState(props.queryPage)
     const [businesses, setBusinesses] = useState(businessList)
     const [location, setLocation] = useState()
+    const [category, setCategory] = useState(props.queryCategory)
     const [distance, setDistance] = useState(props.queryDistance)
     const [errors, setErrors] = useState("")
 
@@ -23,12 +23,12 @@ const AllBusiness = (props) => {
         let newPage = page + 1
         console.log(location, distance, newPage)
 
-        let res = await fetch('http://localhost:3000/api/business/geobusiness', {
+        let res = await fetch(`${process.env.FEASTEY_API_URL}/business/geobusiness`, {
             method: "POST",
             headers: {
                 "content-type": "application/json"
             },
-            body: JSON.stringify({ location, distance, page: newPage })
+            body: JSON.stringify({ location, distance, page: newPage, category })
         })
         res = await res.json()
         if (res.error) {
@@ -41,7 +41,7 @@ const AllBusiness = (props) => {
                 });
                 setBusinesses(businesses)
                 setPage(newPage)
-                Router.replace(Router.pathname + `?distance=${distance}&page=${newPage}`)
+                Router.replace(Router.pathname + `?distance=${distance}&page=${newPage}&category=${category}`)
             }
         }
     }
@@ -70,12 +70,12 @@ const AllBusiness = (props) => {
             location.push(crd.latitude);
             setLocation(location)
 
-            let res = await fetch('http://localhost:3000/api/business/geobusiness', {
+            let res = await fetch(`${process.env.FEASTEY_API_URL}/business/geobusiness`, {
                 method: "POST",
                 headers: {
                     "content-type": "application/json"
                 },
-                body: JSON.stringify({ location, distance, page: newPage, count })
+                body: JSON.stringify({ location, distance, page: newPage, count, category })
             })
 
             res = await res.json()
@@ -85,9 +85,9 @@ const AllBusiness = (props) => {
                 setErrors("")
                 setBusinesses(res)
                 if (firstLoad) {
-                    Router.replace(Router.pathname + `?distance=${distance}&page=${page}`)
+                    Router.replace(Router.pathname + `?distance=${distance}&page=${page}&category=${category}`)
                 } else {
-                    Router.replace(Router.pathname + `?distance=${distance}&page=${newPage}`)                  
+                    Router.replace(Router.pathname + `?distance=${distance}&page=${newPage}&category=${category}`)                  
                     setPage(newPage)
                 }
             }
@@ -98,14 +98,32 @@ const AllBusiness = (props) => {
         }
 
         window.navigator.geolocation.getCurrentPosition(success, error, options)
-
     }
+
+    const renderCategoriesOptions = () => {
+        const { categories } = props
+
+        return categories.map((item) => {
+            let selected = false
+            if (item.id == category ) {
+                selected = true
+            }
+            return <option selected={selected} value={item.id}>{item.name}</option>
+        })
+    }
+
+
     return (
         <Layout>
             <form>
                 <p>Distance</p>
                 <input type="number" defaultValue={distance} onChange={(e) => setDistance(e.target.value)}></input>
                 <p>km</p>
+                <label>Categoría</label>
+                        <select name="category" defaultValue={category} onChange={(e) => setCategory(e.target.value)}>
+                            <option value={""}>Ninguna</option>
+                            {renderCategoriesOptions()}
+                        </select>
                 <input type="submit" value="submit" onClick={(e) => getBussinessesByDistance(e)} />
             </form>
             <BusinessList businessList={businesses} />
@@ -117,7 +135,12 @@ const AllBusiness = (props) => {
 AllBusiness.getInitialProps = async (ctx) => {
     const queryPage = parseFloat(ctx.query.page) || 1
     const queryDistance = parseFloat(ctx.query.distance) || 5
-    return { queryPage, queryDistance }
+    const queryCategory = ctx.query.category || ""
+    let categories = await fetch(`${process.env.FEASTEY_API_URL}/categories`)
+    categories = await categories.json()
+    return { queryPage, queryDistance, queryCategory, categories }
+
+
 }
 
 export default AllBusiness

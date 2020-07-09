@@ -49,7 +49,14 @@ const Business = new Schema({
             type: ObjectId,
             ref: 'File'
         }]
-    }]
+    }],
+
+    category:{
+        type:ObjectId,
+        ref: 'Category',
+        required: true
+    }
+
 })
 
 Business.index({ location: "2dsphere" })
