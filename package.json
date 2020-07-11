@@ -5,8 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "next",
-    "ssr-dev": "nodemon ssr-server.js",
+    "dev": "nodemon ssr-server.js",
     "build": "next build",
     "start": "node ssr-server.js"
   },
