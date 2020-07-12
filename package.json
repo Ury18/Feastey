@@ -5,9 +5,9 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "nodemon ssr-server.js",
+    "dev": "sudo nodemon ssr-server.js",
     "build": "next build",
-    "start": "node ssr-server.js"
+    "start": "sudo node ssr-server.js"
   },
   "author": "",
   "license": "ISC",

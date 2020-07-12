@@ -7,8 +7,8 @@ const https = require("https")
 const http = require("http")
 const { readFileSync } = require("fs")
 
-const httpPort = process.env.HTTP_PORT || 3000
-const httpsPort = process.env.HTTPS_PORT || 3080
+const httpPort = process.env.HTTP_PORT || 80
+const httpsPort = process.env.HTTPS_PORT || 443
 const db_url = process.env.DB_URL
 const dev = process.env.NODE_DEV !== 'production'
 const nextApp = next({ dev })
