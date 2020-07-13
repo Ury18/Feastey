@@ -9,6 +9,7 @@ const { readFileSync } = require("fs")
 
 const httpPort = process.env.HTTP_PORT || 80
 const httpsPort = process.env.HTTPS_PORT || 443
+const certPath = process.env.SSL_CERT_PATH
 const db_url = process.env.DB_URL
 const dev = process.env.NODE_DEV !== 'production'
 const nextApp = next({ dev })
@@ -17,15 +18,15 @@ const handle = nextApp.getRequestHandler()
 const { UserRouter, BusinessRouter, FileRouter, CategoryRouter } = require('./api/routes')
 
 const httpsOptions = {
-    key: readFileSync('./certs/localhost.key'),
-    cert: readFileSync('./certs/localhost.crt'),
-    passphrase: "pollas"
+    key: readFileSync(`${certPath}/privkey.pem`),
+    cert: readFileSync(`${certPath}/cert.pem`),
+    ca: readFileSync(`${certPath}/chain.pem`)
 }
 
 const httpsServer = express()
 const httpServer = express()
 
-if(dev) {
+if (dev) {
     process.env["NODE_TLS_REJECT_UNAUTHORIZED"] = 0;
 }
 
@@ -42,8 +43,12 @@ mongoose.connect(db_url, { useNewUrlParser: true })
                     }
                 });
 
+                //Used to verify certbot key
+                // httpServer.use(express.static(__dirname + '/static', {dotfiles: 'allow'}))
+
                 httpsServer.use(bodyParser.json())
                 httpsServer.use(bodyParser.urlencoded({ extended: true }))
+
 
                 httpsServer.use('/api/users', UserRouter)
                 httpsServer.use('/api/business', BusinessRouter)
@@ -62,6 +67,7 @@ mongoose.connect(db_url, { useNewUrlParser: true })
                 https.createServer(httpsOptions, httpsServer).listen(httpsPort, () => {
                     console.log(`Server Running in port ${httpsPort}`)
                 })
+
             })
     })
 
