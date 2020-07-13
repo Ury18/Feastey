@@ -1,35 +1,72 @@
 .mainNav {
-        ul {
-            display: flex;
-            list-style: none;
-            padding-left: 0;
+    ul {
+        display: flex;
+        list-style: none;
+        padding-left: 0;
 
-            li {
-                margin: 0 1em;
-                a {
-                    color: #FFB135;
-                    text-decoration: none;
-                    transition: color 0.2s ease;
-                    position: relative;
-                    font-weight: 600;
+        li {
+            margin: 0 1em;
+            position: relative;
 
-                    &:after {
-                        content: "";
-                        position: absolute;
-                        bottom: -5px;
-                        left: 0;
-                        width: 0;
-                        border-bottom: 2px solid #FFB135;
-                        transition: all 0.2s ease;
+            a,button {
+                color: black;
+                // color: #FFB135;
+                text-decoration: none;
+                transition: color 0.2s ease;
+                position: relative;
+                font-weight: 300;
+                font-size: 1em;
+                cursor: pointer;
+
+                &:after {
+                    content: "";
+                    position: absolute;
+                    bottom: -5px;
+                    left: 0;
+                    width: 0;
+                    border-bottom: 2px solid #FFB135;
+                    transition: all 0.2s ease;
+                }
+
+                &:hover, &.active {
+                    &:after{
+                        width: 100%;
                     }
+                }
+            }
 
-                    &:hover, &.active {
+            ul {
+                display: flex;
+                flex-direction: column;
+                position: absolute;
+                right: 0px;
+                width: 12em;
+                background-color: #f7f7f7;
+                padding: 1em;
+                text-align: right;
 
-                        &:after{
-                            width: 100%;
-                        }
+                li {
+                    margin: 0;
+                    margin-bottom: 2em;
+
+                    &:last-child {
+                        margin-bottom: 0;
+                    }
+                }
+            }
+
+            button {
+                background-color: transparent !important;
+                border: none;
+                padding: 0;
+
+                &#registerButtonBox,&#accountBoxButton {
+
+                    &:focus {
+                        outline: none;
                     }
                 }
             }
         }
     }
+}

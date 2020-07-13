@@ -10,7 +10,7 @@ const Layout = ((props) => {
         if(!props.user.token) {
             Cookie.remove("authToken")
         }
-    })
+    },[])
     return (
         <div className="app">
             <Header />
