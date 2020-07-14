@@ -50,6 +50,22 @@ businessRouter.route('/geobusiness')
         }
     })
 
+businessRouter.route('/multiple-businesses')
+    .post((req, res) => {
+        try {
+            logic.getMultipleBusinesses(req.body)
+                .then((businesses) => {
+                    console.log(businesses)
+                    res.status(201).json(businesses)
+                })
+                .catch(({ message }) => {
+                    res.status(400).json({ error: message })
+                })
+        } catch ({ message }) {
+            res.status(400).send({ error: message })
+        }
+    })
+
 businessRouter.use('/:businessId', (req, res, next) => {
     try {
         logic.getBusinessById(req.params.businessId)
