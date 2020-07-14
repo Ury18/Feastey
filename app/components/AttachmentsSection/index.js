@@ -1,5 +1,5 @@
 import './index.scss'
-import { useState, useEffect, Component } from 'react'
+import { Component } from 'react'
 import FileUploader from '../FileUploader'
 
 
