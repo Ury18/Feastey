@@ -11,24 +11,26 @@ const AllBusiness = (props) => {
     const [location, setLocation] = useState()
     const [category, setCategory] = useState(props.queryCategory)
     const [distance, setDistance] = useState(props.queryDistance)
+    const [address, setAddress] = useState("")
+    const [tempAddress, setTempAddress] = useState("")
+    const [name, setName] = useState("")
     const [errors, setErrors] = useState("")
 
     useEffect(() => {
-        getBussinessesByDistance(null, true)
+        getBusinessesByDistance(null, true)
     }, [])
 
     const loadMore = async (e) => {
         e.preventDefault()
         // let newPage = parseFloat(page) + 1
         let newPage = page + 1
-        console.log(location, distance, newPage)
 
         let res = await fetch(`${process.env.FEASTEY_API_URL}/business/geobusiness`, {
             method: "POST",
             headers: {
                 "content-type": "application/json"
             },
-            body: JSON.stringify({ location, distance, page: newPage, category })
+            body: JSON.stringify({ location, distance, page: newPage, category, name })
         })
         res = await res.json()
         if (res.error) {
@@ -46,7 +48,7 @@ const AllBusiness = (props) => {
         }
     }
 
-    const getBussinessesByDistance = async (e, firstLoad) => {
+    const getBusinessesByDistance = async (e, firstLoad) => {
         if (e) e.preventDefault()
 
         let newPage = 1
@@ -63,19 +65,25 @@ const AllBusiness = (props) => {
         };
 
         async function success(pos) {
-            var crd = pos.coords;
+            var crd = []
+            let newLocation = []
 
-            const location = []
-            location.push(crd.longitude);
-            location.push(crd.latitude);
-            setLocation(location)
+            if (pos.coords) {
+                crd = pos.coords;
+                newLocation.push(crd.longitude);
+                newLocation.push(crd.latitude);
+            } else {
+                newLocation = pos
+            }
+
+            setLocation(newLocation)
 
             let res = await fetch(`${process.env.FEASTEY_API_URL}/business/geobusiness`, {
                 method: "POST",
                 headers: {
                     "content-type": "application/json"
                 },
-                body: JSON.stringify({ location, distance, page: newPage, count, category })
+                body: JSON.stringify({ location: newLocation, distance, page: newPage, count, category, name })
             })
 
             res = await res.json()
@@ -87,7 +95,7 @@ const AllBusiness = (props) => {
                 if (firstLoad) {
                     Router.replace(Router.pathname + `?distance=${distance}&page=${page}&category=${category}`)
                 } else {
-                    Router.replace(Router.pathname + `?distance=${distance}&page=${newPage}&category=${category}`)                  
+                    Router.replace(Router.pathname + `?distance=${distance}&page=${newPage}&category=${category}`)
                     setPage(newPage)
                 }
             }
@@ -97,7 +105,26 @@ const AllBusiness = (props) => {
             console.warn(`ERROR(${err.code}): ${err.message}`);
         }
 
-        window.navigator.geolocation.getCurrentPosition(success, error, options)
+        if (!tempAddress) {
+            window.navigator.geolocation.getCurrentPosition(success, error, options)
+        } else {
+            if (address !== tempAddress) {
+                fetch(`https://cors-anywhere.herokuapp.com/${process.env.GOOGLE_MAPS_GEOCODE_URL}address=${tempAddress}&key=${process.env.GOOGLE_MAPS_KEY}`, {
+                    headers: {
+                        "content-type": "application/json"
+                    }
+                })
+                    .then(response => response.json())
+                    .then(response => {
+                        let geolocation = response.results[0].geometry.location
+                        geolocation = [geolocation.lng, geolocation.lat]
+                        setAddress(tempAddress)
+                        success(geolocation)
+                    })
+            } else {
+                success(location)
+            }
+        }
     }
 
     const renderCategoriesOptions = () => {
@@ -105,7 +132,7 @@ const AllBusiness = (props) => {
 
         return categories.map((item) => {
             let selected = false
-            if (item.id == category ) {
+            if (item.id == category) {
                 selected = true
             }
             return <option selected={selected} value={item.id}>{item.name}</option>
@@ -116,15 +143,17 @@ const AllBusiness = (props) => {
     return (
         <Layout>
             <form>
+                <input placeholder="Nombre del negocio" onChange={(e) => setName(e.target.value)}></input>
+                <input placeholder="Direccción, Ciudad, Codigo Postal" onChange={(e) => setTempAddress(e.target.value)}></input>
                 <p>Distance</p>
                 <input type="number" defaultValue={distance} onChange={(e) => setDistance(e.target.value)}></input>
                 <p>km</p>
                 <label>Categoría</label>
-                        <select name="category" defaultValue={category} onChange={(e) => setCategory(e.target.value)}>
-                            <option value={""}>Ninguna</option>
-                            {renderCategoriesOptions()}
-                        </select>
-                <input type="submit" value="submit" onClick={(e) => getBussinessesByDistance(e)} />
+                <select name="category" defaultValue={category} onChange={(e) => setCategory(e.target.value)}>
+                    <option value={""}>Ninguna</option>
+                    {renderCategoriesOptions()}
+                </select>
+                <input type="submit" value="submit" onClick={(e) => getBusinessesByDistance(e)} />
             </form>
             <BusinessList businessList={businesses} />
             <button onClick={(e) => loadMore(e)}>Más</button>

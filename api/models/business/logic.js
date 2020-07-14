@@ -44,7 +44,7 @@ logic = {
     },
 
     getBusinessByDistance(data) {
-        let { location, distance, page, count, category } = data
+        let { location, distance, page, count, category, name } = data
         let filters = []
         filters.push(
             {
@@ -66,6 +66,15 @@ logic = {
                 {
                     $match: {
                         category: ObjectId(category)
+                    }
+                }
+            )
+        }
+        if(name){
+            filters.push(
+                {
+                    $match:{
+                        name: {"$regex":name , "$options": "i"}
                     }
                 }
             )
@@ -93,6 +102,16 @@ logic = {
             })
 
     },
+
+    async getMultipleBusinesses(businessesIds) {
+        let businessList = await Business.find().select('-__v').lean().where('_id').in(businessesIds).exec()
+        businessList.forEach(business => {
+            business.id = business._id
+            delete business._id
+        })
+        return businessList
+    },
+
 
     createBusiness(creatorId, creatorRole, data) {
         const { attachments, owner } = data
