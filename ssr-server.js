@@ -17,11 +17,11 @@ const handle = nextApp.getRequestHandler()
 
 const { UserRouter, BusinessRouter, FileRouter, CategoryRouter } = require('./api/routes')
 
-const httpsOptions = {
-    key: readFileSync(`${certPath}/privkey.pem`),
-    cert: readFileSync(`${certPath}/cert.pem`),
-    ca: readFileSync(`${certPath}/chain.pem`)
-}
+// const httpsOptions = {
+//     key: readFileSync(`${certPath}/privkey.pem`),
+//     cert: readFileSync(`${certPath}/cert.pem`),
+//     ca: readFileSync(`${certPath}/chain.pem`)
+// }
 
 const httpsServer = express()
 const httpServer = express()
@@ -35,28 +35,28 @@ mongoose.connect(db_url, { useNewUrlParser: true })
         nextApp.prepare()
             .then(() => {
 
-                httpServer.all("*", function (req, res) {
-                    if (dev) {
-                        res.redirect("https://" + req.hostname + ":" + httpsPort + req.path);
-                    } else {
-                        res.redirect("https://" + req.hostname + "/" + req.path);
-                    }
-                });
+                // httpServer.all("*", function (req, res) {
+                //     if (dev) {
+                //         res.redirect("https://" + req.hostname + ":" + httpsPort + req.path);
+                //     } else {
+                //         res.redirect("https://" + req.hostname + "/" + req.path);
+                //     }
+                // });
 
                 //Used to verify certbot key
                 // httpServer.use(express.static(__dirname + '/static', {dotfiles: 'allow'}))
 
-                httpsServer.use(bodyParser.json())
-                httpsServer.use(bodyParser.urlencoded({ extended: true }))
+                httpServer.use(bodyParser.json())
+                httpServer.use(bodyParser.urlencoded({ extended: true }))
 
 
-                httpsServer.use('/api/users', UserRouter)
-                httpsServer.use('/api/business', BusinessRouter)
-                httpsServer.use('/api/files', FileRouter)
-                httpsServer.use('/api/categories', CategoryRouter)
+                httpServer.use('/api/users', UserRouter)
+                httpServer.use('/api/business', BusinessRouter)
+                httpServer.use('/api/files', FileRouter)
+                httpServer.use('/api/categories', CategoryRouter)
 
                 //Handles react
-                httpsServer.all('*', (req, res) => {
+                httpServer.all('*', (req, res) => {
                     return handle(req, res)
                 })
 
@@ -64,9 +64,9 @@ mongoose.connect(db_url, { useNewUrlParser: true })
                     console.log(`Server Running in port ${httpPort}`)
                 })
 
-                https.createServer(httpsOptions, httpsServer).listen(httpsPort, () => {
-                    console.log(`Server Running in port ${httpsPort}`)
-                })
+                // https.createServer(httpsOptions, httpsServer).listen(httpsPort, () => {
+                //     console.log(`Server Running in port ${httpsPort}`)
+                // })
 
             })
     })

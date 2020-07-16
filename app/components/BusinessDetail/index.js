@@ -1,10 +1,75 @@
 import './index.scss'
 import Link from 'next/link'
 import { connect } from 'react-redux'
+import { useState, useEffect } from 'react'
 import GoogleMap from '../GoogleMap'
+import { updateUserData } from '../../redux/user/action'
 const Detail = ((props) => {
 
     const { business, user } = props
+    const { token } = user
+
+    const [isFaved, setIsFaved] = useState(false)
+
+    const favedImage = require('../../img/feastey_favoriteIcon_faved.png')
+    const unfavedImage = require('../../img/feastey_favoriteIcon.png')
+
+    useEffect(() => {
+        favCheck();
+    })
+
+    const favCheck = () => {
+        const favorites = user.favorites
+
+        if (user.id) {
+            const isFav = favorites.indexOf(business.id)
+            if (isFav == -1) {
+                setIsFaved(false)
+            } else {
+                setIsFaved(true)
+            }
+        }
+
+    }
+
+    const onToggleFav = () => {
+
+        let favorites = props.user.favorites
+
+        if (!props.user.id) {
+            debugger
+            console.log("Log in to add to favorites")
+        } else {
+            if (isFaved) {
+                let index = favorites.indexOf(business.id)
+                favorites.splice(index, 1)
+                setIsFaved(false)
+            } else {
+                favorites.push(business.id)
+                setIsFaved(true)
+            }
+
+
+
+            fetch(`${process.env.FEASTEY_API_URL}/users/${user.id}`, {
+                method: "PUT",
+                headers: {
+                    "content-type": "application/json",
+                    "authorization": `Bearer ${token}`
+                },
+                body: JSON.stringify({ favorites })
+            })
+                .then(res => res.json())
+                .then(res => {
+                    if (!res.error) {
+                        updateUserData({ favorites })
+                    } else {
+                        setIsFaved(!isFaved)
+                    }
+                })
+        }
+    }
+
 
     const renderAttachmentsList = () => {
         const { attachments } = business
@@ -69,7 +134,7 @@ const Detail = ((props) => {
                     <div className="titleIcons">
                         <p>200</p>
                         <img className="BusinessDetailLikeIcon" src={require('../../img/feastey_likeIcon.png')} />
-                        <img className="BusinessDetailFavIcon" src={require('../../img/feastey_favoriteIcon.png')} />
+                        <img onClick={(e) => onToggleFav()} className="BusinessDetailFavIcon" src={isFaved ? favedImage : unfavedImage} />
                     </div>
                 </div>
                 <p>{business.address}</p>
