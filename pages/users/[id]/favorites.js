@@ -13,7 +13,7 @@ const Favorites = (props) => {
         if(favorites) {
             getFavoriteBusinesses(favorites)
         }
-    })
+    },[])
 
     const getFavoriteBusinesses = (favorites) => {
         fetch(`${process.env.FEASTEY_API_URL}/business/multiple-businesses`, {
