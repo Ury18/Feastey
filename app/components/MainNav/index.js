@@ -16,7 +16,7 @@ const MainNav = ((props) => {
 
     useEffect(() => {
         window.addEventListener('click', function (e) {
-            if (e.target.id !== "registerButtonBox" && e.target.id !== "registerBox" ) {
+            if (e.target.id !== "registerButtonBox" && e.target.id !== "registerBox") {
                 setRegisterBoxActive(false)
             }
 
@@ -60,7 +60,7 @@ const MainNav = ((props) => {
             username: ""
         }
 
-        updateUserData({...data})
+        updateUserData({ ...data })
     }
 
     return (
@@ -95,8 +95,13 @@ const MainNav = ((props) => {
                             </Link>
                         </li>
                         <li>
-                            <Link href="/business-signup">
-                                <a className={router.pathname == "/business-signup" ? "active" : ""}>Favoritos</a>
+                            <Link href={`/users/${props.user.id}/favorites`}>
+                                <a className={router.pathname == '/users/[id]/favorites' ? "active" : ""}>Favoritos</a>
+                            </Link>
+                        </li>
+                        <li>
+                            <Link href={`/users/${props.user.id}/my-businesses`}>
+                                <a className={router.pathname == '/users/[id]/my-businesses' ? "active" : ""}>Mis negocios</a>
                             </Link>
                         </li>
                         <li>
