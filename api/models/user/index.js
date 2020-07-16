@@ -47,7 +47,7 @@ const User = new Schema({
         ref: "Business"
     }],
 
-    myBusiness: [{
+    myBusinesses: [{
         type: ObjectId,
         ref: "Business"
     }],

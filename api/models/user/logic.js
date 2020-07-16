@@ -135,7 +135,7 @@ logic = {
     addMyBusiness(userId, businesId) {
         return User.findById(userId)
             .then(user => {
-                user.myBusiness.push(businesId)
+                user.myBusinesses.push(businesId)
                 return user.save()
             })
     }

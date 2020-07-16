@@ -145,14 +145,20 @@ logic = {
             if (creatorRole == "businessOwner") {
                 let business = new Business({ ...data })
                 return business.save()
-                    .then(business => {
-                        return Business.findById(business._id).select('-__v').lean()
-                            .then(business => {
-                                business.id = business._id
-                                delete business._id
-                                return business
-                            })
-                    })
+                .then(business => {
+                    return UserLogic.addMyBusiness(owner, business._id)
+                        .then(() => {
+                            return Business.findById(business._id).select('-__v').lean()
+                                .then(business => {
+                                    business.id = business._id
+                                    delete business._id
+                                    return business
+                                })
+                        })
+                        .catch(({ message }) => {
+                            throw Error(message)
+                        })
+                })
             } else {
                 throw Error("This user can't have any business")
             }
