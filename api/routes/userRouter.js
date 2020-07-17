@@ -1,7 +1,6 @@
 const express = require('express')
 const logic = require('../models/user/logic')
 const { createToken, tokenVerifierMiddleware } = require('../middleware/token-helper');
-const user = require('../models/user');
 
 const userRouter = express.Router();
 
@@ -28,7 +27,7 @@ userRouter.route('/')
     })
     .post(tokenVerifierMiddleware, (req, res) => {
         try {
-            logic.createUser(req.body, req.tokenUserRole)
+            logic.createUser(req.body, req.tokenUserRole, createToken)
                 .then((user) => {
                     res.status(200).send(user)
                 })
@@ -49,7 +48,6 @@ userRouter.route('/authenticate')
                 .then((user) => {
                     const token = createToken(user.id)
                     user.token = token
-                    delete user.password
                     res.json(user)
                 })
                 .catch(({ message }) => {
@@ -59,25 +57,57 @@ userRouter.route('/authenticate')
             res.status(400).send({ error: message })
         }
     })
-userRouter.route('/authenticate/renew')
-    .get(tokenVerifierMiddleware, (req, res) => {
-        if(req.tokenUserId) {
-            try {
-                logic.getUserById(req.tokenUserId)
+
+userRouter.route('/change-password')
+    .put(tokenVerifierMiddleware, (req, res) => {
+        try {
+            logic.changePasswordById(req.tokenUserId, req.tokenUserRole,req.body)
                 .then((user) => {
                     const token = createToken(user.id)
                     user.token = token
-                    delete user.password
                     res.json(user)
                 })
                 .catch(({ message }) => {
-                    res.status(401).send({ error: message })
+                    res.status(401).json({ error: message })
                 })
+        } catch ({ message }) {
+            res.status(400).send({ error: message })
+        }
+    })
+
+userRouter.route('/change-pass-request')
+    .post(tokenVerifierMiddleware, (req, res) => {
+        try {
+            logic.changePasswordRequest(req.body.email, createToken)
+                .then((user) => {
+                    res.json({})
+                })
+                .catch(({ message }) => {
+                    res.status(401).json({ error: message })
+                })
+        } catch ({ message }) {
+            res.status(400).send({ error: message })
+        }
+    })
+
+userRouter.route('/authenticate/renew')
+    .get(tokenVerifierMiddleware, (req, res) => {
+        if (req.tokenUserId) {
+            try {
+                logic.getUserById(req.tokenUserId)
+                    .then((user) => {
+                        const token = createToken(user.id)
+                        user.token = token
+                        res.json(user)
+                    })
+                    .catch(({ message }) => {
+                        res.status(401).send({ error: message })
+                    })
             } catch ({ message }) {
                 res.status(400).send({ error: message })
             }
         } else {
-            res.status(400).send({error: "Invalid user"})
+            res.status(400).send({ error: "Invalid user" })
         }
     })
 

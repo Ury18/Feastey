@@ -139,7 +139,6 @@ const AllBusiness = (props) => {
         })
     }
 
-
     return (
         <Layout>
             <form>
@@ -168,8 +167,6 @@ AllBusiness.getInitialProps = async (ctx) => {
     let categories = await fetch(`${process.env.FEASTEY_API_URL}/categories`)
     categories = await categories.json()
     return { queryPage, queryDistance, queryCategory, categories }
-
-
 }
 
 export default AllBusiness

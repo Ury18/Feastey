@@ -90,8 +90,8 @@ const MainNav = ((props) => {
                     <button id="accountBoxButton" onClick={(e) => accountButtonClick(e)}>Mi cuenta</button>
                     {accountBoxActive && <ul id="accountBox">
                         <li>
-                            <Link href="/signup">
-                                <a className={router.pathname == "/signup" ? "active" : ""}>Información de la cuenta</a>
+                            <Link href={`/users/${props.user.id}/edit`}>
+                                <a className={`/users/${props.user.id}/edit` ? "active" : ""}>Información de la cuenta</a>
                             </Link>
                         </li>
                         <li>
