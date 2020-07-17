@@ -4,8 +4,8 @@ const userLogic = require('../models/user/logic')
 const tokenHelper = {
     jwtSecret: "comercio",
 
-    createToken(userId) {
-        return jwt.sign({ sub: userId }, this.jwtSecret, { expiresIn: '4h' })
+    createToken(userId, ttl) {
+        return jwt.sign({ sub: userId }, this.jwtSecret, { expiresIn: ttl || '4h' })
     },
 
     verifyToken(token) {
@@ -29,6 +29,7 @@ const tokenHelper = {
                     next()
                 })
                 .catch(({ message }) => {
+                    console.log(message)
                     req.tokenUserRole = null
                     next()
                 })
