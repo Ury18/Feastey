@@ -4,8 +4,6 @@ import { useState, useEffect } from 'react'
 import { updateUserData } from '../../redux/user/action'
 import { connect } from 'react-redux'
 
-
-
 const BusinessCard = (props) => {
 
     const { business, user, updateUserData } = props

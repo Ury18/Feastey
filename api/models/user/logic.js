@@ -236,8 +236,8 @@ logic = {
 
     editUserById(userId, content, editorId, editorRole) {
         if (userId == editorId || editorRole == "admin") {
-            if (content.email) delete content.email
-            if (content.password) delete content.password
+            if (content.email && editorRole !=="admin") delete content.email
+            if (content.password && editorRole !== "admin") delete content.password
 
             return User.findByIdAndUpdate(userId, content)
                 .then(() => {
