@@ -75,6 +75,23 @@ userRouter.route('/change-password')
         }
     })
 
+userRouter.route('/change-email')
+    .put(tokenVerifierMiddleware, (req, res) => {
+        try {
+            logic.changeEmailById(req.tokenUserId, req.tokenUserRole, req.body)
+                .then((user) => {
+                    const token = createToken(user.id)
+                    user.token = token
+                    res.json(user)
+                })
+                .catch(({ message }) => {
+                    res.status(401).json({ error: message })
+                })
+        } catch ({ message }) {
+            res.status(400).send({ error: message })
+        }
+    })
+
 userRouter.route('/change-pass-request')
     .post(tokenVerifierMiddleware, (req, res) => {
         try {

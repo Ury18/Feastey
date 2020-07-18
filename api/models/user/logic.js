@@ -133,18 +133,17 @@ logic = {
 
     changePasswordRequest(email, createToken) {
         return User.find({ email }).select('-__v').lean()
-        .then(user => {
-            if(user.length > 0) {
-                user = user[0]
-            }else {
-                return {}
-            }
-            if (user._id) {
-                const token = createToken(user._id, "1h")
-                const changePassUrl = process.env.HOST + `/change-password?auth=${token}&encpass=${user.password}`
-                console.log("hete")
-                ChangePassword.send({ to: email, changePassUrl })
-            }
+            .then(user => {
+                if (user.length > 0) {
+                    user = user[0]
+                } else {
+                    return {}
+                }
+                if (user._id) {
+                    const token = createToken(user._id, "1h")
+                    const changePassUrl = process.env.HOST + `/change-password?auth=${token}&encpass=${user.password}`
+                    ChangePassword.send({ to: email, changePassUrl })
+                }
 
                 delete user._id
                 delete user.password
@@ -166,7 +165,7 @@ logic = {
             userId = tokenUserId
         }
 
-        if(newPassword !== newPasswordConfirmation) {
+        if (newPassword !== newPasswordConfirmation) {
             throw Error("Missmatching passwords")
         }
 
@@ -217,8 +216,54 @@ logic = {
             })
     },
 
-    changeEmailById(userTokenId, userTokenRole, userId, data) {
+    changeEmailById(tokenUserId, tokenUserRole, data) {
+        const { password, user, email } = data
 
+        let userId = "";
+
+        if (tokenUserRole == "admin") {
+            userId = user
+        } else {
+            userId = tokenUserId
+        }
+
+        return User.findById(userId)
+            .then(user => {
+                if (password) {
+                    return bcrypt.compare(password, user.password)
+                        .then((match) => {
+                            if (match) {
+                                user.email = email
+                                return user.save()
+                                    .then(user => {
+                                        return User.findById(user._id).select('-__v').lean()
+                                            .then(user => {
+                                                user.id = user._id
+                                                delete user._id
+                                                delete user.password
+                                                return user
+                                            })
+                                    })
+                            } else {
+                                throw Error("Wrong password")
+                            }
+                        })
+                } else if( tokenUserRole =="admin") {
+                    user.email = email
+                    return user.save()
+                        .then(user => {
+                            return User.findById(user._id).select('-__v').lean()
+                                .then(user => {
+                                    user.id = user._id
+                                    delete user._id
+                                    delete user.password
+                                    return user
+                                })
+                        })
+                } else {
+                    throw Error("Insufficient Permissions")
+                }
+            })
     },
 
     getUserById(userId) {
@@ -236,7 +281,7 @@ logic = {
 
     editUserById(userId, content, editorId, editorRole) {
         if (userId == editorId || editorRole == "admin") {
-            if (content.email && editorRole !=="admin") delete content.email
+            if (content.email && editorRole !== "admin") delete content.email
             if (content.password && editorRole !== "admin") delete content.password
 
             return User.findByIdAndUpdate(userId, content)

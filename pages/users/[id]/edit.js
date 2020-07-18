@@ -48,7 +48,7 @@ class EditUser extends Component {
                 if (res.error) {
                     this.setState({ errors: res.error })
                 } else {
-                    updateUserData(res)
+                    Router.push(Router.asPath)
                 }
             })
             .catch(err => {
@@ -61,7 +61,7 @@ class EditUser extends Component {
 
         const { password, email } = this.state
         const { user } = this.props
-        const { token, id } = user
+        const { token } = user
 
         this.setState({ errors: "" })
 
@@ -70,7 +70,7 @@ class EditUser extends Component {
             email
         }
 
-        fetch(`${process.env.FEASTEY_API_URL}/users/${id}`, {
+        fetch(`${process.env.FEASTEY_API_URL}/users/change-email`, {
             method: "PUT",
             headers: {
                 "content-type": "application/json",
@@ -96,7 +96,7 @@ class EditUser extends Component {
 
         const { password, newPassword, newPasswordConfirmation } = this.state
         const { user } = this.props
-        const { token, id } = user
+        const { token } = user
 
         this.setState({ errors: "" })
 
@@ -106,7 +106,7 @@ class EditUser extends Component {
             newPasswordConfirmation
         }
 
-        fetch(`${process.env.FEASTEY_API_URL}/users/${id}`, {
+        fetch(`${process.env.FEASTEY_API_URL}/users/change-password`, {
             method: "PUT",
             headers: {
                 "content-type": "application/json",
