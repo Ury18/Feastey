@@ -1,23 +1,14 @@
-.header {
+.footer {
     display: flex;
     background-color: white;
     // background-color: rgb(49, 49, 49);
     border-bottom: 1px solid rgb(209, 209, 209);
-    height: 3em;
+    min-height: 3em;
     padding: 1em;
     display: flex;
     justify-content: center;
     align-items: center;
     justify-content: space-between;
     align-items: center;
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    z-index: 10000;
 
-    .logo {
-        max-width: 200px;
-        max-width: 120px;
-    }
 }

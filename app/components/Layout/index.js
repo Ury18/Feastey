@@ -3,6 +3,7 @@ import { useEffect } from 'react'
 import Header from '../Header'
 import { connect } from 'react-redux'
 import Cookie from "js-cookie"
+import Footer from '../Footer'
 
 const Layout = ((props) => {
     const { contentClasses } = props
@@ -19,6 +20,7 @@ const Layout = ((props) => {
                     {props.children}
                 </div>
             </div>
+            <Footer className= "footer"/>
         </div>
     )
 })
