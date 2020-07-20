@@ -1,7 +1,8 @@
 import Layout from '../app/components/Layout'
-import { useState } from 'react'
 import Cookie from "js-cookie"
 import Head from 'next/head'
+import Link from 'next/link'
+import { useState } from 'react'
 import { connect } from 'react-redux'
 import { updateUserData } from '../app/redux/user/action'
 import { useRouter } from 'next/router'
@@ -31,6 +32,7 @@ const LogIn = (props) => {
                     setErrors(res.error)
                 } else {
                     Cookie.set("authToken", res.token)
+                    console.log(res)
                     updateUserData({ ...res })
                     router.push('/')
                 }
@@ -51,12 +53,16 @@ const LogIn = (props) => {
                     <label>Email</label>
                     <input onChange={(e) => setEmail(e.target.value)} type="email" name="email" />
                 </div>
-                <div style={{ display: "flex", flexDirection: "column" }}>
+                <div style={{ display: "flex", flexDirection: "column", marginBottom:"1em" }}>
                     <label>Password</label>
                     <input onChange={(e) => setPassword(e.target.value)} type="password" name="password" />
+                    <Link href={`/password-reset-request`}>
+                        <a>Recuperar contraseña</a>
+                    </Link>
                 </div>
+
                 {errors && <p className="errors">{errors}</p>}
-                <button type="submit">Send</button>
+                <button type="submit">Enviar</button>
             </form>
         </Layout>
     )

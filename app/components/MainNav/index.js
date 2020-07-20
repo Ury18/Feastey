@@ -15,16 +15,23 @@ const MainNav = ((props) => {
     const { updateUserData } = props
 
     useEffect(() => {
-        window.addEventListener('click', function (e) {
-            if (e.target.id !== "registerButtonBox" && e.target.id !== "registerBox" ) {
-                setRegisterBoxActive(false)
-            }
+        window.addEventListener('click', eventClick)
 
-            if (e.target.id !== "accountBoxButton" && e.target.id !== "accountBox") {
-                setAccountBoxActive(false)
-            }
-        })
+        //ComponentWillUnmount
+        return () => {
+            window.removeEventListener("click", eventClick)
+        }
     }, [])
+
+    const eventClick = (e) => {
+        if (e.target.id !== "registerButtonBox" && e.target.id !== "registerBox") {
+            setRegisterBoxActive(false)
+        }
+
+        if (e.target.id !== "accountBoxButton" && e.target.id !== "accountBox") {
+            setAccountBoxActive(false)
+        }
+    }
 
     const registerButtonClick = (e) => {
         e.preventDefault()
@@ -60,7 +67,7 @@ const MainNav = ((props) => {
             username: ""
         }
 
-        updateUserData({...data})
+        updateUserData({ ...data })
     }
 
     return (
@@ -90,13 +97,18 @@ const MainNav = ((props) => {
                     <button id="accountBoxButton" onClick={(e) => accountButtonClick(e)}>Mi cuenta</button>
                     {accountBoxActive && <ul id="accountBox">
                         <li>
-                            <Link href="/signup">
-                                <a className={router.pathname == "/signup" ? "active" : ""}>Información de la cuenta</a>
+                            <Link href={`/users/${props.user.id}/edit`}>
+                                <a className={router.pathname == '/users/[id]/edit' ? "active" : ""}>Información de la cuenta</a>
                             </Link>
                         </li>
                         <li>
-                            <Link href="/business-signup">
-                                <a className={router.pathname == "/business-signup" ? "active" : ""}>Favoritos</a>
+                            <Link href={`/users/${props.user.id}/favorites`}>
+                                <a className={router.pathname == '/users/[id]/favorites' ? "active" : ""}>Favoritos</a>
+                            </Link>
+                        </li>
+                        <li>
+                            <Link href={`/users/${props.user.id}/my-businesses`}>
+                                <a className={router.pathname == '/users/[id]/my-businesses' ? "active" : ""}>Mis negocios</a>
                             </Link>
                         </li>
                         <li>

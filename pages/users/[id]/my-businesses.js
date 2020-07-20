@@ -3,39 +3,39 @@ import { connect } from 'react-redux'
 import Layout from '../../../app/components/Layout'
 import BusinessList from '../../../app/components/BusinessList'
 
-const Favorites = (props) => {
+const MyBusinesses = (props) => {
 
-    const { favorites } = props.user
+    const { myBusinesses } = props.user
 
-    const [favoritesList, setFavoritesList] = useState([])
+    const [myBusinesseslist, setMyBusinessesList] = useState([])
 
     useEffect(() => {
-        if(favorites) {
-            getFavoriteBusinesses(favorites)
+        if(myBusinesses) {
+            getMyBusinessesBusinesses(myBusinesses)
         }
     },[])
 
-    const getFavoriteBusinesses = (favorites) => {
+    const getMyBusinessesBusinesses = (myBusinesses) => {
         fetch(`${process.env.FEASTEY_API_URL}/business/multiple-businesses`, {
             method: "POST",
             headers: {
                 "content-type": "application/json"
             },
-            body: JSON.stringify(favorites)
+            body: JSON.stringify(myBusinesses)
         })
             .then(res => res.json())
             .then(res => {
                 if (res.error) {
                     console.error(res.error)
                 } else {
-                    setFavoritesList(res)
+                    setMyBusinessesList(res)
                 }
             })
     }
 
     return (
         <Layout>
-            <BusinessList businessList={favoritesList} />
+            <BusinessList businessList={myBusinesseslist} />
             <button onClick={(e) => loadMore(e)}>Más</button>
         </Layout>
     )
@@ -46,4 +46,4 @@ const mapDispatchToProps = (dispatch) => {
 }
 
 
-export default connect((state => state), mapDispatchToProps)(Favorites)
+export default connect((state => state), mapDispatchToProps)(MyBusinesses)

@@ -33,7 +33,7 @@ const Signup = (props) => {
                     if (res.error) {
                         setErrors(res.error)
                     } else {
-                        router.push('/')
+                        router.push('/please-verify-user')
                     }
                 })
                 .catch(err => {

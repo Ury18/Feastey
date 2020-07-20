@@ -3,6 +3,12 @@ const uniqueValidator = require('mongoose-unique-validator')
 const { Schema, ObjectId }  = mongoose
 
 const User = new Schema({
+
+    isVerified : {
+        type: Boolean,
+        default:  false
+    },
+
     username: {
         type: String,
         required: true
@@ -47,7 +53,7 @@ const User = new Schema({
         ref: "Business"
     }],
 
-    myBusiness: [{
+    myBusinesses: [{
         type: ObjectId,
         ref: "Business"
     }],

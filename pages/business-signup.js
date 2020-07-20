@@ -31,8 +31,7 @@ const SignupBusiness = (props) => {
                     if (res.error) {
                         setErrors(res.error)
                     } else {
-                        setErrors("")
-                        console.log(res)
+                        router.push('/please-verify-user')
                     }
                 })
                 .catch(err => {
