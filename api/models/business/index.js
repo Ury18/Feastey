@@ -18,6 +18,10 @@ const Business = new Schema({
         type: String,
     },
 
+    summary: {
+        type: String
+    },
+
     address: {
         type: String,
     },
