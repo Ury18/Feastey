@@ -1,6 +1,10 @@
 const Business = require('./index')
 const UserLogic = require('../user/logic')
+const FileLogic = require('../file/logic')
+const qrHelper = require('../../middleware/qr-helper')
+const fs = require('fs')
 const { Types: { ObjectId } } = require('mongoose')
+const NODE_PATH = process.env.NODE_PATH
 
 logic = {
 
@@ -16,26 +20,32 @@ logic = {
     },
 
     getBusinessById(businessId) {
-        return Business.findById(businessId).populate("images").populate("attachments.files").select('-__v').lean()
+        return Business.findById(businessId).populate("images").populate("attachments.files").populate("qr_codes").select('-__v').lean()
             .then(business => {
                 business.id = business._id
                 delete business._id
 
                 business.images.forEach(image => {
                     image.id = image._id
-                    delete image.__v
                     delete image._id
+                    delete image.__v
+                })
+
+                business.qr_codes.forEach(qr => {
+                    qr.id = qr._id
+                    delete qr._id
+                    delete qr.__v
                 })
 
                 business.attachments.forEach(attachment => {
                     attachment.id = attachment._id
-                    delete attachment.__v
                     delete attachment._id
+                    delete attachment.__v
 
                     attachment.files.forEach(file => {
                         file.id = file._id
-                        delete file.__v
                         delete file._id
+                        delete file.__v
                     })
                 })
 
@@ -70,11 +80,11 @@ logic = {
                 }
             )
         }
-        if(name){
+        if (name) {
             filters.push(
                 {
-                    $match:{
-                        name: {"$regex":name , "$options": "i"}
+                    $match: {
+                        name: { "$regex": name, "$options": "i" }
                     }
                 }
             )
@@ -129,11 +139,18 @@ logic = {
                     .then(business => {
                         return UserLogic.addMyBusiness(owner, business._id)
                             .then(() => {
-                                return Business.findById(business._id).select('-__v').lean()
-                                    .then(business => {
-                                        business.id = business._id
-                                        delete business._id
-                                        return business
+                                return this.generateBusinessQrById(business._id, owner)
+                                    .then((file) => {
+                                        business.qr_codes.push(file.id)
+                                        return business.save()
+                                            .then(() => {
+                                                return Business.findById(business._id).select('-__v').lean()
+                                                    .then(business => {
+                                                        business.id = business._id
+                                                        delete business._id
+                                                        return business
+                                                    })
+                                            })
                                     })
                             })
                             .catch(({ message }) => {
@@ -145,24 +162,63 @@ logic = {
             if (creatorRole == "businessOwner") {
                 let business = new Business({ ...data })
                 return business.save()
-                .then(business => {
-                    return UserLogic.addMyBusiness(owner, business._id)
-                        .then(() => {
-                            return Business.findById(business._id).select('-__v').lean()
-                                .then(business => {
-                                    business.id = business._id
-                                    delete business._id
-                                    return business
-                                })
-                        })
-                        .catch(({ message }) => {
-                            throw Error(message)
-                        })
-                })
+                    .then(business => {
+                        return UserLogic.addMyBusiness(owner, business._id)
+                            .then(() => {
+                                return this.generateBusinessQrById(business._id, owner)
+                                    .then((file) => {
+                                        business.qr_codes.push(file.id)
+                                        return business.save()
+                                            .then(() => {
+                                                return Business.findById(business._id).select('-__v').lean()
+                                                    .then(business => {
+                                                        business.id = business._id
+                                                        delete business._id
+                                                        return business
+                                                    })
+                                            })
+                                    })
+                            })
+                            .catch(({ message }) => {
+                                throw Error(message)
+                            })
+                    })
             } else {
                 throw Error("This user can't have any business")
             }
         }
+    },
+
+    generateBusinessQrById(businessId, owner) {
+        return qrHelper.generateQr(businessId)
+            .then(() => {
+                return qrHelper.mergeQr(businessId)
+                    .then(() => {
+                        let file = {
+                            mimetype: "image/png",
+                            buffer: {}
+                        }
+                        let data = {
+                            owner: owner,
+                            name: `finalQR-${businessId}`,
+                        }
+                        return new Promise((resolve, reject) => {
+
+                            fs.readFile(`${NODE_PATH}/static/tmp/qr/finalQR-${businessId}.png`, function (err, buffer) {
+                                if (err) console.log(err)
+                                file.buffer = buffer
+                                resolve(FileLogic.uploadFile(owner, "businessOwner", data, file))
+                            })
+                        })
+                            .then(file => {
+                                return new Promise((resolve, reject) => {
+                                    fs.unlink(`${NODE_PATH}/static/tmp/qr/finalQR-${businessId}.png`, function (err) {
+                                        resolve(file)
+                                    })
+                                })
+                            })
+                    })
+            })
     },
 
     editBusiness(editorId, editorRole, businessId, data) {

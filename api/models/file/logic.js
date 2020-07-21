@@ -74,7 +74,7 @@ logic = {
         date = `${curr_date}-${curr_month}-${curr_year}_${curr_hour}:${curr_minutes}:${curr_seconds}`
 
         const bucket = admin.storage().bucket()
-        const fileTitle = `${uploaderId}-${name}-${date}.${contentType}`
+        const fileTitle = `${owner}-${name}-${date}.${contentType}`
         const fileUpload = await bucket.file(fileTitle)
         const fileBlobStream = fileUpload.createWriteStream({
             metadata: {

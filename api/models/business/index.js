@@ -18,14 +18,19 @@ const Business = new Schema({
         type: String,
     },
 
+    summary: {
+        type: String
+    },
+
     address: {
         type: String,
     },
 
     location: {
-        type: {type: String,
+        type: {
+            type: String,
             enum: ['Point'],
-            default:'Point',
+            default: 'Point',
             required: true
         },
         coordinates: {
@@ -35,6 +40,11 @@ const Business = new Schema({
     },
 
     images: [{
+        type: ObjectId,
+        ref: 'File'
+    }],
+
+    qr_codes: [{
         type: ObjectId,
         ref: 'File'
     }],
@@ -51,8 +61,8 @@ const Business = new Schema({
         }]
     }],
 
-    category:{
-        type:ObjectId,
+    category: {
+        type: ObjectId,
         ref: 'Category',
         required: true
     }
