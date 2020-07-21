@@ -6,6 +6,12 @@ import Router from 'next/router'
 import FileUploader from '../../app/components/FileUploader'
 import AttachmentsSection from '../../app/components/AttachmentsSection'
 import GoogleMap from '../../app/components/GoogleMap'
+//Rich Text
+import dynamic from 'next/dynamic'
+const Editor = dynamic(() => import('react-draft-wysiwyg').then(mod => mod.Editor), { ssr: false })
+import '../../node_modules/react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
+import draftToHtml from 'draftjs-to-html';
+import { convertToRaw } from 'draft-js'
 
 class CreateBusiness extends Component {
 
@@ -13,6 +19,7 @@ class CreateBusiness extends Component {
         name: "",
         description: "",
         address: "",
+        summary: "",
         location: [],
         finalAddress: "",
         errors: "",
@@ -28,8 +35,8 @@ class CreateBusiness extends Component {
     }
 
     onWindowClose = (e) => {
-        const { name, description, location, images, attachments, deletedFiles } = this.state
-        const { id, token } = this.props.user
+        const { images, attachments, deletedFiles } = this.state
+        const { token } = this.props.user
         let files = []
 
         for (var i = 0; i < images.length; i++) {
@@ -37,7 +44,6 @@ class CreateBusiness extends Component {
         }
 
         for (var i = 0; i < attachments.length; i++) {
-            let attachment = {}
 
             let thisFiles = attachments[i].files
 
@@ -59,7 +65,7 @@ class CreateBusiness extends Component {
     createBusiness = (e) => {
         e.preventDefault()
 
-        const { name, description, location, images, attachments, deletedFiles, finalAddress, category } = this.state
+        const { name, description, location, images, attachments, deletedFiles, finalAddress, category, summary } = this.state
         const { id, token } = this.props.user
 
         let imageList = []
@@ -94,6 +100,7 @@ class CreateBusiness extends Component {
         let data = {
             name,
             description,
+            summary,
             address: finalAddress,
             location: newLocation,
             images: imageList,
@@ -203,6 +210,12 @@ class CreateBusiness extends Component {
 
     }
 
+    onDescriptionChange = (descriptionRichText) => {
+        let description = draftToHtml(convertToRaw(descriptionRichText.getCurrentContent()));
+        description = description.replace(/(?:\r\n|\r|\n)/g, "<br>")
+        this.setState({ description: description })
+    }
+
     setInputValue = (name, value) => {
         if (name) {
             this.setState({ [name]: value })
@@ -245,10 +258,14 @@ class CreateBusiness extends Component {
         })
     }
 
+    toolbar = {
+        options: ['inline', 'blockType', 'fontSize', 'list', 'textAlign', 'colorPicker', 'link', 'embedded', 'emoji', 'image', 'remove', 'history'],
+    }
+
     render() {
         const { user: { token, id } } = this.props
         const { location, errors, address, finalAddress } = this.state
-        const { renderImagesUploader, setInputValue, createBusiness, renderAttachmentsSection, onAcceptAddress, renderCategoriesOptions } = this
+        const { renderImagesUploader, setInputValue, createBusiness, renderAttachmentsSection, onAcceptAddress, renderCategoriesOptions, onDescriptionChange, toolbar } = this
 
         return (
             <Layout contentClasses="centered">
@@ -273,10 +290,15 @@ class CreateBusiness extends Component {
                         </select>
                     </div>
                     <div style={{ display: "flex", flexDirection: "column" }}>
-                        <label>Descripción</label>
-                        <input onChange={(e) => setInputValue(e.target.name, e.target.value)} name="description" type="text" required />
+                        <label>Resumen</label>
+                        <input onChange={(e) => setInputValue(e.target.name, e.target.value)} name="summary" type="text" required />
                     </div>
-
+                    <div style={{ display: "flex", flexDirection: "column" }}>
+                        <label>Descripción</label>
+                        <div>
+                            <Editor toolbar={toolbar} onEditorStateChange={onDescriptionChange} />
+                        </div>
+                    </div>
                     {location && location.length > 0 && <div className="map-container">
                         <GoogleMap class="map" lng={location[0]} lat={location[1]} />
                     </div>}

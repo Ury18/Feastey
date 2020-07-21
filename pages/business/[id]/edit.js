@@ -10,11 +10,8 @@ import { updateUserData } from '../../../app/redux/user/action'
 import dynamic from 'next/dynamic'
 const Editor = dynamic(() => import('react-draft-wysiwyg').then(mod => mod.Editor), { ssr: false })
 import '../../../node_modules/react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
-import { useEffect, useState } from 'react';
 import draftToHtml from 'draftjs-to-html';
-import { stateFromHTML } from 'draft-js-import-html'
-// const htmlToDraft = dynamic(() => import('html-to-draftjs').then(mod => mod.htmlToDraft), { ssr: false })
-import { convertToRaw, EditorState, ContentState } from 'draft-js'
+import { convertToRaw, EditorState, ContentState, convertFromHTML } from 'draft-js'
 
 class EditBusiness extends Component {
 
@@ -23,6 +20,7 @@ class EditBusiness extends Component {
         name: "",
         description: "",
         address: "",
+        summary: "",
         location: [],
         finalAddress: "",
         errors: "",
@@ -31,7 +29,7 @@ class EditBusiness extends Component {
         tempFiles: [],
         deletedFiles: [],
         category: "",
-        descriptionContentState: ""
+        descriptionEditorState: {}
     }
 
     componentDidMount = () => {
@@ -60,7 +58,7 @@ class EditBusiness extends Component {
     editBusiness = (e) => {
         e.preventDefault()
 
-        const { id, name, description, location, images, attachments, deletedFiles, finalAddress, category } = this.state
+        const { id, name, description, location, images, attachments, deletedFiles, finalAddress, category, summary } = this.state
         const { user } = this.props
         const { token } = user
 
@@ -98,6 +96,7 @@ class EditBusiness extends Component {
         let data = {
             name,
             description,
+            summary,
             address: finalAddress,
             location: newLocation,
             images: imageList,
@@ -249,7 +248,6 @@ class EditBusiness extends Component {
         }
     }
 
-
     renderCategoriesOptions = () => {
         const { categories } = this.props
         const { category } = this.state
@@ -270,19 +268,24 @@ class EditBusiness extends Component {
     }
 
     onDescriptionExists = () => {
-        const { description } = this.props
-        debugger
-        const descriptionToDraft = stateFromHTML("<p>Pollas</p>")
-        this.setState({ descriptionContentState: descriptionToDraft })
+        const { description } = this.props.business
+        const blocksFromHTML = convertFromHTML(description)
+        const content = ContentState.createFromBlockArray(
+            blocksFromHTML.contentBlocks,
+            blocksFromHTML.entityMap
+        )
+        const descriptionToDraft = EditorState.createWithContent(content)
+        this.setState({ descriptionEditorState: descriptionToDraft })
     }
 
+    toolbar = {
+        options: ['inline', 'blockType', 'fontSize', 'list', 'textAlign', 'colorPicker', 'link', 'embedded', 'emoji', 'image', 'remove', 'history'],
+    }
 
     render() {
-        const toolbar = {
-            options: ['inline', 'blockType', 'fontSize', 'list', 'textAlign', 'colorPicker', 'link', 'embedded', 'emoji', 'image', 'remove', 'history'],
-        }
-        const { name, description, location, address, errors, finalAddress, category, descriptionContentState } = this.state
-        const { setInputValue, editBusiness, renderAttachmentsSection, renderImagesUploader, onAcceptAddress, renderCategoriesOptions, onDescriptionChange, onDescriptionExists } = this
+
+        const { name, description, location, address, errors, finalAddress, category, summary, descriptionEditorState } = this.state
+        const { setInputValue, editBusiness, renderAttachmentsSection, renderImagesUploader, onAcceptAddress, renderCategoriesOptions, onDescriptionChange, toolbar } = this
         return (
             <Layout contentClasses="centered">
                 <form onSubmit={(e) => editBusiness(e)} style={{ maxWidth: "200px" }}>
@@ -307,11 +310,14 @@ class EditBusiness extends Component {
                         </select>
                     </div>
                     <div style={{ display: "flex", flexDirection: "column" }}>
+                        <label>Resumen</label>
+                        <input onChange={(e) => setInputValue(e.target.name, e.target.value)} type="text" defaultValue={summary} name="summary" />
+                    </div>
+                    <div style={{ display: "flex", flexDirection: "column" }}>
                         <label>Descripción</label>
-                        <input onChange={(e) => setInputValue(e.target.name, e.target.value)} type="text" defaultValue={description} name="description" />
                         <div>
                             {/* <Editor/> */}
-                            <Editor toolbar={toolbar} contentState={descriptionContentState} onEditorStateChange={onDescriptionChange} />
+                            {descriptionEditorState && <Editor toolbar={toolbar} defaultEditorState={descriptionEditorState} onEditorStateChange={onDescriptionChange} />}
                         </div>
                         <div dangerouslySetInnerHTML={{ __html: description }}></div>
                     </div>

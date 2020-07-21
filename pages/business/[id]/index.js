@@ -2,7 +2,7 @@ import Layout from '../../../app/components/Layout'
 import { useRouter } from 'next/router'
 import DetailBusiness from '../../../app/components/BusinessDetail'
 
-const UserId = (props) => {
+const Business = (props) => {
 
     const { business } = props
     const router = useRouter()
@@ -15,10 +15,10 @@ const UserId = (props) => {
     )
 }
 
-UserId.getInitialProps = async (ctx) => {
+Business.getInitialProps = async (ctx) => {
     const res = await fetch(`${process.env.FEASTEY_API_URL}/business/${ctx.query.id}`)
     const business = await res.json()
     return { business }
 }
 
-export default UserId
+export default Business
