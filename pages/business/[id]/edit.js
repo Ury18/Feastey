@@ -6,6 +6,15 @@ import AttachmentsSection from '../../../app/components/AttachmentsSection'
 import FileUploader from '../../../app/components/FileUploader'
 import GoogleMap from '../../../app/components/GoogleMap'
 import { updateUserData } from '../../../app/redux/user/action'
+//Rich Text
+import dynamic from 'next/dynamic'
+const Editor = dynamic(() => import('react-draft-wysiwyg').then(mod => mod.Editor), { ssr: false })
+import '../../../node_modules/react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
+import { useEffect, useState } from 'react';
+import draftToHtml from 'draftjs-to-html';
+import { stateFromHTML } from 'draft-js-import-html'
+// const htmlToDraft = dynamic(() => import('html-to-draftjs').then(mod => mod.htmlToDraft), { ssr: false })
+import { convertToRaw, EditorState, ContentState } from 'draft-js'
 
 class EditBusiness extends Component {
 
@@ -21,14 +30,16 @@ class EditBusiness extends Component {
         attachments: [],
         tempFiles: [],
         deletedFiles: [],
-        category: ""
+        category: "",
+        descriptionContentState: ""
     }
 
     componentDidMount = () => {
         const { business } = this.props
         this.setState({ ...business })
         let location = business.location.coordinates
-        this.setState({ location, finalAddress:business.address })
+        this.setState({ location, finalAddress: business.address })
+        this.onDescriptionExists()
         window.addEventListener("beforeunload", this.onWindowClose)
     }
 
@@ -49,7 +60,7 @@ class EditBusiness extends Component {
     editBusiness = (e) => {
         e.preventDefault()
 
-        const { id, name, description, location, images, attachments, deletedFiles, finalAddress,category } = this.state
+        const { id, name, description, location, images, attachments, deletedFiles, finalAddress, category } = this.state
         const { user } = this.props
         const { token } = user
 
@@ -242,20 +253,36 @@ class EditBusiness extends Component {
     renderCategoriesOptions = () => {
         const { categories } = this.props
         const { category } = this.state
-        
+
         return categories.map((item) => {
             let selected = false
-            if (item.id == category ) {
+            if (item.id == category) {
                 selected = true
             }
             return <option selected={selected} value={item.id}>{item.name}</option>
         })
     }
 
+    onDescriptionChange = (descriptionRichText) => {
+        let description = draftToHtml(convertToRaw(descriptionRichText.getCurrentContent()));
+        description = description.replace(/(?:\r\n|\r|\n)/g, "<br>")
+        this.setState({ description: description })
+    }
+
+    onDescriptionExists = () => {
+        const { description } = this.props
+        debugger
+        const descriptionToDraft = stateFromHTML("<p>Pollas</p>")
+        this.setState({ descriptionContentState: descriptionToDraft })
+    }
+
 
     render() {
-        const { name, description, location, address, errors, finalAddress, category } = this.state
-        const { setInputValue, editBusiness, renderAttachmentsSection, renderImagesUploader, onAcceptAddress, renderCategoriesOptions } = this
+        const toolbar = {
+            options: ['inline', 'blockType', 'fontSize', 'list', 'textAlign', 'colorPicker', 'link', 'embedded', 'emoji', 'image', 'remove', 'history'],
+        }
+        const { name, description, location, address, errors, finalAddress, category, descriptionContentState } = this.state
+        const { setInputValue, editBusiness, renderAttachmentsSection, renderImagesUploader, onAcceptAddress, renderCategoriesOptions, onDescriptionChange, onDescriptionExists } = this
         return (
             <Layout contentClasses="centered">
                 <form onSubmit={(e) => editBusiness(e)} style={{ maxWidth: "200px" }}>
@@ -282,6 +309,11 @@ class EditBusiness extends Component {
                     <div style={{ display: "flex", flexDirection: "column" }}>
                         <label>Descripción</label>
                         <input onChange={(e) => setInputValue(e.target.name, e.target.value)} type="text" defaultValue={description} name="description" />
+                        <div>
+                            {/* <Editor/> */}
+                            <Editor toolbar={toolbar} contentState={descriptionContentState} onEditorStateChange={onDescriptionChange} />
+                        </div>
+                        <div dangerouslySetInnerHTML={{ __html: description }}></div>
                     </div>
                     {location && location.length > 0 && <div className="map-container">
                         <GoogleMap class="map" lng={location[0]} lat={location[1]} />

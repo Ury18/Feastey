@@ -141,7 +141,8 @@ const Detail = ((props) => {
                 <div className="map-container">
                     <GoogleMap class="map" lng={business.location.coordinates[0]} lat={business.location.coordinates[1]} />
                 </div>
-                <p>{business.description}</p>
+                <div dangerouslySetInnerHTML={{ __html: business.description }}></div>
+
                 <ul className="section_Container">
                     {renderAttachmentsList()}
                 </ul>
