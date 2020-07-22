@@ -11,7 +11,8 @@ import dynamic from 'next/dynamic'
 const Editor = dynamic(() => import('react-draft-wysiwyg').then(mod => mod.Editor), { ssr: false })
 import '../../../node_modules/react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 import draftToHtml from 'draftjs-to-html';
-import { convertToRaw, EditorState, ContentState, convertFromHTML } from 'draft-js'
+import { convertToRaw, EditorState, ContentState } from 'draft-js'
+import htmlToDraft from 'html-to-draftjs';
 
 class EditBusiness extends Component {
 
@@ -269,7 +270,7 @@ class EditBusiness extends Component {
 
     onDescriptionExists = () => {
         const { description } = this.props.business
-        const blocksFromHTML = convertFromHTML(description)
+        const blocksFromHTML = htmlToDraft(description)
         const content = ContentState.createFromBlockArray(
             blocksFromHTML.contentBlocks,
             blocksFromHTML.entityMap
