@@ -65,8 +65,25 @@ const Business = new Schema({
         type: ObjectId,
         ref: 'Category',
         required: true
-    }
+    },
 
+    stripe: {
+        customerId: {
+            type: String
+        },
+
+        subscriptionId: {
+            type: String
+        },
+
+        productId: {
+            type: String
+        },
+
+        priceId: {
+            type: String
+        }
+    }
 })
 
 Business.index({ location: "2dsphere" })
