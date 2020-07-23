@@ -1,8 +1,8 @@
 const express = require('express')
 const logic = require('../models/business/logic')
 const { tokenVerifierMiddleware } = require('../middleware/token-helper')
-
-const businessRouter = express.Router()
+const stripe = require('stripe')()
+const businessRouter = express.Router(process.env.STRIPE_KEY)
 
 businessRouter.route('/')
     .get((req, res) => {

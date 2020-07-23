@@ -15,7 +15,7 @@ const dev = process.env.NODE_DEV !== 'production'
 const nextApp = next({ dev })
 const handle = nextApp.getRequestHandler()
 
-const { UserRouter, BusinessRouter, FileRouter, CategoryRouter } = require('./api/routes')
+const { UserRouter, BusinessRouter, FileRouter, CategoryRouter, StripeRouter } = require('./api/routes')
 
 const httpsOptions = {
     key: readFileSync(`${certPath}/privkey.pem`),
@@ -58,6 +58,7 @@ mongoose.connect(db_url, {
                 httpsServer.use('/api/business', BusinessRouter)
                 httpsServer.use('/api/files', FileRouter)
                 httpsServer.use('/api/categories', CategoryRouter)
+                httpsServer.use('/api/stripe', StripeRouter)
 
                 //Handles react
                 httpsServer.all('*', (req, res) => {
