@@ -5,7 +5,6 @@ const qrHelper = require('../../middleware/qr-helper')
 const stripeHelper = require('../../middleware/stripe-helper')
 const fs = require('fs')
 const { Types: { ObjectId } } = require('mongoose')
-const { create } = require('./index')
 const NODE_PATH = process.env.NODE_PATH
 
 logic = {
@@ -132,6 +131,11 @@ logic = {
             throw Error("Owner is needed")
         }
 
+        if(creatorRole !=="admin") {
+            if(!data.paymentMethodId) throw Error("Please introduce a valid payment method")
+            if (!data.priceId) throw Error("Please select a price")
+        }
+
         const create = () => {
             let business = new Business({ ...data })
             return business.save()
@@ -143,7 +147,15 @@ logic = {
                                     business.qr_codes.push(file.id)
                                     let stripeCustomer = await stripeHelper.createSubscriber(data.ownerEmail)
                                     business.stripe.customerId = stripeCustomer.id
-                                    console.log(business.stripe)
+                                    let stripeSubscription = await stripeHelper.createSubscription(stripeCustomer.id, data.paymentMethodId, data.priceId)
+                                    if(stripeSubscription.error){
+                                        stripeHelper.deleteSubscriber(stripeCustomer.id)
+                                        throw Error(stripeSubscription.error)
+                                    }
+                                    business.stripe.subscriptionId = stripeSubscription.id
+                                    business.stripe.priceId = data.priceId
+                                    business.stripe.productId = stripeSubscription.plan.product
+                                    business.isEnabled = true
                                     return business.save()
                                         .then(() => {
                                             return Business.findById(business._id).select('-__v').lean()

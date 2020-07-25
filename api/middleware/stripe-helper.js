@@ -7,13 +7,14 @@ const stripeHelper = {
             email
         })
     },
+
     async createSubscription(customerId, paymentMethodId, priceId) {
         try {
             await stripe.paymentMethods.attach(paymentMethodId, {
                 customer: customerId,
             });
         } catch ({ message}) {
-            throw Error(message)
+            return({error:message})
         }
 
         // Change the default invoice settings on the customer to the new payment method
@@ -27,13 +28,17 @@ const stripeHelper = {
         );
 
         // Create the subscription
-        const subscription = await stripe.subscriptions.create({
+        let subscription = await stripe.subscriptions.create({
             customer: customerId,
             items: [{ price: priceId }],
             expand: ['latest_invoice.payment_intent'],
         });
 
         return subscription
+    },
+
+    async deleteSubscriber(customerId) {
+        return stripe.customers.del(customerId)
     }
 }
 

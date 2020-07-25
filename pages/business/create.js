@@ -12,6 +12,11 @@ const Editor = dynamic(() => import('react-draft-wysiwyg').then(mod => mod.Edito
 import '../../node_modules/react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 import draftToHtml from 'draftjs-to-html';
 import { convertToRaw } from 'draft-js'
+import { loadStripe } from '@stripe/stripe-js';
+import { Elements } from '@stripe/react-stripe-js';
+import PaymentInfoForm from '../../app/components/PaymentInfoForm'
+
+const stripePromise = loadStripe("pk_test_51H7jFNHesZkxfUDSfJkBztrwFiLv7BnMbzJdhbleX9haB2ncM4RUjfWOazBen7aK3yW3x2BzDd26Z2wOq4BVkuni00vFmhfisR");
 
 class CreateBusiness extends Component {
 
@@ -26,7 +31,9 @@ class CreateBusiness extends Component {
         images: [],
         attachments: [],
         deletedFiles: [],
-        category: ""
+        category: "",
+        priceId: "",
+        paymentMethodId: ""
     }
 
     componentDidMount() {
@@ -64,7 +71,7 @@ class CreateBusiness extends Component {
     createBusiness = (e) => {
         e.preventDefault()
 
-        const { name, description, location, images, attachments, deletedFiles, finalAddress, category, summary } = this.state
+        const { name, description, location, images, attachments, deletedFiles, finalAddress, category, summary, priceId, paymentMethodId } = this.state
         const { id, token } = this.props.user
 
         let imageList = []
@@ -105,7 +112,9 @@ class CreateBusiness extends Component {
             images: imageList,
             attachments: attachmentsClean,
             category,
-            ownerEmail: this.props.user.email
+            ownerEmail: this.props.user.email,
+            priceId,
+            paymentMethodId
         }
 
         this.setState({ errors: "" })
@@ -264,7 +273,7 @@ class CreateBusiness extends Component {
 
     render() {
         const { user: { token, id } } = this.props
-        const { location, errors, address, finalAddress } = this.state
+        const { location, errors, address, finalAddress, priceId } = this.state
         const { renderImagesUploader, setInputValue, createBusiness, renderAttachmentsSection, onAcceptAddress, renderCategoriesOptions, onDescriptionChange, toolbar } = this
 
         return (
@@ -282,6 +291,9 @@ class CreateBusiness extends Component {
                             {address && address !== finalAddress && <button onClick={(e) => onAcceptAddress(e)}>Aceptar</button>}
                         </div>
                     </div>
+                        {location && location.length > 0 && <div className="map-container">
+                            <GoogleMap class="map" lng={location[0]} lat={location[1]} />
+                        </div>}
                     <div>
                         <label>Categoría</label>
                         <select name="category" onChange={(e) => setInputValue(e.target.name, e.target.value)}>
@@ -299,10 +311,6 @@ class CreateBusiness extends Component {
                             <Editor toolbar={toolbar} onEditorStateChange={onDescriptionChange} />
                         </div>
                     </div>
-                    {location && location.length > 0 && <div className="map-container">
-                        <GoogleMap class="map" lng={location[0]} lat={location[1]} />
-                    </div>}
-
                     <div style={{ display: "flex", flexDirection: "column" }}>
                         <label>Imagenes</label>
                         {renderImagesUploader()}
@@ -312,6 +320,18 @@ class CreateBusiness extends Component {
                         <h2>Attachments</h2>
                         {renderAttachmentsSection()}
                     </div>
+
+                    <div className={`price ${priceId == "price_1H7jXCHesZkxfUDSo4o2xLrL" ? " selected" : ""}`} onClick={(e) => setInputValue("priceId", "price_1H7jXCHesZkxfUDSo4o2xLrL")}>
+                        ANUAL
+                    </div>
+                    <div className={`price ${priceId == "price_1H7jWPHesZkxfUDSN4V0r8b0" ? " selected" : ""}`} onClick={(e) => setInputValue("priceId", "price_1H7jWPHesZkxfUDSN4V0r8b0")}>
+                        MONTHLY
+                    </div>
+
+
+                    <Elements stripe={stripePromise}>
+                        <PaymentInfoForm onSubmit={(paymentMethodId) => this.setState({ paymentMethodId})}/>
+                    </Elements>
 
                     {errors && <p className="errors">{errors}</p>}
 

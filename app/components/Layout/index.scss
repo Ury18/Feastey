@@ -89,6 +89,13 @@ form  {
         max-width: 400px;
         text-align: center;
     }
+
+    .price {
+        cursor: pointer;
+        &.selected {
+            border: 1px solid red;
+        }
+    }
 }
 
 
