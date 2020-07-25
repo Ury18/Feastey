@@ -2,8 +2,10 @@ const Business = require('./index')
 const UserLogic = require('../user/logic')
 const FileLogic = require('../file/logic')
 const qrHelper = require('../../middleware/qr-helper')
+const stripeHelper = require('../../middleware/stripe-helper')
 const fs = require('fs')
 const { Types: { ObjectId } } = require('mongoose')
+const { create } = require('./index')
 const NODE_PATH = process.env.NODE_PATH
 
 logic = {
@@ -130,59 +132,44 @@ logic = {
             throw Error("Owner is needed")
         }
 
+        const create = () => {
+            let business = new Business({ ...data })
+            return business.save()
+                .then(business => {
+                    return UserLogic.addMyBusiness(owner, business._id)
+                        .then(() => {
+                            return this.generateBusinessQrById(business._id, owner)
+                                .then(async (file) => {
+                                    business.qr_codes.push(file.id)
+                                    let stripeCustomer = await stripeHelper.createSubscriber(data.ownerEmail)
+                                    business.stripe.customerId = stripeCustomer.id
+                                    console.log(business.stripe)
+                                    return business.save()
+                                        .then(() => {
+                                            return Business.findById(business._id).select('-__v').lean()
+                                                .then(business => {
+                                                    business.id = business._id
+                                                    delete business._id
+                                                    return business
+                                                })
+                                        })
+                                })
+                        })
+                        .catch(({ message }) => {
+                            throw Error(message)
+                        })
+                })
+        }
+
         if (owner !== creatorId) {
             if (creatorRole !== "admin") {
                 throw Error("Insuficcient Permisions")
             } else {
-                let business = new Business({ ...data })
-                return business.save()
-                    .then(business => {
-                        return UserLogic.addMyBusiness(owner, business._id)
-                            .then(() => {
-                                return this.generateBusinessQrById(business._id, owner)
-                                    .then((file) => {
-                                        business.qr_codes.push(file.id)
-                                        return business.save()
-                                            .then(() => {
-                                                return Business.findById(business._id).select('-__v').lean()
-                                                    .then(business => {
-                                                        business.id = business._id
-                                                        delete business._id
-                                                        return business
-                                                    })
-                                            })
-                                    })
-                            })
-                            .catch(({ message }) => {
-                                throw Error(message)
-                            })
-                    })
+                return create()
             }
         } else {
             if (creatorRole == "businessOwner") {
-                let business = new Business({ ...data })
-                return business.save()
-                    .then(business => {
-                        return UserLogic.addMyBusiness(owner, business._id)
-                            .then(() => {
-                                return this.generateBusinessQrById(business._id, owner)
-                                    .then((file) => {
-                                        business.qr_codes.push(file.id)
-                                        return business.save()
-                                            .then(() => {
-                                                return Business.findById(business._id).select('-__v').lean()
-                                                    .then(business => {
-                                                        business.id = business._id
-                                                        delete business._id
-                                                        return business
-                                                    })
-                                            })
-                                    })
-                            })
-                            .catch(({ message }) => {
-                                throw Error(message)
-                            })
-                    })
+                return create()
             } else {
                 throw Error("This user can't have any business")
             }

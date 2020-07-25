@@ -27,7 +27,6 @@ class CreateBusiness extends Component {
         attachments: [],
         deletedFiles: [],
         category: ""
-
     }
 
     componentDidMount() {
@@ -105,7 +104,8 @@ class CreateBusiness extends Component {
             location: newLocation,
             images: imageList,
             attachments: attachmentsClean,
-            category
+            category,
+            ownerEmail: this.props.user.email
         }
 
         this.setState({ errors: "" })

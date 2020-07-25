@@ -3,6 +3,7 @@ const aggregatePaginate = require('mongoose-aggregate-paginate-v2')
 const { Schema, ObjectId } = mongoose
 
 const Business = new Schema({
+
     owner: {
         type: ObjectId,
         ref: 'User',
@@ -24,6 +25,18 @@ const Business = new Schema({
 
     address: {
         type: String,
+    },
+
+    isEnabled: {
+        type: Boolean,
+        required: true,
+        default: false
+    },
+
+    isPublished : {
+        type: Boolean,
+        required: true,
+        default: true
     },
 
     location: {
@@ -88,4 +101,5 @@ const Business = new Schema({
 
 Business.index({ location: "2dsphere" })
 Business.plugin(aggregatePaginate)
+
 module.exports = mongoose.model("Business", Business)
