@@ -1,6 +1,7 @@
 const User = require('./index')
 const bcrypt = require('bcrypt')
 const { VerifyEmail, ChangePassword } = require('../../mails')
+const stripeHelper = require('../../middleware/stripe-helper')
 
 logic = {
 
@@ -227,13 +228,17 @@ logic = {
             userId = tokenUserId
         }
 
-        return User.findById(userId)
-            .then(user => {
+        return User.findById(userId).populate("myBusinesses")
+            .then(async (user) => {
                 if (password) {
                     return bcrypt.compare(password, user.password)
-                        .then((match) => {
+                        .then(async (match) => {
                             if (match) {
                                 user.email = email
+                                await user.myBusinesses.forEach(async (business) => {
+                                        await stripeHelper.changeSubscriberEmail(business.stripe.customerId, email)
+                                        return business
+                                    })
                                 return user.save()
                                     .then(user => {
                                         return User.findById(user._id).select('-__v').lean()
@@ -250,6 +255,11 @@ logic = {
                         })
                 } else if( tokenUserRole =="admin") {
                     user.email = email
+                    await user.myBusinesses.forEach(async (business)  => {
+                        let res = await stripeHelper.changeSubscriberEmail(business.stripe.customerId, email)
+                        console.log(res)
+                        return res
+                    })
                     return user.save()
                         .then(user => {
                             return User.findById(user._id).select('-__v').lean()

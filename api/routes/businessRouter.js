@@ -1,7 +1,6 @@
 const express = require('express')
 const logic = require('../models/business/logic')
 const { tokenVerifierMiddleware } = require('../middleware/token-helper')
-const stripe = require('stripe')()
 const businessRouter = express.Router(process.env.STRIPE_KEY)
 
 businessRouter.route('/')
@@ -55,7 +54,6 @@ businessRouter.route('/multiple-businesses')
         try {
             logic.getMultipleBusinesses(req.body)
                 .then((businesses) => {
-                    console.log(businesses)
                     res.status(201).json(businesses)
                 })
                 .catch(({ message }) => {
@@ -82,7 +80,12 @@ businessRouter.use('/:businessId', (req, res, next) => {
 })
 
 businessRouter.route('/:businessId')
-    .get((req, res) => {
+    .get(tokenVerifierMiddleware, (req, res) => {
+        if (req.tokenUserId) {
+            if (req.tokenUserId.toString() !== req.business.owner.toString() && req.tokenUserRole !== "admin") {
+                delete req.business.stripe
+            }
+        }
         res.status(201).json(req.business)
     })
     .put(tokenVerifierMiddleware, (req, res) => {

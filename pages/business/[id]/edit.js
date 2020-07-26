@@ -13,6 +13,7 @@ import '../../../node_modules/react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 import draftToHtml from 'draftjs-to-html';
 import { convertToRaw, EditorState, ContentState } from 'draft-js'
 import htmlToDraft from 'html-to-draftjs';
+import { parseCookies } from '../../../app/middleware/parseCookies'
 
 class EditBusiness extends Component {
 
@@ -20,6 +21,7 @@ class EditBusiness extends Component {
         id: "",
         name: "",
         description: "",
+        isPublished: false,
         address: "",
         summary: "",
         location: [],
@@ -30,7 +32,9 @@ class EditBusiness extends Component {
         tempFiles: [],
         deletedFiles: [],
         category: "",
-        descriptionEditorState: {}
+        descriptionEditorState: {},
+        priceId: "",
+        paymentMethodId: ""
     }
 
     componentDidMount = () => {
@@ -38,6 +42,7 @@ class EditBusiness extends Component {
         this.setState({ ...business })
         let location = business.location.coordinates
         this.setState({ location, finalAddress: business.address })
+        this.setState({ priceId: business.stripe.priceId, stripe: {} })
         this.onDescriptionExists()
         window.addEventListener("beforeunload", this.onWindowClose)
     }
@@ -59,7 +64,7 @@ class EditBusiness extends Component {
     editBusiness = (e) => {
         e.preventDefault()
 
-        const { id, name, description, location, images, attachments, deletedFiles, finalAddress, category, summary } = this.state
+        const { id, name, description, location, images, attachments, deletedFiles, finalAddress, category, summary, priceId, paymentMethodId } = this.state
         const { user } = this.props
         const { token } = user
 
@@ -103,7 +108,9 @@ class EditBusiness extends Component {
             images: imageList,
             attachments: attachmentsClean,
             owner: user.id,
-            category
+            category,
+            priceId,
+            paymentMethodId
         }
 
         fetch(`${process.env.FEASTEY_API_URL}/business/${id}`, {
@@ -229,7 +236,7 @@ class EditBusiness extends Component {
 
         e.preventDefault()
 
-        fetch(`https://cors-anywhere.herokuapp.com/${porcess.env.GOOGLE_MAPS_GEOCODE_URL}address=${address}&key=${process.env.GOOGLE_MAPS_KEY}`, {
+        fetch(`https://cors-anywhere.herokuapp.com/${process.env.GOOGLE_MAPS_GEOCODE_URL}address=${address}&key=${process.env.GOOGLE_MAPS_KEY}`, {
             headers: {
                 "content-type": "application/json"
             }
@@ -285,7 +292,7 @@ class EditBusiness extends Component {
 
     render() {
 
-        const { name, description, location, address, errors, finalAddress, category, summary, descriptionEditorState } = this.state
+        const { name, description, location, address, errors, finalAddress, category, summary, descriptionEditorState, priceId, isPublished } = this.state
         const { setInputValue, editBusiness, renderAttachmentsSection, renderImagesUploader, onAcceptAddress, renderCategoriesOptions, onDescriptionChange, toolbar } = this
         return (
             <Layout contentClasses="centered">
@@ -297,12 +304,19 @@ class EditBusiness extends Component {
                         <input onChange={(e) => setInputValue(e.target.name, e.target.value)} type="text" defaultValue={name} name="name" />
                     </div>
                     <div style={{ display: "flex", flexDirection: "column" }}>
+                        <label>Publicado</label>
+                        <input onChange={(e) => setInputValue(e.target.name, e.target.checked)} type="checkbox" checked={isPublished} name="isPublished" />
+                    </div>
+                    <div style={{ display: "flex", flexDirection: "column" }}>
                         <label>Dirección</label>
                         <div>
                             <input onChange={(e) => setInputValue(e.target.name, e.target.value)} defaultValue={address} name="address" type="text" required />
                             {address && address !== finalAddress && <button onClick={(e) => onAcceptAddress(e)}>Aceptar</button>}
                         </div>
                     </div>
+                    {location && location.length > 0 && <div className="map-container">
+                        <GoogleMap class="map" lng={location[0]} lat={location[1]} />
+                    </div>}
                     <div>
                         <label>Categoría</label>
                         <select name="category" defaultValue={category} onChange={(e) => setInputValue(e.target.name, e.target.value)}>
@@ -322,9 +336,6 @@ class EditBusiness extends Component {
                         </div>
                         <div dangerouslySetInnerHTML={{ __html: description }}></div>
                     </div>
-                    {location && location.length > 0 && <div className="map-container">
-                        <GoogleMap class="map" lng={location[0]} lat={location[1]} />
-                    </div>}
                     <div style={{ display: "flex", flexDirection: "column" }}>
                         <label>Imagenes</label>
                         {renderImagesUploader()}
@@ -333,6 +344,13 @@ class EditBusiness extends Component {
                     <div style={{ display: "flex", flexDirection: "column" }}>
                         <h2>Attachments</h2>
                         {renderAttachmentsSection()}
+                    </div>
+
+                    <div className={`price ${priceId == "price_1H7jXCHesZkxfUDSo4o2xLrL" ? " selected" : ""}`} onClick={(e) => setInputValue("priceId", "price_1H7jXCHesZkxfUDSo4o2xLrL")}>
+                        ANUAL
+                    </div>
+                    <div className={`price ${priceId == "price_1H7jWPHesZkxfUDSN4V0r8b0" ? " selected" : ""}`} onClick={(e) => setInputValue("priceId", "price_1H7jWPHesZkxfUDSN4V0r8b0")}>
+                        MONTHLY
                     </div>
 
                     {errors && <p className="errors">{errors}</p>}
@@ -346,7 +364,13 @@ class EditBusiness extends Component {
 }
 
 EditBusiness.getInitialProps = async (ctx) => {
-    const res = await fetch(`${process.env.FEASTEY_API_URL}/business/${ctx.query.id}`)
+    const cookie = parseCookies(ctx.req)
+    const res = await fetch(`${process.env.FEASTEY_API_URL}/business/${ctx.query.id}`,
+        {
+            headers: {
+                authorization: `Bearer ${cookie.authToken}`
+            }
+        })
     const business = await res.json()
     let categories = await fetch(`${process.env.FEASTEY_API_URL}/categories`)
     categories = await categories.json()

@@ -8,6 +8,17 @@ const stripeHelper = {
         })
     },
 
+    changeSubscriberEmail(subscriberId, email) {
+        return stripe.customers.update(
+            subscriberId,
+            { email }
+        )
+    },
+
+    async deleteSubscriber(customerId) {
+        return stripe.customers.del(customerId)
+    },
+
     async createSubscription(customerId, paymentMethodId, priceId) {
         try {
             await stripe.paymentMethods.attach(paymentMethodId, {
@@ -37,9 +48,28 @@ const stripeHelper = {
         return subscription
     },
 
-    async deleteSubscriber(customerId) {
-        return stripe.customers.del(customerId)
+    async changeSubscriptionPrice(subscriptionId, priceId) {
+        console.log(subscriptionId, priceId)
+        const subscription = await stripe.subscriptions.retrieve(
+            subscriptionId
+        )
+        const updatedSubscription = await stripe.subscriptions.update(
+            subscriptionId,
+            {
+                cancel_at_period_end: false,
+                items:[
+                    {
+                        id: subscription.items.data[0].id,
+                        price: priceId
+                    }
+                ]
+            }
+        )
+
+        return updatedSubscription
+
     }
+
 }
 
 module.exports = stripeHelper
