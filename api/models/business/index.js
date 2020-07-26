@@ -33,7 +33,7 @@ const Business = new Schema({
         default: false
     },
 
-    isPublished : {
+    isPublished: {
         type: Boolean,
         required: true,
         default: true
@@ -95,7 +95,12 @@ const Business = new Schema({
 
         priceId: {
             type: String
-        }
+        },
+
+        paymentMethodId: {
+            type: String
+        },
+
     }
 })
 

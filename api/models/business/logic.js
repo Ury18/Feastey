@@ -131,8 +131,8 @@ logic = {
             throw Error("Owner is needed")
         }
 
-        if(creatorRole !=="admin") {
-            if(!data.paymentMethodId) throw Error("Please introduce a valid payment method")
+        if (creatorRole !== "admin") {
+            if (!data.paymentMethodId) throw Error("Please introduce a valid payment method")
             if (!data.priceId) throw Error("Please select a price")
         }
 
@@ -148,13 +148,18 @@ logic = {
                                     let stripeCustomer = await stripeHelper.createSubscriber(data.ownerEmail)
                                     business.stripe.customerId = stripeCustomer.id
                                     let stripeSubscription = await stripeHelper.createSubscription(stripeCustomer.id, data.paymentMethodId, data.priceId)
-                                    if(stripeSubscription.error){
+                                    if (stripeSubscription.error) {
                                         stripeHelper.deleteSubscriber(stripeCustomer.id)
                                         throw Error(stripeSubscription.error)
+                                    }
+                                    if (stripeSubscription.latest_invoice.payment_intent.status !== 'succeeded') {
+                                        stripeHelper.deleteSubscriber(stripeCustomer.id)
+                                        throw Error("No se ha podido completar el pago, porfavor, introduce otro metodo de pago.")
                                     }
                                     business.stripe.subscriptionId = stripeSubscription.id
                                     business.stripe.priceId = data.priceId
                                     business.stripe.productId = stripeSubscription.plan.product
+                                    business.stripe.paymentMethodId = data.paymentMethodId
                                     business.isEnabled = true
                                     return business.save()
                                         .then(() => {
@@ -221,42 +226,64 @@ logic = {
     },
 
     editBusiness(editorId, editorRole, businessId, data) {
+
+        const edit = async (business) => {
+            const { paymentMethodId, priceId } = data
+            const { subscriptionId } = business.stripe
+            if (data.priceId) delete data.priceId
+            if (data.paymentMethodId) delete data.paymentMethodId
+
+            if (business.stripe.priceId !== priceId) {
+                let stripePlan = await stripeHelper.changeSubscriptionPrice(business.stripe.subscriptionId, priceId)
+                if(stripePlan.plan.id == priceId) {
+                    business.stripe.priceId = priceId
+                }
+            }
+
+            if (business.stripe.paymentMethodId !== paymentMethodId) {
+                // let stripePlan = await stripeHelper.changeSubscriptionPrice(business.stripe.subscriptionId, priceId)
+                // if (stripePlan.plan.id == priceId) {
+                //     business.stripe.priceId = priceId
+                // }
+            }
+
+
+            var keys = Object.keys(data)
+
+            for (var i = 0; i < keys.length; i++) {
+                var key = keys[i]
+                business[key] = data[key]
+            }
+
+            return business.save()
+                .then(business => {
+                    return Business.findById(businessId).select('-__v').lean()
+                        .then(business => {
+                            business.id = business._id
+                            delete business._id
+                            return business
+                        })
+                })
+        }
+
+        const changeStripePlan = (subscriptionId, priceId) => {
+            return
+        }
+
+        const changePaymentInfo = (paymentMethodId) => {
+
+        }
+
         return Business.findById(businessId)
             .then(business => {
                 if (business.owner.toString() !== editorId) {
                     if (editorRole == "admin") {
-                        var keys = Object.keys(data)
-                        for (var i = 0; i < keys.length; i++) {
-                            var key = keys[i]
-                            business[key] = data[key]
-                        }
-                        return business.save()
-                            .then(business => {
-                                return Business.findById(businessId).select('-__v').lean()
-                                    .then(business => {
-                                        business.id = business._id
-                                        delete business._id
-                                        return business
-                                    })
-                            })
+                        return edit(business)
                     } else {
                         throw Error("Insufficient permisions")
                     }
                 } else {
-                    var keys = Object.keys(data)
-                    for (var i = 0; i < keys.length; i++) {
-                        var key = keys[i]
-                        business[key] = data[key]
-                    }
-                    return business.save()
-                        .then(business => {
-                            return Business.findById(businessId).select('-__v').lean()
-                                .then(business => {
-                                    business.id = business._id
-                                    delete business._id
-                                    return business
-                                })
-                        })
+                    return edit(business)
                 }
             })
     }
