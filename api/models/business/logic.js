@@ -123,7 +123,6 @@ logic = {
         return businessList
     },
 
-
     createBusiness(creatorId, creatorRole, data) {
         const { attachments, owner } = data
 
@@ -156,6 +155,10 @@ logic = {
                                         stripeHelper.deleteSubscriber(stripeCustomer.id)
                                         throw Error("No se ha podido completar el pago, porfavor, introduce otro metodo de pago.")
                                     }
+
+                                    let paymentInfo = await stripeHelper.retrivePaymentInfo(data.paymentMethodId)
+
+                                    business.stripe.last4 = paymentInfo.card.last4
                                     business.stripe.subscriptionId = stripeSubscription.id
                                     business.stripe.priceId = data.priceId
                                     business.stripe.productId = stripeSubscription.plan.product
@@ -173,7 +176,10 @@ logic = {
                                 })
                         })
                         .catch(({ message }) => {
-                            throw Error(message)
+                            return Business.findByIdAndRemove(business._id)
+                                .then(() => {
+                                    throw Error(message)
+                                })
                         })
                 })
         }
@@ -229,22 +235,23 @@ logic = {
 
         const edit = async (business) => {
             const { paymentMethodId, priceId } = data
-            const { subscriptionId } = business.stripe
             if (data.priceId) delete data.priceId
             if (data.paymentMethodId) delete data.paymentMethodId
 
             if (business.stripe.priceId !== priceId) {
                 let stripePlan = await stripeHelper.changeSubscriptionPrice(business.stripe.subscriptionId, priceId)
-                if(stripePlan.plan.id == priceId) {
+                if (stripePlan.plan.id == priceId) {
                     business.stripe.priceId = priceId
                 }
             }
 
             if (business.stripe.paymentMethodId !== paymentMethodId) {
-                // let stripePlan = await stripeHelper.changeSubscriptionPrice(business.stripe.subscriptionId, priceId)
-                // if (stripePlan.plan.id == priceId) {
-                //     business.stripe.priceId = priceId
-                // }
+                let customer = await stripeHelper.changePaymentMethod(business.stripe.customerId, business.stripe.paymentMethodId, paymentMethodId)
+                if (customer.invoice_settings.default_payment_method == paymentMethodId) {
+                    business.stripe.paymentMethodId = paymentMethodId
+                    const paymentInfo = await stripeHelper.retrivePaymentInfo(paymentMethodId)
+                    business.stripe.last4 = paymentInfo.card.last4
+                }
             }
 
 
@@ -266,14 +273,6 @@ logic = {
                 })
         }
 
-        const changeStripePlan = (subscriptionId, priceId) => {
-            return
-        }
-
-        const changePaymentInfo = (paymentMethodId) => {
-
-        }
-
         return Business.findById(businessId)
             .then(business => {
                 if (business.owner.toString() !== editorId) {
@@ -286,8 +285,11 @@ logic = {
                     return edit(business)
                 }
             })
-    }
+    },
 
+    onPaymentFailed(data) {
+        return console.log(data)
+    }
 }
 
 module.exports = logic

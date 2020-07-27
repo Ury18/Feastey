@@ -101,6 +101,9 @@ const Business = new Schema({
             type: String
         },
 
+        last4: {
+            type: String
+        },
     }
 })
 

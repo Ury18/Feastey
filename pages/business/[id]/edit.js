@@ -15,6 +15,11 @@ import { convertToRaw, EditorState, ContentState } from 'draft-js'
 import htmlToDraft from 'html-to-draftjs';
 import { parseCookies } from '../../../app/middleware/parseCookies'
 
+import PaymentInfoForm from '../../../app/components/PaymentInfoForm'
+import { loadStripe } from '@stripe/stripe-js';
+import { Elements } from '@stripe/react-stripe-js';
+const stripePromise = loadStripe("pk_test_51H7jFNHesZkxfUDSfJkBztrwFiLv7BnMbzJdhbleX9haB2ncM4RUjfWOazBen7aK3yW3x2BzDd26Z2wOq4BVkuni00vFmhfisR");
+
 class EditBusiness extends Component {
 
     state = {
@@ -34,7 +39,8 @@ class EditBusiness extends Component {
         category: "",
         descriptionEditorState: {},
         priceId: "",
-        paymentMethodId: ""
+        paymentMethodId: "",
+        last4: ""
     }
 
     componentDidMount = () => {
@@ -42,7 +48,12 @@ class EditBusiness extends Component {
         this.setState({ ...business })
         let location = business.location.coordinates
         this.setState({ location, finalAddress: business.address })
-        this.setState({ priceId: business.stripe.priceId, stripe: {} })
+        this.setState({
+            priceId: business.stripe.priceId,
+            paymentMethodId: business.stripe.paymentMethodId,
+            last4: business.stripe.last4,
+            stripe: {}
+        })
         this.onDescriptionExists()
         window.addEventListener("beforeunload", this.onWindowClose)
     }
@@ -292,7 +303,7 @@ class EditBusiness extends Component {
 
     render() {
 
-        const { name, description, location, address, errors, finalAddress, category, summary, descriptionEditorState, priceId, isPublished } = this.state
+        const { name, description, location, address, errors, finalAddress, category, summary, descriptionEditorState, priceId, isPublished, last4 } = this.state
         const { setInputValue, editBusiness, renderAttachmentsSection, renderImagesUploader, onAcceptAddress, renderCategoriesOptions, onDescriptionChange, toolbar } = this
         return (
             <Layout contentClasses="centered">
@@ -352,6 +363,10 @@ class EditBusiness extends Component {
                     <div className={`price ${priceId == "price_1H7jWPHesZkxfUDSN4V0r8b0" ? " selected" : ""}`} onClick={(e) => setInputValue("priceId", "price_1H7jWPHesZkxfUDSN4V0r8b0")}>
                         MONTHLY
                     </div>
+                    {last4}
+                    <Elements stripe={stripePromise}>
+                        <PaymentInfoForm onSubmit={(paymentMethodId) => this.setState({ paymentMethodId })} />
+                    </Elements>
 
                     {errors && <p className="errors">{errors}</p>}
 
