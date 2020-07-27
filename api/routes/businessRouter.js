@@ -64,6 +64,21 @@ businessRouter.route('/multiple-businesses')
         }
     })
 
+businessRouter.route('/payment-failed')
+    .post((req, res) => {
+        try {
+            logic.onPaymentFailed(req.body)
+                // .then(result => {
+                //     console.log(result)
+                // })
+                // .catch(({ message }) => {
+                //     res.status(400).send({ error: message })
+                // })
+        } catch ({ message }) {
+            res.status(400).send({ error: message })
+        }
+    })
+
 businessRouter.use('/:businessId', (req, res, next) => {
     try {
         logic.getBusinessById(req.params.businessId)
