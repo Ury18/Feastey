@@ -68,12 +68,26 @@ businessRouter.route('/payment-failed')
     .post((req, res) => {
         try {
             logic.onPaymentFailed(req.body)
-                // .then(result => {
-                //     console.log(result)
-                // })
-                // .catch(({ message }) => {
-                //     res.status(400).send({ error: message })
-                // })
+                .then(result => {
+                    res.status(201).json(result)
+                })
+                .catch(({ message }) => {
+                    res.status(400).send({ error: message })
+                })
+        } catch ({ message }) {
+            res.status(400).send({ error: message })
+        }
+    })
+businessRouter.route('/payment-success')
+    .post((req, res) => {
+        try {
+            logic.onPaymentSuccess(req.body)
+                .then(result => {
+                    res.status(201).json(result)
+                })
+                .catch(({ message }) => {
+                    res.status(400).send({ error: message })
+                })
         } catch ({ message }) {
             res.status(400).send({ error: message })
         }

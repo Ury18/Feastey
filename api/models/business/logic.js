@@ -288,8 +288,45 @@ logic = {
     },
 
     onPaymentFailed(data) {
-        return console.log(data)
+        if (data.type == "invoice.payment_failed") {
+            return Business.findOne({ "stripe.subscriptionId": data.data.object.subscription })
+                .then(business => {
+                    if(business) {
+                        if (!business.isEnabled) return "Nothing to do"
+                        business.isEnabled = false
+                        //SEND EMAIl
+                        console.log("sendEmail")
+                        return business.save()
+                        .then(business => {
+                            return "Business disabled"
+                        })
+                    } else {
+                        throw Error("Business not found")
+                    }
+                })
+        }
+    },
+
+    onPaymentSuccess(data) {
+        if (data.type == "invoice.payment_succeeded") {
+            return Business.findOne({ "stripe.subscriptionId": data.data.object.subscription })
+                .then(business => {
+                    if (business) {
+                        if(business.isEnabled) return "Nothing to do"
+                        business.isEnabled = true
+                        //SEND EMAIl
+                        console.log("sendEmail")
+                        return business.save()
+                            .then(business => {
+                                return "Business enabled"
+                            })
+                    } else {
+                        throw Error("Business not found")
+                    }
+                })
+        }
     }
+
 }
 
 module.exports = logic
