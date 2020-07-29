@@ -7,7 +7,7 @@ export default ((props) => {
     return (
         <header className="header">
             <Link href="/">
-                <a><img className="logo" src={require("../../img/feastey_logo.png")}></img></a>
+                <a><img className="logo" alt="Feastey Logo"src={require("../../img/feastey_logo.png")}></img></a>
             </Link>
             <MainNav/>
         </header>

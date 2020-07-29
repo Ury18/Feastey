@@ -45,7 +45,14 @@ const LogIn = (props) => {
     return (
         <Layout contentClasses="centered">
             <Head>
-                <title>Feastey - Inicia sesión</title>
+                <title>Inicia seión - Feastey</title>
+                <meta name="viewport" content="initial-scale=1.0, width=device-width" />
+                <meta property="og:title" content="Inicia seión - Feastey" key="title" />
+                <meta name="description" content="Pagina de Inicia seión - Feastey" />
+                <meta property="og:type" content="website" />
+                <meta name="og:title" property="og:title" content="Inicia seión - Feastey" />
+                <meta name="og:description" property="og:description" content="Pagina de Inicia seión - Feastey" />
+                <meta property="og:site_name" content="ury.feastey.com" />
             </Head>
             <form onSubmit={(e) => logIn(e, { email, password })} style={{ maxWidth: "200px" }}>
                 <h1>Inicia sessión</h1>
@@ -53,7 +60,7 @@ const LogIn = (props) => {
                     <label>Email</label>
                     <input onChange={(e) => setEmail(e.target.value)} type="email" name="email" />
                 </div>
-                <div style={{ display: "flex", flexDirection: "column", marginBottom:"1em" }}>
+                <div style={{ display: "flex", flexDirection: "column", marginBottom: "1em" }}>
                     <label>Password</label>
                     <input onChange={(e) => setPassword(e.target.value)} type="password" name="password" />
                     <Link href={`/password-reset-request`}>

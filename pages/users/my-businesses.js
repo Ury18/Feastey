@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react'
 import { connect } from 'react-redux'
-import Layout from '../../../app/components/Layout'
-import BusinessList from '../../../app/components/BusinessList'
+import Layout from '../../app/components/Layout'
+import BusinessList from '../../app/components/BusinessList'
+import Head from 'next/head'
 
 const MyBusinesses = (props) => {
 
@@ -35,8 +36,17 @@ const MyBusinesses = (props) => {
 
     return (
         <Layout>
+            <Head>
+                <title>Mis negocios - Feastey</title>
+                <meta name="viewport" content="initial-scale=1.0, width=device-width" />
+                <meta property="og:title" content="Mis negocios - Feastey" key="title" />
+                <meta name="description" content="Pagina de visualizacion de negocios - Feastey" />
+                <meta property="og:type" content="website" />
+                <meta name="og:title" property="og:title" content="Mis negocios - Feastey" />
+                <meta name="og:description" property="og:description" content="Pagina de visualizacion de negocios - Feastey" />
+                <meta property="og:site_name" content="ury.feastey.com" />
+            </Head>
             <BusinessList businessList={myBusinesseslist} />
-            <button onClick={(e) => loadMore(e)}>Más</button>
         </Layout>
     )
 }

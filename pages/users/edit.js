@@ -1,8 +1,9 @@
 import { Component } from 'react'
 import { connect } from 'react-redux'
-import Layout from '../../../app/components/Layout'
-import { updateUserData } from '../../../app/redux/user/action'
+import Layout from '../../app/components/Layout'
+import { updateUserData } from '../../app/redux/user/action'
 import Router from 'next/router'
+import Head from 'next/head'
 
 class EditUser extends Component {
 
@@ -143,6 +144,16 @@ class EditUser extends Component {
         const { setInputValue, editUsername, setSection, editEmail, editPassword } = this
         return (
             <Layout contentClasses="centered">
+                <Head>
+                    <title>Editar información - Feastey</title>
+                    <meta name="viewport" content="initial-scale=1.0, width=device-width" />
+                    <meta property="og:title" content="Editar información - Feastey" key="title" />
+                    <meta name="description" content="Pagina de visualizacion de información de usuario - Feastey" />
+                    <meta property="og:type" content="website" />
+                    <meta name="og:title" property="og:title" content="información de usuario - Feastey" />
+                    <meta name="og:description" property="og:description" content="Pagina de visualizacion de información de usuario - Feastey" />
+                    <meta property="og:site_name" content="ury.feastey.com" />
+                </Head>
                 {!section && <form onSubmit={(e) => editUsername(e)} style={{ maxWidth: "200px" }}>
                     <h1>Change username</h1>
 

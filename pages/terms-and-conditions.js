@@ -1,12 +1,23 @@
 import Layout from '../app/components/Layout'
 import { connect } from 'react-redux'
 import { updateUserData } from '../app/redux/user/action'
+import Head from 'next/head'
 
 
 const Index = (props) => {
     const { updateUserData } = props
     return (
         <Layout>
+            <Head>
+                <title>Terminos y condiciones - Feastey</title>
+                <meta name="viewport" content="initial-scale=1.0, width=device-width" />
+                <meta property="og:title" content="Terminos y condiciones - Feastey" key="title" />
+                <meta name="description" content="Pagina de Terminos y condiciones - Feastey" />
+                <meta property="og:type" content="website" />
+                <meta name="og:title" property="og:title" content="Terminos y condiciones - Feastey" />
+                <meta name="og:description" property="og:description" content="Pagina de Terminos y condiciones - Feastey" />
+                <meta property="og:site_name" content="ury.feastey.com" />
+            </Head>
             <div>
                 <h2>
                     Términos y Condiciones de Uso

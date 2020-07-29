@@ -15,6 +15,7 @@ import { convertToRaw } from 'draft-js'
 import { loadStripe } from '@stripe/stripe-js';
 import { Elements } from '@stripe/react-stripe-js';
 import PaymentInfoForm from '../../app/components/PaymentInfoForm'
+import Head from 'next/head'
 
 const stripePromise = loadStripe("pk_test_51H7jFNHesZkxfUDSfJkBztrwFiLv7BnMbzJdhbleX9haB2ncM4RUjfWOazBen7aK3yW3x2BzDd26Z2wOq4BVkuni00vFmhfisR");
 
@@ -278,6 +279,16 @@ class CreateBusiness extends Component {
 
         return (
             <Layout contentClasses="centered">
+                <Head>
+                    <title>Publica tu negocio! - Feastey</title>
+                    <meta name="viewport" content="initial-scale=1.0, width=device-width" />
+                    <meta property="og:title" content="Publica tu negocio! - Feastey" key="title" />
+                    <meta name="description" content="Publica tu negocio ya en Feastey y aprovecha todas sus ventajas! - Feastey" />
+                    <meta property="og:type" content="website" />
+                    <meta name="og:title" property="og:title" content="Publica tu negocio! - Feastey" />
+                    <meta name="og:description" property="og:description" content="Publica tu negocio ya en Feastey y aprovecha todas sus ventajas! - Feastey" />
+                    <meta property="og:site_name" content="ury.feastey.com" />
+                </Head>
                 <form onSubmit={(e) => createBusiness(e)} style={{ maxWidth: "200px" }}>
                     <h1>Crea tu negocio</h1>
                     <div style={{ display: "flex", flexDirection: "column" }}>

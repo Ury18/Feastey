@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react'
 import { connect } from 'react-redux'
 import { updateUserData } from '../app/redux/user/action'
 import { useRouter } from 'next/router'
+import Head from 'next/head'
 
 const ResetPasswordRequest = (props) => {
     const router = useRouter()
@@ -30,6 +31,16 @@ const ResetPasswordRequest = (props) => {
 
     return (
         <Layout contentClasses="centered">
+            <Head>
+                <title>Solicitud de cambio de contraseña - Feastey</title>
+                <meta name="viewport" content="initial-scale=1.0, width=device-width" />
+                <meta property="og:title" content="Solicitud de cambio de contraseña - Feastey" key="title" />
+                <meta name="description" content="Pagina de Solicitud de cambio de contraseña - Feastey" />
+                <meta property="og:type" content="website" />
+                <meta name="og:title" property="og:title" content="Solicitud de cambio de contraseña - Feastey" />
+                <meta name="og:description" property="og:description" content="Pagina de Solicitud de cambio de contraseña - Feastey" />
+                <meta property="og:site_name" content="ury.feastey.com" />
+            </Head>
             {!emailSent && <form onSubmit={(e) => onSubmitForm(e)}>
                 <div style={{ display: "flex", flexDirection: "column" }}>
                     <label>Email</label>

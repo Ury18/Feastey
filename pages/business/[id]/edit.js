@@ -19,6 +19,7 @@ import PaymentInfoForm from '../../../app/components/PaymentInfoForm'
 import { loadStripe } from '@stripe/stripe-js';
 import { Elements } from '@stripe/react-stripe-js';
 const stripePromise = loadStripe("pk_test_51H7jFNHesZkxfUDSfJkBztrwFiLv7BnMbzJdhbleX9haB2ncM4RUjfWOazBen7aK3yW3x2BzDd26Z2wOq4BVkuni00vFmhfisR");
+import Head from 'next/head'
 
 class EditBusiness extends Component {
 
@@ -44,18 +45,25 @@ class EditBusiness extends Component {
     }
 
     componentDidMount = () => {
-        const { business } = this.props
-        this.setState({ ...business })
-        let location = business.location.coordinates
-        this.setState({ location, finalAddress: business.address })
-        this.setState({
-            priceId: business.stripe.priceId,
-            paymentMethodId: business.stripe.paymentMethodId,
-            last4: business.stripe.last4,
-            stripe: {}
-        })
-        this.onDescriptionExists()
-        window.addEventListener("beforeunload", this.onWindowClose)
+
+
+        const { business, user } = this.props
+
+        if(user.id !== business.owner)  {
+            Router.push("/")
+        } else {
+            this.setState({ ...business })
+            let location = business.location.coordinates
+            this.setState({ location, finalAddress: business.address })
+            this.setState({
+                priceId: business.stripe.priceId,
+                paymentMethodId: business.stripe.paymentMethodId,
+                last4: business.stripe.last4,
+                stripe: {}
+            })
+            this.onDescriptionExists()
+            window.addEventListener("beforeunload", this.onWindowClose)
+        }
     }
 
     onWindowClose = (e) => {
@@ -307,6 +315,16 @@ class EditBusiness extends Component {
         const { setInputValue, editBusiness, renderAttachmentsSection, renderImagesUploader, onAcceptAddress, renderCategoriesOptions, onDescriptionChange, toolbar } = this
         return (
             <Layout contentClasses="centered">
+                <Head>
+                    <title>{`Editando ${business.name} - Feastey`}</title>
+                    <meta name="viewport" content="initial-scale=1.0, width=device-width" />
+                    <meta property="og:title" content={`Editando ${business.name} - Feastey`} key="title" />
+                    <meta name="description" content={`Pagina de edición de ${business.name} - Feastey`} />
+                    <meta property="og:type" content="website" />
+                    <meta name="og:title" property="og:title" content={`Editando ${business.name} - Feastey`} />
+                    <meta name="og:description" property="og:description" content={`Pagina de edición de ${business.name} - Feastey`} />
+                    <meta property="og:site_name" content="ury.feastey.com" />
+                </Head>
                 <form onSubmit={(e) => editBusiness(e)} style={{ maxWidth: "200px" }}>
                     <h1>Edit tu negocio</h1>
 

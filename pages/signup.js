@@ -3,6 +3,7 @@ import { useState } from 'react'
 import { connect } from 'react-redux'
 import { updateUserData } from '../app/redux/user/action'
 import { useRouter } from 'next/router'
+import Head from 'next/head'
 
 const Signup = (props) => {
 
@@ -47,6 +48,16 @@ const Signup = (props) => {
 
     return (
         <Layout contentClasses="centered">
+            <Head>
+                <title>Registrate ya! - Feastey</title>
+                <meta name="viewport" content="initial-scale=1.0, width=device-width" />
+                <meta property="og:title" content="Registrate ya! - Feastey" key="title" />
+                <meta name="description" content="No esperes mas y registrate ya en feastey.com! Pagina de registro - Feastey" />
+                <meta property="og:type" content="website" />
+                <meta name="og:title" property="og:title" content="Registrate ya! - Feastey" />
+                <meta name="og:description" property="og:description" content="No esperes mas y registrate ya en feastey.com! Pagina de registro - Feastey" />
+                <meta property="og:site_name" content="ury.feastey.com" />
+            </Head>
             <form onSubmit={(e) => registerUser(e, { username, email, password, passwordConfirmation })} style={{ maxWidth: "200px" }}>
                 <h1>Crea tu cuenta</h1>
                 <div style={{ display: "flex", flexDirection: "column" }}>

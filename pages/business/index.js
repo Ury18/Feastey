@@ -2,6 +2,7 @@ import Layout from '../../app/components/Layout'
 import BusinessList from '../../app/components/BusinessList'
 import { useState, useEffect } from 'react'
 import Router from 'next/router'
+import Head from 'next/head'
 
 const AllBusiness = (props) => {
     const { businessList } = props
@@ -141,6 +142,16 @@ const AllBusiness = (props) => {
 
     return (
         <Layout>
+            <Head>
+                <title>Descubre tu zona - Feastey</title>
+                <meta name="viewport" content="initial-scale=1.0, width=device-width" />
+                <meta property="og:title" content="Descubre tu zona - Feastey" key="title" />
+                <meta name="description" content="Descubre tu zona y conoce todos los negocios locales que te rodean! - Feastey" />
+                <meta property="og:type" content="website" />
+                <meta name="og:title" property="og:title" content="Descubre tu zona - Feastey" />
+                <meta name="og:description" property="og:description" content="Descubre tu zona y conoce todos los negocios locales que te rodean! - Feastey" />
+                <meta property="og:site_name" content="ury.feastey.com" />
+            </Head>
             <form>
                 <input placeholder="Nombre del negocio" onChange={(e) => setName(e.target.value)}></input>
                 <input placeholder="Direccción, Ciudad, Codigo Postal" onChange={(e) => setTempAddress(e.target.value)}></input>

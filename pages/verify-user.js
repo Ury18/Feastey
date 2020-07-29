@@ -4,6 +4,7 @@ import { connect } from 'react-redux'
 import { updateUserData } from '../app/redux/user/action'
 import { useRouter } from 'next/router'
 import Cookie from "js-cookie"
+import Head from 'next/head'
 
 const VerifyUser = (props) => {
 
@@ -19,6 +20,27 @@ const VerifyUser = (props) => {
 
     return (
         <Layout contentClasses="centered">
+            <Head>
+                <title>Verificación de usuario - Feastey</title>
+                <meta name="viewport" content="initial-scale=1.0, width=device-width" />
+                <meta property="og:title" content="Verificación de usuario - Feastey" key="title" />
+                <meta name="description" content="Pagina de verificación de usuarios - Feastey" />
+                <meta property="og:type" content="website" />
+                <meta name="og:title" property="og:title" content="Verificación de usuario - Feastey" />
+                <meta name="og:description" property="og:description" content="Pagina de verificación de usuarios - Feastey" />
+                <meta property="og:site_name" content="ury.feastey.com" />
+                {/* <meta name="twitter:card" content="summary" />
+                <meta name="twitter:title" content="" />
+                <meta name="twitter:description" content={props.desc} />
+                <meta name="twitter:site" content="" />
+                <meta name="twitter:creator" content="" />
+                <link rel="icon" type="image/png" href="/static/images/favicon.ico" />
+                <link rel="apple-touch-icon" href="/static/images/favicon.ico" />
+                <link rel="stylesheet" href="" />
+                <meta property="og:image" content="" />
+                <meta name="twitter:image" content="" />
+                <link rel="canonical" href="" /> */}
+            </Head>
             {verified && <div>
                 <h1>Cuenta Verificada</h1>
             </div>}
