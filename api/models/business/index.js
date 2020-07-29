@@ -52,6 +52,11 @@ const Business = new Schema({
         }
     },
 
+    mainImage: {
+        type: ObjectId,
+        ref:"File"
+    },
+
     images: [{
         type: ObjectId,
         ref: 'File'

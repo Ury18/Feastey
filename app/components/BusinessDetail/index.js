@@ -110,7 +110,7 @@ const Detail = ((props) => {
                     </Link>
                 }
                 <div className="coverImage">
-                    <img src={business.imageProfile ? business.imageProfile : business.images[0] ? business.images[0].url : "placeholderImageUrl"}></img>
+                    <img src={business.mainImage ? business.mainImage.url : business.images[0] ? business.images[0].url : "placeholderImageUrl"}></img>
                 </div>
                 {business.info !== undefined ?
                     <div className="contactInfo_Container">

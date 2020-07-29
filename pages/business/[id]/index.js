@@ -1,13 +1,10 @@
 import Layout from '../../../app/components/Layout'
-import { useRouter } from 'next/router'
 import DetailBusiness from '../../../app/components/BusinessDetail'
 import Head from 'next/head'
 
 const Business = (props) => {
 
     const { business } = props
-    const router = useRouter()
-    const { id } = router.query
 
     return (
         <Layout>

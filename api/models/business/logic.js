@@ -21,7 +21,7 @@ logic = {
     },
 
     getBusinessById(businessId) {
-        return Business.findById(businessId).populate("images").populate("attachments.files").populate("qr_codes").populate("category").select('-__v').lean()
+        return Business.findById(businessId).populate("images").populate("attachments.files").populate("qr_codes").populate("category").populate("mainImage").select('-__v').lean()
             .then(business => {
                 business.id = business._id
                 delete business._id
@@ -49,6 +49,16 @@ logic = {
                         delete file.__v
                     })
                 })
+
+                business.category.id = business.category._id
+                delete business.category._id
+                delete business.category.__v
+
+                if(business.mainImage) {
+                    business.mainImage.id = business.mainImage._id
+                    delete business.mainImage._id
+                    delete business.mainImage.__v
+                }
 
                 return business
             })
@@ -291,15 +301,15 @@ logic = {
         if (data.type == "invoice.payment_failed") {
             return Business.findOne({ "stripe.subscriptionId": data.data.object.subscription })
                 .then(business => {
-                    if(business) {
+                    if (business) {
                         if (!business.isEnabled) return "Nothing to do"
                         business.isEnabled = false
                         //SEND EMAIl
                         console.log("sendEmail")
                         return business.save()
-                        .then(business => {
-                            return "Business disabled"
-                        })
+                            .then(business => {
+                                return "Business disabled"
+                            })
                     } else {
                         throw Error("Business not found")
                     }
@@ -312,7 +322,7 @@ logic = {
             return Business.findOne({ "stripe.subscriptionId": data.data.object.subscription })
                 .then(business => {
                     if (business) {
-                        if(business.isEnabled) return "Nothing to do"
+                        if (business.isEnabled) return "Nothing to do"
                         business.isEnabled = true
                         //SEND EMAIl
                         console.log("sendEmail")

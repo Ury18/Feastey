@@ -34,6 +34,7 @@ class EditBusiness extends Component {
         finalAddress: "",
         errors: "",
         images: [],
+        mainImage: "",
         attachments: [],
         tempFiles: [],
         deletedFiles: [],
@@ -49,7 +50,7 @@ class EditBusiness extends Component {
 
         const { business, user } = this.props
 
-        if(user.id !== business.owner)  {
+        if (user.id !== business.owner) {
             Router.push("/")
         } else {
             this.setState({ ...business })
@@ -83,7 +84,7 @@ class EditBusiness extends Component {
     editBusiness = (e) => {
         e.preventDefault()
 
-        const { id, name, description, location, images, attachments, deletedFiles, finalAddress, category, summary, priceId, paymentMethodId } = this.state
+        const { id, name, description, location, images, attachments, deletedFiles, finalAddress, category, summary, priceId, paymentMethodId, mainImage } = this.state
         const { user } = this.props
         const { token } = user
 
@@ -127,10 +128,12 @@ class EditBusiness extends Component {
             images: imageList,
             attachments: attachmentsClean,
             owner: user.id,
-            category,
+            category: category.id,
             priceId,
             paymentMethodId
         }
+
+        if (mainImage) data.mainImage = mainImage.id
 
         fetch(`${process.env.FEASTEY_API_URL}/business/${id}`, {
             method: "PUT",
@@ -164,6 +167,23 @@ class EditBusiness extends Component {
             .catch(err => {
                 this.setState({ errors: err.error })
             })
+    }
+
+    onUploadMainImage = (value) => {
+        this.setState({ mainImage: value })
+    }
+
+    onUpdateMainImage = (value) => {
+        this.setState({ mainImage: value })
+    }
+
+    onDeleteMainImage = (e) => {
+        e.preventDefault()
+
+        const { mainImage, deletedFiles } = this.state
+        deletedFiles.push(mainImage.id)
+
+        this.setState({ mainImage: null, deletedFiles })
     }
 
     onUploadImage = (value) => {
@@ -220,6 +240,17 @@ class EditBusiness extends Component {
         deletedFiles.push(value)
 
         this.setState({ deletedFiles })
+    }
+
+    renderMainImageUploader = () => {
+        const { onUpdateMainImage, onUploadMainImage, onDeleteMainImage, addNewTempFile } = this
+        const { mainImage } = this.state
+        return <FileUploader data={mainImage} updateCallback={onUpdateMainImage} uploadCallback={onUploadMainImage} tempFileCallback={addNewTempFile} deleteCallback={onDeleteMainImage} />
+    }
+
+    renderMainImageUploaderEmpty = () => {
+        const { onUpdateMainImage, onUploadMainImage, onDeleteMainImage, addNewTempFile } = this
+        return <FileUploader updateCallback={onUpdateMainImage} uploadCallback={onUploadMainImage} tempFileCallback={addNewTempFile} deleteCallback={onDeleteMainImage} />
     }
 
     renderImagesUploader = () => {
@@ -281,7 +312,7 @@ class EditBusiness extends Component {
 
         return categories.map((item) => {
             let selected = false
-            if (item.id == category) {
+            if (item.id == category.id) {
                 selected = true
             }
             return <option selected={selected} value={item.id}>{item.name}</option>
@@ -310,9 +341,21 @@ class EditBusiness extends Component {
     }
 
     render() {
+        const { business } = this.props
 
-        const { name, description, location, address, errors, finalAddress, category, summary, descriptionEditorState, priceId, isPublished, last4 } = this.state
-        const { setInputValue, editBusiness, renderAttachmentsSection, renderImagesUploader, onAcceptAddress, renderCategoriesOptions, onDescriptionChange, toolbar } = this
+        const {
+            name, description, location, address, errors, finalAddress,
+            category, summary, descriptionEditorState, priceId, isPublished,
+            last4, mainImage
+        } = this.state
+
+        const {
+            setInputValue, editBusiness, renderAttachmentsSection,
+            renderImagesUploader, onAcceptAddress,
+            renderCategoriesOptions, onDescriptionChange, toolbar,
+            renderMainImageUploader, renderMainImageUploaderEmpty
+        } = this
+
         return (
             <Layout contentClasses="centered">
                 <Head>
@@ -348,7 +391,7 @@ class EditBusiness extends Component {
                     </div>}
                     <div>
                         <label>Categoría</label>
-                        <select name="category" defaultValue={category} onChange={(e) => setInputValue(e.target.name, e.target.value)}>
+                        <select name="category" defaultValue={category.id} onChange={(e) => setInputValue(e.target.name, e.target.value)}>
                             <option value={""}>Ninguna</option>
                             {renderCategoriesOptions()}
                         </select>
@@ -366,10 +409,14 @@ class EditBusiness extends Component {
                         <div dangerouslySetInnerHTML={{ __html: description }}></div>
                     </div>
                     <div style={{ display: "flex", flexDirection: "column" }}>
+                        <label>Imagen de perfil</label>
+                        {mainImage && renderMainImageUploader()}
+                        {!mainImage && renderMainImageUploaderEmpty()}
+                    </div>
+                    <div style={{ display: "flex", flexDirection: "column" }}>
                         <label>Imagenes</label>
                         {renderImagesUploader()}
                     </div>
-
                     <div style={{ display: "flex", flexDirection: "column" }}>
                         <h2>Attachments</h2>
                         {renderAttachmentsSection()}

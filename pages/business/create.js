@@ -30,6 +30,7 @@ class CreateBusiness extends Component {
         finalAddress: "",
         errors: "",
         images: [],
+        mainImage: "",
         attachments: [],
         deletedFiles: [],
         category: "",
@@ -42,13 +43,15 @@ class CreateBusiness extends Component {
     }
 
     onWindowClose = (e) => {
-        const { images, attachments, deletedFiles } = this.state
+        const { images, attachments, deletedFiles, mainImage } = this.state
         const { token } = this.props.user
         let files = []
 
         for (var i = 0; i < images.length; i++) {
             files.push(images[i].id)
         }
+
+        files.push(mainImage.id)
 
         for (var i = 0; i < attachments.length; i++) {
 
@@ -72,9 +75,8 @@ class CreateBusiness extends Component {
     createBusiness = (e) => {
         e.preventDefault()
 
-        const { name, description, location, images, attachments, deletedFiles, finalAddress, category, summary, priceId, paymentMethodId } = this.state
+        const { name, description, location, images, attachments, deletedFiles, finalAddress, category, summary, priceId, paymentMethodId, mainImage } = this.state
         const { id, token } = this.props.user
-
         let imageList = []
 
         for (var i = 0; i < images.length; i++) {
@@ -115,8 +117,11 @@ class CreateBusiness extends Component {
             category,
             ownerEmail: this.props.user.email,
             priceId,
-            paymentMethodId
+            paymentMethodId,
         }
+
+        if (mainImage) data.mainImage = mainImage.id
+
 
         this.setState({ errors: "" })
 
@@ -154,6 +159,24 @@ class CreateBusiness extends Component {
             })
     }
 
+    onUploadMainImage = (value) => {
+        this.setState({ mainImage: value })
+    }
+
+    onUpdateMainImage = (value) => {
+        this.setState({ mainImage: value })
+    }
+
+    onDeleteMainImage = (e) => {
+        e.preventDefault()
+
+        const { mainImage, deletedFiles } = this.state
+
+        deletedFiles.push(mainImage.id)
+
+        this.setState({ mainImage: null, deletedFiles })
+    }
+
     onUploadImage = (value) => {
         const { images } = this.state
         let newImages = images
@@ -169,8 +192,8 @@ class CreateBusiness extends Component {
     }
 
     onDeleteImage = (e, index) => {
-        e.preventDefault()
 
+        e.preventDefault()
         const { images, deletedFiles } = this.state
         deletedFiles.push(images[index].id)
         let newImages = images
@@ -232,6 +255,17 @@ class CreateBusiness extends Component {
         }
     }
 
+    renderMainImageUploaderEmpty = () => {
+        const { onUpdateMainImage, onUploadMainImage, onDeleteMainImage } = this
+        return <FileUploader updateCallback={onUpdateMainImage} uploadCallback={onUploadMainImage} deleteCallback={onDeleteMainImage} />
+    }
+
+    renderMainImageUploader = () => {
+        const { onUpdateMainImage, onUploadMainImage, onDeleteMainImage } = this
+        const { mainImage } = this.state
+        return <FileUploader data={mainImage} updateCallback={onUpdateMainImage} uploadCallback={onUploadMainImage} deleteCallback={onDeleteMainImage} />
+    }
+
     renderImagesUploader = () => {
         const { images } = this.state
         const { onUpdateImage, onUploadImage, onDeleteImage } = this
@@ -274,8 +308,8 @@ class CreateBusiness extends Component {
 
     render() {
         const { user: { token, id } } = this.props
-        const { location, errors, address, finalAddress, priceId } = this.state
-        const { renderImagesUploader, setInputValue, createBusiness, renderAttachmentsSection, onAcceptAddress, renderCategoriesOptions, onDescriptionChange, toolbar } = this
+        const { location, errors, address, finalAddress, priceId, mainImage } = this.state
+        const { renderImagesUploader, setInputValue, createBusiness, renderAttachmentsSection, renderMainImageUploader, renderMainImageUploaderEmpty, onAcceptAddress, renderCategoriesOptions, onDescriptionChange, toolbar } = this
 
         return (
             <Layout contentClasses="centered">
@@ -302,9 +336,9 @@ class CreateBusiness extends Component {
                             {address && address !== finalAddress && <button onClick={(e) => onAcceptAddress(e)}>Aceptar</button>}
                         </div>
                     </div>
-                        {location && location.length > 0 && <div className="map-container">
-                            <GoogleMap class="map" lng={location[0]} lat={location[1]} />
-                        </div>}
+                    {location && location.length > 0 && <div className="map-container">
+                        <GoogleMap class="map" lng={location[0]} lat={location[1]} />
+                    </div>}
                     <div>
                         <label>Categoría</label>
                         <select name="category" onChange={(e) => setInputValue(e.target.name, e.target.value)}>
@@ -321,6 +355,11 @@ class CreateBusiness extends Component {
                         <div>
                             <Editor toolbar={toolbar} onEditorStateChange={onDescriptionChange} />
                         </div>
+                    </div>
+                    <div style={{ display: "flex", flexDirection: "column" }}>
+                        <label>Imagen principal</label>
+                        {mainImage && renderMainImageUploader()}
+                        {!mainImage && renderMainImageUploaderEmpty()}
                     </div>
                     <div style={{ display: "flex", flexDirection: "column" }}>
                         <label>Imagenes</label>
@@ -341,7 +380,7 @@ class CreateBusiness extends Component {
 
 
                     <Elements stripe={stripePromise}>
-                        <PaymentInfoForm onSubmit={(paymentMethodId) => this.setState({ paymentMethodId})}/>
+                        <PaymentInfoForm onSubmit={(paymentMethodId) => this.setState({ paymentMethodId })} />
                     </Elements>
 
                     {errors && <p className="errors">{errors}</p>}
