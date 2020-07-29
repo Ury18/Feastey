@@ -60,7 +60,8 @@ const MainNav = ((props) => {
             favorites: [],
             id: "",
             liked: [],
-            myBusiness: [],
+            isVerified: false,
+            myBusinesses: [],
             recent: [],
             role: "",
             token: "",
@@ -68,6 +69,8 @@ const MainNav = ((props) => {
         }
 
         updateUserData({ ...data })
+
+        router.push("/")
     }
 
     return (
@@ -97,18 +100,18 @@ const MainNav = ((props) => {
                     <button id="accountBoxButton" onClick={(e) => accountButtonClick(e)}>Mi cuenta</button>
                     {accountBoxActive && <ul id="accountBox">
                         <li>
-                            <Link href={`/users/${props.user.id}/edit`}>
-                                <a className={router.pathname == '/users/[id]/edit' ? "active" : ""}>Información de la cuenta</a>
+                            <Link href={`/users/edit`}>
+                                <a className={router.pathname == '/users/edit' ? "active" : ""}>Información de la cuenta</a>
                             </Link>
                         </li>
                         <li>
-                            <Link href={`/users/${props.user.id}/favorites`}>
-                                <a className={router.pathname == '/users/[id]/favorites' ? "active" : ""}>Favoritos</a>
+                            <Link href={`/users/favorites`}>
+                                <a className={router.pathname == '/users/favorites' ? "active" : ""}>Favoritos</a>
                             </Link>
                         </li>
                         <li>
-                            <Link href={`/users/${props.user.id}/my-businesses`}>
-                                <a className={router.pathname == '/users/[id]/my-businesses' ? "active" : ""}>Mis negocios</a>
+                            <Link href={`/users/my-businesses`}>
+                                <a className={router.pathname == '/users/my-businesses' ? "active" : ""}>Mis negocios</a>
                             </Link>
                         </li>
                         <li>
