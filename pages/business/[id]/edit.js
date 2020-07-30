@@ -173,7 +173,7 @@ class EditBusiness extends Component {
         this.setState({ mainImage: value })
     }
 
-    onUpdateMainImage = (value) => {
+    onUpdateMainImage = (index,value) => {
         this.setState({ mainImage: value })
     }
 
