@@ -214,8 +214,10 @@ logic = {
                                         throw Error("No se ha podido completar el pago, porfavor, introduce otro metodo de pago.")
                                     }
 
+
                                     let paymentInfo = await stripeHelper.retrivePaymentInfo(data.paymentMethodId)
 
+                                    business.stripe.lastPayment = "success"
                                     business.stripe.last4 = paymentInfo.card.last4
                                     business.stripe.subscriptionId = stripeSubscription.id
                                     business.stripe.priceId = data.priceId
@@ -292,9 +294,33 @@ logic = {
     editBusiness(editorId, editorRole, businessId, data) {
 
         const edit = async (business) => {
-            const { paymentMethodId, priceId } = data
+            let { paymentMethodId, priceId } = data
             if (data.priceId) delete data.priceId
             if (data.paymentMethodId) delete data.paymentMethodId
+
+            if (business.stripe.paymentMethodId !== paymentMethodId) {
+                let customer = await stripeHelper.changePaymentMethod(business.stripe.customerId, business.stripe.paymentMethodId, paymentMethodId)
+
+                if (customer.invoice_settings.default_payment_method == paymentMethodId) {
+                    business.stripe.paymentMethodId = paymentMethodId
+                    const paymentInfo = await stripeHelper.retrivePaymentInfo(paymentMethodId)
+                    business.stripe.last4 = paymentInfo.card.last4
+
+                    if (business.stripe.lastPayment == "failed") {
+                        let canceledSubscription = await stripeHelper.cancelSubscription(business.stripe.subscriptionId)
+                        let stripeSubscription = await stripeHelper.createSubscription(business.stripe.customerId, paymentMethodId, priceId)
+
+                        if (stripeSubscription.latest_invoice.payment_intent.status !== 'succeeded') {
+                            throw Error("No se ha podido completar el pago, porfavor, introduce otro metodo de pago.")
+                        } else {
+                            business.stripe.lastPayment = "success"
+                            business.isEnabled = true
+                            business.stripe.subscriptionId = stripeSubscription.id
+                            business.stripe.productId = stripeSubscription.plan.product
+                        }
+                    }
+                }
+            }
 
             if (business.stripe.priceId !== priceId) {
                 let stripePlan = await stripeHelper.changeSubscriptionPrice(business.stripe.subscriptionId, priceId)
@@ -302,16 +328,6 @@ logic = {
                     business.stripe.priceId = priceId
                 }
             }
-
-            if (business.stripe.paymentMethodId !== paymentMethodId) {
-                let customer = await stripeHelper.changePaymentMethod(business.stripe.customerId, business.stripe.paymentMethodId, paymentMethodId)
-                if (customer.invoice_settings.default_payment_method == paymentMethodId) {
-                    business.stripe.paymentMethodId = paymentMethodId
-                    const paymentInfo = await stripeHelper.retrivePaymentInfo(paymentMethodId)
-                    business.stripe.last4 = paymentInfo.card.last4
-                }
-            }
-
 
             var keys = Object.keys(data)
 
@@ -352,8 +368,9 @@ logic = {
                     if (business) {
                         if (!business.isEnabled) return "Nothing to do"
                         business.isEnabled = false
+                        business.stripe.lastPayment = "failed"
                         //SEND EMAIl
-                        console.log("sendEmail")
+                        console.log("sendEmail Fail")
                         return business.save()
                             .then(business => {
                                 return "Business disabled"
@@ -372,8 +389,9 @@ logic = {
                     if (business) {
                         if (business.isEnabled) return "Nothing to do"
                         business.isEnabled = true
+                        business.stripe.lastPayment = "success"
                         //SEND EMAIl
-                        console.log("sendEmail")
+                        console.log("sendEmail Success")
                         return business.save()
                             .then(business => {
                                 return "Business enabled"

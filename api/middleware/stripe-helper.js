@@ -97,6 +97,11 @@ const stripeHelper = {
         )
 
         return paymentMethod
+    },
+
+    async cancelSubscription(subscriptionId) {
+        let canceledSubscription = await stripe.subscriptions.del(subscriptionId)
+        return canceledSubscription
     }
 
 }

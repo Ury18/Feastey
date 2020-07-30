@@ -109,6 +109,10 @@ const Business = new Schema({
         last4: {
             type: String
         },
+
+        lastPayment: {
+            type: String
+        }
     }
 })
 
