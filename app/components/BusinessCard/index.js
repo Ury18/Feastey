@@ -91,14 +91,10 @@ const BusinessCard = (props) => {
                 <p>{address}</p>
                 {description && <p className="businessCard_infoContainer_Description">{description}</p>}
                 <div className="cardFooter">
-                    <p>Category</p>
-                    <div className="likesContainer">
+                    {/* <div className="likesContainer">
                         <p>200</p>
-
-                        <img className="likesIconCard" src={require("../../img/feastey_likeIcon.png")}></img>
-
-                    </div>
-
+                        <img className="likesIconCard" src={"/img/feastey_likeIcon.png"}></img>
+                    </div> */}
                 </div>
             </div>
 

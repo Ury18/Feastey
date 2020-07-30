@@ -126,7 +126,7 @@ const Detail = ((props) => {
                     </Link>
                 }
                 <div className="coverImage">
-                    <img src={business.mainImage ? business.mainImage.url : business.images[0] ? business.images[0].url : "placeholderImageUrl"}></img>
+                    <img src={business.mainImage ? business.mainImage.url : business.images[0] ? business.images[0].url : "/img/Table-QR-Template.png"}/>
                 </div>
                 {business.info !== undefined ?
                     <div className="contactInfo_Container">
@@ -148,8 +148,8 @@ const Detail = ((props) => {
                     <h2>{business.name}</h2>
                     <p> Location Icon </p>
                     <div className="titleIcons">
-                        <p>200</p>
-                        <img className="BusinessDetailLikeIcon" src={require('../../img/feastey_likeIcon.png')} />
+                        {/* <p>200</p>
+                        <img className="BusinessDetailLikeIcon" src={'/img/feastey_likeIcon.png'} /> */}
                         <img onClick={(e) => onToggleFav()} className="BusinessDetailFavIcon" src={isFaved ? favedImage : unfavedImage} />
                     </div>
                 </div>
@@ -163,7 +163,6 @@ const Detail = ((props) => {
                     {renderAttachmentsList()}
                 </ul>
                 <div className="gallery_Container">
-                    <h2>Gallery Component</h2>
                     <ul>
                         {/* {renderGalleryList()} */}
                         {galleryImages.length > 0 && <ImageGallery items={galleryImages} showPlayButton={false}/>}
