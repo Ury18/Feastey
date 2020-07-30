@@ -4,6 +4,7 @@ import Header from '../Header'
 import { connect } from 'react-redux'
 import Cookie from "js-cookie"
 import Footer from '../Footer'
+import Head from 'next/head'
 
 const Layout = ((props) => {
     const { contentClasses } = props
@@ -14,6 +15,9 @@ const Layout = ((props) => {
     },[])
     return (
         <div className="app">
+            <Head>
+                <link rel="shortcut icon" href="/favicon/favicon.ico" />
+            </Head>
             <Header />
             <div className="content-container">
                 <div className={`content ${contentClasses}`}>
