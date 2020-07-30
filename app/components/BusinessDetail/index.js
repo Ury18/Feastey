@@ -4,15 +4,31 @@ import { connect } from 'react-redux'
 import { useState, useEffect } from 'react'
 import GoogleMap from '../GoogleMap'
 import { updateUserData } from '../../redux/user/action'
+import ImageGallery from 'react-image-gallery'
+
 const Detail = ((props) => {
 
     const { business, user } = props
     const { token } = user
-
     const [isFaved, setIsFaved] = useState(false)
+    const [galleryImages, setGalleryImages] = useState([])
 
-    const favedImage = require('../../img/feastey_favoriteIcon_faved.png')
-    const unfavedImage = require('../../img/feastey_favoriteIcon.png')
+    const favedImage = '/img/feastey_favoriteIcon_faved.png'
+    const unfavedImage = '/img/feastey_favoriteIcon.png'
+
+    useEffect(() => {
+
+        let newGalleryImages = []
+        business.images.forEach(element => {
+            newGalleryImages.push({
+                original: element.url,
+                thumbnail: element.url
+            })
+        })
+
+        setGalleryImages(newGalleryImages)
+
+    }, [])
 
     useEffect(() => {
         favCheck();
@@ -149,7 +165,8 @@ const Detail = ((props) => {
                 <div className="gallery_Container">
                     <h2>Gallery Component</h2>
                     <ul>
-                        {renderGalleryList()}
+                        {/* {renderGalleryList()} */}
+                        {galleryImages.length > 0 && <ImageGallery items={galleryImages} showPlayButton={false}/>}
                     </ul>
                 </div>
             </div>
