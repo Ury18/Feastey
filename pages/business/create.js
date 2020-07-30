@@ -35,7 +35,11 @@ class CreateBusiness extends Component {
         deletedFiles: [],
         category: "",
         priceId: "",
-        paymentMethodId: ""
+        paymentMethodId: "",
+        email: "",
+        phone: "",
+        twitter: "",
+        instagram: ""
     }
 
     componentDidMount() {
@@ -75,7 +79,10 @@ class CreateBusiness extends Component {
     createBusiness = (e) => {
         e.preventDefault()
 
-        const { name, description, location, images, attachments, deletedFiles, finalAddress, category, summary, priceId, paymentMethodId, mainImage } = this.state
+        const { name, description, location, images, attachments,
+            deletedFiles, finalAddress, category, summary,
+            priceId, paymentMethodId, mainImage, email, phone, twitter, instagram } = this.state
+
         const { id, token } = this.props.user
         let imageList = []
 
@@ -118,6 +125,12 @@ class CreateBusiness extends Component {
             ownerEmail: this.props.user.email,
             priceId,
             paymentMethodId,
+            info: {
+                email,
+                phone,
+                twitter,
+                instagram,
+            }
         }
 
         if (mainImage) data.mainImage = mainImage.id
@@ -163,7 +176,7 @@ class CreateBusiness extends Component {
         this.setState({ mainImage: value })
     }
 
-    onUpdateMainImage = (index,value) => {
+    onUpdateMainImage = (index, value) => {
         this.setState({ mainImage: value })
     }
 
@@ -328,6 +341,22 @@ class CreateBusiness extends Component {
                     <div style={{ display: "flex", flexDirection: "column" }}>
                         <label>Nombre</label>
                         <input onChange={(e) => setInputValue(e.target.name, e.target.value)} name="name" type="text" required />
+                    </div>
+                    <div style={{ display: "flex", flexDirection: "column" }}>
+                        <label>Email</label>
+                        <input onChange={(e) => setInputValue(e.target.name, e.target.value)} name="email" type="email" required />
+                    </div>
+                    <div style={{ display: "flex", flexDirection: "column" }}>
+                        <label>Telefono</label>
+                        <input onChange={(e) => setInputValue(e.target.name, e.target.value)} name="phone" type="tel" required />
+                    </div>
+                    <div style={{ display: "flex", flexDirection: "column" }}>
+                        <label>Twitter</label>
+                        <input onChange={(e) => setInputValue(e.target.name, e.target.value)} name="twitter" type="text" required />
+                    </div>
+                    <div style={{ display: "flex", flexDirection: "column" }}>
+                        <label>Instagram</label>
+                        <input onChange={(e) => setInputValue(e.target.name, e.target.value)} name="instagram" type="text" required />
                     </div>
                     <div style={{ display: "flex", flexDirection: "column" }}>
                         <label>Dirección</label>

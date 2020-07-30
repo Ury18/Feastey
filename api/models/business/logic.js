@@ -292,7 +292,6 @@ logic = {
     },
 
     editBusiness(editorId, editorRole, businessId, data) {
-
         const edit = async (business) => {
             let { paymentMethodId, priceId } = data
             if (data.priceId) delete data.priceId
@@ -350,7 +349,7 @@ logic = {
 
         return Business.findById(businessId).populate("owner")
             .then(business => {
-                if (business.owner.toString() !== editorId) {
+                if (business.owner._id.toString() !== editorId) {
                     if (editorRole == "admin") {
                         return edit(business)
                     } else {
@@ -371,7 +370,6 @@ logic = {
                         business.isEnabled = false
                         business.stripe.lastPayment = "failed"
                         PaymentFailed.send({ to: user.email, business })
-                        console.log("sendEmail Fail")
                         return business.save()
                             .then(business => {
                                 return "Business disabled"
@@ -392,7 +390,6 @@ logic = {
                         business.isEnabled = true
                         business.stripe.lastPayment = "success"
                         PaymentSucceeded.send({ to: user.email, business})
-                        console.log("sendEmail Success")
                         return business.save()
                             .then(business => {
                                 return "Business enabled"

@@ -42,7 +42,11 @@ class EditBusiness extends Component {
         descriptionEditorState: {},
         priceId: "",
         paymentMethodId: "",
-        last4: ""
+        last4: "",
+        instagram: "",
+        twitter:"",
+        phone:"",
+        email: "",
     }
 
     componentDidMount = () => {
@@ -62,6 +66,12 @@ class EditBusiness extends Component {
                 last4: business.stripe.last4,
                 stripe: {}
             })
+
+            if(business.info) {
+                this.setState({...business.info})
+            }
+
+
             this.onDescriptionExists()
             window.addEventListener("beforeunload", this.onWindowClose)
         }
@@ -84,7 +94,10 @@ class EditBusiness extends Component {
     editBusiness = (e) => {
         e.preventDefault()
 
-        const { id, name, description, location, images, attachments, deletedFiles, finalAddress, category, summary, priceId, paymentMethodId, mainImage } = this.state
+        const { id, name, description, location,
+            images, attachments, deletedFiles, finalAddress,
+            category, summary, priceId, paymentMethodId, mainImage,
+            twitter, instagram, email, phone } = this.state
         const { user } = this.props
         const { token } = user
 
@@ -130,7 +143,13 @@ class EditBusiness extends Component {
             owner: user.id,
             category: category.id,
             priceId,
-            paymentMethodId
+            paymentMethodId,
+            info: {
+                email,
+                phone,
+                twitter,
+                instagram,
+            }
         }
 
         if (mainImage) data.mainImage = mainImage.id
@@ -173,7 +192,7 @@ class EditBusiness extends Component {
         this.setState({ mainImage: value })
     }
 
-    onUpdateMainImage = (index,value) => {
+    onUpdateMainImage = (index, value) => {
         this.setState({ mainImage: value })
     }
 
@@ -346,7 +365,7 @@ class EditBusiness extends Component {
         const {
             name, description, location, address, errors, finalAddress,
             category, summary, descriptionEditorState, priceId, isPublished,
-            last4, mainImage
+            last4, mainImage, twitter, instagram, email, phone
         } = this.state
 
         const {
@@ -372,12 +391,28 @@ class EditBusiness extends Component {
                     <h1>Edit tu negocio</h1>
 
                     <div style={{ display: "flex", flexDirection: "column" }}>
+                        <label>Publicado</label>
+                        <input onChange={(e) => setInputValue(e.target.name, e.target.checked)} type="checkbox" checked={isPublished} name="isPublished" />
+                    </div>
+                    <div style={{ display: "flex", flexDirection: "column" }}>
                         <label>Nombre</label>
                         <input onChange={(e) => setInputValue(e.target.name, e.target.value)} type="text" defaultValue={name} name="name" />
                     </div>
                     <div style={{ display: "flex", flexDirection: "column" }}>
-                        <label>Publicado</label>
-                        <input onChange={(e) => setInputValue(e.target.name, e.target.checked)} type="checkbox" checked={isPublished} name="isPublished" />
+                        <label>Email</label>
+                        <input onChange={(e) => setInputValue(e.target.name, e.target.value)} name="email" defaultValue={email} type="email"  />
+                    </div>
+                    <div style={{ display: "flex", flexDirection: "column" }}>
+                        <label>Telefono</label>
+                        <input onChange={(e) => setInputValue(e.target.name, e.target.value)} name="phone" defaultValue={phone} type="tel"  />
+                    </div>
+                    <div style={{ display: "flex", flexDirection: "column" }}>
+                        <label>Twitter</label>
+                        <input onChange={(e) => setInputValue(e.target.name, e.target.value)} name="twitter" defaultValue={twitter} type="text"  />
+                    </div>
+                    <div style={{ display: "flex", flexDirection: "column" }}>
+                        <label>Instagram</label>
+                        <input onChange={(e) => setInputValue(e.target.name, e.target.value)} name="instagram" defaultValue={instagram} type="text"  />
                     </div>
                     <div style={{ display: "flex", flexDirection: "column" }}>
                         <label>Dirección</label>

@@ -10,6 +10,25 @@ const Business = new Schema({
         required: true
     },
 
+    info: {
+        email: {
+            type: String
+        },
+
+        phone: {
+            type: String
+        },
+
+        instagram: {
+            type: String
+        },
+
+        twitter: {
+            type: String
+        },
+
+    },
+
     name: {
         type: String,
         required: true
