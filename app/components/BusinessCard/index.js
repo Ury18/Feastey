@@ -20,10 +20,6 @@ const BusinessCard = (props) => {
         favCheck();
     })
 
-    useEffect(() => {
-        console.log(business.mainImage ? business.mainImage.url : (business.images[0] ? business.images[0].url : "/img/Table-QR-Template.png"))
-    },[])
-
     const favCheck = () => {
         const favorites = user.favorites
 
