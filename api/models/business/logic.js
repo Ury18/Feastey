@@ -317,6 +317,7 @@ logic = {
                             business.isEnabled = true
                             business.stripe.subscriptionId = stripeSubscription.id
                             business.stripe.productId = stripeSubscription.plan.product
+                            PaymentSucceeded.send({ to: business.user.email, business })
                         }
                     }
                 }
@@ -347,7 +348,7 @@ logic = {
                 })
         }
 
-        return Business.findById(businessId)
+        return Business.findById(businessId).populate("owner")
             .then(business => {
                 if (business.owner.toString() !== editorId) {
                     if (editorRole == "admin") {
@@ -363,13 +364,13 @@ logic = {
 
     onPaymentFailed(data) {
         if (data.type == "invoice.payment_failed") {
-            return Business.findOne({ "stripe.subscriptionId": data.data.object.subscription })
+            return Business.findOne({ "stripe.subscriptionId": data.data.object.subscription }).populate("owner")
                 .then(business => {
                     if (business) {
                         if (!business.isEnabled) return "Nothing to do"
                         business.isEnabled = false
                         business.stripe.lastPayment = "failed"
-                        //SEND EMAIl
+                        PaymentFailed.send({ to: user.email, business })
                         console.log("sendEmail Fail")
                         return business.save()
                             .then(business => {
@@ -384,13 +385,13 @@ logic = {
 
     onPaymentSuccess(data) {
         if (data.type == "invoice.payment_succeeded") {
-            return Business.findOne({ "stripe.subscriptionId": data.data.object.subscription })
+            return Business.findOne({ "stripe.subscriptionId": data.data.object.subscription }).populate("owner")
                 .then(business => {
                     if (business) {
                         if (business.isEnabled) return "Nothing to do"
                         business.isEnabled = true
                         business.stripe.lastPayment = "success"
-                        //SEND EMAIl
+                        PaymentSucceeded.send({ to: user.email, business})
                         console.log("sendEmail Success")
                         return business.save()
                             .then(business => {
