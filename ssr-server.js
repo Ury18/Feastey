@@ -27,11 +27,11 @@ const httpsServer = express()
 const httpServer = express()
 
 if (dev) {
-    process.env["NODE_TLS_REJECT_UNAUTHORIZED"] = 0;
+    // process.env["NODE_TLS_REJECT_UNAUTHORIZED"] = 0;
 }
 
 mongoose.connect(db_url, {
-    seNewUrlParser: true,
+    useNewUrlParser: true,
     user:"feastey",
     pass: "oec123",
 })
@@ -48,7 +48,7 @@ mongoose.connect(db_url, {
                 });
 
                 //Used to verify certbot key
-                // httpServer.use(express.static(__dirname + '/static', {dotfiles: 'allow'}))
+                // httpServer.use(express.static(__dirname + '/public', {dotfiles: 'allow'}))
 
                 httpsServer.use(bodyParser.json())
                 httpsServer.use(bodyParser.urlencoded({ extended: true }))

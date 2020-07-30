@@ -9,7 +9,7 @@ const qrHelper = {
 
     generateQr(businessId) {
         return new Promise((resolve, reject) => {
-            return QRCode.toFile(`${NODE_PATH}/static/tmp/qr/${businessId}.png`, `${HOST}/business/${businessId}`, {
+            return QRCode.toFile(`${NODE_PATH}/public/tmp/qr/${businessId}.png`, `${HOST}/business/${businessId}`, {
                 color: {
                     light: '#0000' // Transparent background,
                 },
@@ -25,8 +25,8 @@ const qrHelper = {
     mergeQr(businessId) {
         return mergeImages(
             [
-                `${NODE_PATH}/static/img/Table-QR-Template.png`,
-                { src: `${NODE_PATH}/static/tmp/qr/${businessId}.png`, x: 50, y: 50 }
+                `${NODE_PATH}/public/img/Table-QR-Template.png`,
+                { src: `${NODE_PATH}/public/tmp/qr/${businessId}.png`, x: 50, y: 50 }
             ],
             {
                 Canvas: Canvas,
@@ -36,8 +36,8 @@ const qrHelper = {
             .then(b64 => {
                 let base64Image = b64.split(';base64,').pop();
                 return new Promise((resolve, reject) => {
-                    fs.writeFile(`${NODE_PATH}/static/tmp/qr/finalQR-${businessId}.png`, base64Image, { encoding: 'base64' }, function (err) {
-                        fs.unlink(`${NODE_PATH}/static/tmp/qr/${businessId}.png`, function (err) {
+                    fs.writeFile(`${NODE_PATH}/public/tmp/qr/finalQR-${businessId}.png`, base64Image, { encoding: 'base64' }, function (err) {
+                        fs.unlink(`${NODE_PATH}/public/tmp/qr/${businessId}.png`, function (err) {
                             resolve({})
                         })
                     })

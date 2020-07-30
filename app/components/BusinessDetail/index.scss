@@ -1,9 +1,11 @@
+@import "~react-image-gallery/styles/scss/image-gallery.scss";
+
 .BusinessDetail_MainContainer {
     display: flex;
     padding-top: 5em;
     width: 70%;
     height: 100%;
-    
+
     .coverImage {
         img {
 

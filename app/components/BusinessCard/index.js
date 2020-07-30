@@ -8,18 +8,21 @@ const BusinessCard = (props) => {
 
     const { business, user, updateUserData } = props
     const { token } = user
-
-    const { name, description, location, address } = business
+    const { name, description, location, address, summary, category } = business
 
     const [isFaved, setIsFaved] = useState(false)
 
-    const favedImage = require('../../img/feastey_favoriteIcon_faved.png')
-    const unfavedImage = require('../../img/feastey_favoriteIcon.png')
+    const favedImage = '/img/feastey_favoriteIcon_faved.png'
+    const unfavedImage = '/img/feastey_favoriteIcon.png'
 
 
     useEffect(() => {
         favCheck();
     })
+
+    useEffect(() => {
+        console.log(business.mainImage ? business.mainImage.url : (business.images[0] ? business.images[0].url : "/img/Table-QR-Template.png"))
+    },[])
 
     const favCheck = () => {
         const favorites = user.favorites
@@ -73,7 +76,7 @@ const BusinessCard = (props) => {
             <div className="businessCard_imgContainer">
                 <Link href={`/business/${business.id}`}>
                     <a>
-                        <div className="businessCard_img"></div>
+                        {<img className="businessCard_img" src={business.mainImage ? business.mainImage.url : business.images[0] ? business.images[0].url : "/img/Table-QR-Template.png"}/>}
                     </a>
                 </Link>
             </div>
@@ -89,8 +92,9 @@ const BusinessCard = (props) => {
                     </div>
                 </div>
                 <p>{address}</p>
-                {description && <p className="businessCard_infoContainer_Description">{description}</p>}
+                {summary && <p className="businessCard_infoContainer_Summary">{summary}</p>}
                 <div className="cardFooter">
+                    <p>Category : <span>{category.name}</span></p>
                     {/* <div className="likesContainer">
                         <p>200</p>
                         <img className="likesIconCard" src={"/img/feastey_likeIcon.png"}></img>

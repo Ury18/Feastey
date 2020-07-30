@@ -9,7 +9,7 @@ export default ((props) => {
             <Link href="/business">
                 <a>
                     <div className="discover_button">
-                        <img className="discover_icon" src={require("../../img/feastey_searchIcon.png")} />
+                        <img className="discover_icon" src={"/img/feastey_searchIcon.png"} />
                     </div>
                 </a>
             </Link>

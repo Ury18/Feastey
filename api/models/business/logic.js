@@ -54,7 +54,7 @@ logic = {
                 delete business.category._id
                 delete business.category.__v
 
-                if(business.mainImage) {
+                if (business.mainImage) {
                     business.mainImage.id = business.mainImage._id
                     delete business.mainImage._id
                     delete business.mainImage.__v
@@ -79,6 +79,22 @@ logic = {
                     distanceMultiplier: 1 / 1000,
                     spherical: true
                 }
+            }
+        )
+
+        filters.push(
+            {
+                $lookup: { from: 'files', localField: "images", foreignField: "_id", as: "images" }
+            }
+        )
+        filters.push(
+            {
+                $lookup: { from: 'files', localField: "mainImage", foreignField: "_id", as: "mainImage" }
+            }
+        )
+        filters.push(
+            {
+                $lookup: { from: 'categories', localField: "category", foreignField: "_id", as: "category" }
             }
         )
 
@@ -115,6 +131,19 @@ logic = {
                 businesses = businesses.docs
                 businesses.forEach(business => {
                     business.id = business._id
+                    business.category = business.category[0]
+                    if (business.mainImage && business.mainImage.length > 0) {
+                        business.mainImage = business.mainImage[0]
+                    } else {
+                        delete business.mainImage
+                    }
+                    if(business.images.length > 0) {
+                        business.images.forEach(element => {
+                            element.id = element._id
+                            delete element._id
+                            delete element.__v
+                        })
+                    }
                     delete business._id
                     delete business.__v
                 })
@@ -125,10 +154,29 @@ logic = {
     },
 
     async getMultipleBusinesses(businessesIds) {
-        let businessList = await Business.find().select('-__v').lean().where('_id').in(businessesIds).exec()
+        let businessList = await Business.find().populate("images").populate("mainImage").populate("category").select('-__v').lean().where('_id').in(businessesIds).exec()
         businessList.forEach(business => {
             business.id = business._id
             delete business._id
+
+            if(business.mainImage) {
+                business.mainImage.id = business.mainImage._id
+                delete business.mainImage._id
+                delete business.mainImage.__v
+            }
+
+            if(business.images.length > 0) {
+                business.images.forEach(element => {
+                    element.id = element._id
+                    delete element._id
+                    delete element.__v
+                })
+            }
+
+            business.category.id = business.category._id
+            delete business.category._id
+            delete business.category.__v
+
         })
         return businessList
     },
@@ -224,7 +272,7 @@ logic = {
                         }
                         return new Promise((resolve, reject) => {
 
-                            fs.readFile(`${NODE_PATH}/static/tmp/qr/finalQR-${businessId}.png`, function (err, buffer) {
+                            fs.readFile(`${NODE_PATH}/public/tmp/qr/finalQR-${businessId}.png`, function (err, buffer) {
                                 if (err) console.log(err)
                                 file.buffer = buffer
                                 resolve(FileLogic.uploadFile(owner, "businessOwner", data, file))
@@ -232,7 +280,7 @@ logic = {
                         })
                             .then(file => {
                                 return new Promise((resolve, reject) => {
-                                    fs.unlink(`${NODE_PATH}/static/tmp/qr/finalQR-${businessId}.png`, function (err) {
+                                    fs.unlink(`${NODE_PATH}/public/tmp/qr/finalQR-${businessId}.png`, function (err) {
                                         resolve(file)
                                     })
                                 })
