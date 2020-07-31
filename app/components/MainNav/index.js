@@ -97,7 +97,7 @@ const MainNav = ((props) => {
                     </Link>
                 </li>}
                 {props.user.token && <li>
-                    <button id="accountBoxButton" onClick={(e) => accountButtonClick(e)}>Mi cuenta</button>
+                    <button id="accountBoxButton" onClick={(e) => accountButtonClick(e)}>{props.user.username}</button>
                     {accountBoxActive && <ul id="accountBox">
                         <li>
                             <Link href={`/users/edit`}>
