@@ -18,7 +18,8 @@ import { parseCookies } from '../../../app/middleware/parseCookies'
 import PaymentInfoForm from '../../../app/components/PaymentInfoForm'
 import { loadStripe } from '@stripe/stripe-js';
 import { Elements } from '@stripe/react-stripe-js';
-const stripePromise = loadStripe("pk_test_51H7jFNHesZkxfUDSfJkBztrwFiLv7BnMbzJdhbleX9haB2ncM4RUjfWOazBen7aK3yW3x2BzDd26Z2wOq4BVkuni00vFmhfisR");
+const stripePromise = loadStripe(process.env.STRIPE_PUBLIC_KEY);
+
 import Head from 'next/head'
 
 class EditBusiness extends Component {

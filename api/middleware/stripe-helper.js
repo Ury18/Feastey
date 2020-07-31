@@ -1,4 +1,4 @@
-const stripe = require('stripe')("sk_test_51H7jFNHesZkxfUDSxvwv2mB4CnKVVwp9zpJHt2wduwvZHPZdmPEsUGLsK8RZHHcrbBfFBSsE81CKvmRTjBDwLs4a00LdaLOOgd")
+const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY)
 
 const stripeHelper = {
 

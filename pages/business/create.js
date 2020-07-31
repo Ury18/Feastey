@@ -17,7 +17,7 @@ import { Elements } from '@stripe/react-stripe-js';
 import PaymentInfoForm from '../../app/components/PaymentInfoForm'
 import Head from 'next/head'
 
-const stripePromise = loadStripe("pk_test_51H7jFNHesZkxfUDSfJkBztrwFiLv7BnMbzJdhbleX9haB2ncM4RUjfWOazBen7aK3yW3x2BzDd26Z2wOq4BVkuni00vFmhfisR");
+const stripePromise = loadStripe(process.env.STRIPE_PUBLIC_KEY);
 
 class CreateBusiness extends Component {
 
@@ -344,19 +344,19 @@ class CreateBusiness extends Component {
                     </div>
                     <div style={{ display: "flex", flexDirection: "column" }}>
                         <label>Email</label>
-                        <input onChange={(e) => setInputValue(e.target.name, e.target.value)} name="email" type="email" required />
+                        <input onChange={(e) => setInputValue(e.target.name, e.target.value)} name="email" type="email" />
                     </div>
                     <div style={{ display: "flex", flexDirection: "column" }}>
                         <label>Telefono</label>
-                        <input onChange={(e) => setInputValue(e.target.name, e.target.value)} name="phone" type="tel" required />
+                        <input onChange={(e) => setInputValue(e.target.name, e.target.value)} name="phone" type="tel" />
                     </div>
                     <div style={{ display: "flex", flexDirection: "column" }}>
                         <label>Twitter</label>
-                        <input onChange={(e) => setInputValue(e.target.name, e.target.value)} name="twitter" type="text" required />
+                        <input onChange={(e) => setInputValue(e.target.name, e.target.value)} name="twitter" type="text" />
                     </div>
                     <div style={{ display: "flex", flexDirection: "column" }}>
                         <label>Instagram</label>
-                        <input onChange={(e) => setInputValue(e.target.name, e.target.value)} name="instagram" type="text" required />
+                        <input onChange={(e) => setInputValue(e.target.name, e.target.value)} name="instagram" type="text" />
                     </div>
                     <div style={{ display: "flex", flexDirection: "column" }}>
                         <label>Dirección</label>
@@ -400,10 +400,10 @@ class CreateBusiness extends Component {
                         {renderAttachmentsSection()}
                     </div>
 
-                    <div className={`price ${priceId == "price_1H7jXCHesZkxfUDSo4o2xLrL" ? " selected" : ""}`} onClick={(e) => setInputValue("priceId", "price_1H7jXCHesZkxfUDSo4o2xLrL")}>
+                    <div className={`price ${priceId == process.env.STRIPE_PRICE_ANUAL ? " selected" : ""}`} onClick={(e) => setInputValue("priceId", process.env.STRIPE_PRICE_ANUAL)}>
                         ANUAL
                     </div>
-                    <div className={`price ${priceId == "price_1H7jWPHesZkxfUDSN4V0r8b0" ? " selected" : ""}`} onClick={(e) => setInputValue("priceId", "price_1H7jWPHesZkxfUDSN4V0r8b0")}>
+                    <div className={`price ${priceId == process.env.STRIPE_PRICE_MONTHLY ? " selected" : ""}`} onClick={(e) => setInputValue("priceId", process.env.STRIPE_PRICE_MONTHLY)}>
                         MONTHLY
                     </div>
 
