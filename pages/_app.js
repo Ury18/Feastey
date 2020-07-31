@@ -5,7 +5,6 @@ import { cookiesActionTypes } from '../app/redux/cookies/action'
 
 const { UPDATE_USER_DATA } = userActionTypes
 const { UPDATE_COOKIES_DATA } = cookiesActionTypes
-
 function MyApp({ Component, pageProps }) {
     return <Component {...pageProps} />
 }

@@ -2,22 +2,139 @@
 
 .BusinessDetail_MainContainer {
     display: flex;
-    padding-top: 5em;
-    width: 70%;
+    padding-top: 3em;
+    width: 80%;
     height: 100%;
 
-    .coverImage {
-        img {
+    i {
+        color: #8e8787;
+        font-size: 1.2em;
 
-            width: 15em;
-            height: 15em;
+        &.fa-map-marker {
+            font-size: 1.6em;
+            color: #FFB135;
         }
     }
 
+    @media (max-width: 1300px) {
+        width: 90%;
+    }
+
+    @media (max-width: 860px) {
+        display: block;
+        width: 100%;
+        padding-top: 0;
+        position: relative;
+    }
+
+    .title-container.mobile {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        @media (min-width: 860px) {
+            display: none;
+        }
+    }
+
+    .coverImage {
+        img {
+            width: 17em;
+            height: 17em;
+            border-radius: 2em;
+        }
+    }
+
+    .image-gallery-image {
+        min-height: 20em !important;
+        max-height: 40em !important;
+    }
+
+    .image-gallery-content {
+        margin: auto;
+    }
+
+    #map {
+        height: 25em;
+        position: relative;
+        margin-top: 3em;
+        >div {
+            width: 100%;
+            height: 100%;
+        }
+
+        .directions {
+            position: absolute;
+            width: 8em;
+            height: 4em;
+            background-color: white;
+            bottom: 0;
+            top: left;
+            z-index: 2;
+            display: flex;
+            display: none;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            a {
+                color: blue;
+            }
+        }
+
+    }
+
+    .mobile {
+        @media (min-width: 860px) {
+            display: none;
+        }
+    }
+
+    .edit-button {
+        position: absolute;
+        left: 0;
+        top: -30px;
+        @media (max-width: 860px) {
+            top: 0;
+            left: -10px;
+        }
+    }
+
+    .address {
+            margin-bottom: 2em;
+            color: #797979;
+            &:not(.mobile) {
+                @media (max-width: 860px) {
+                    display: none;
+                }
+            }
+        }
+
     .col1 {
+        position: relative;
+        @media (max-width: 860px) {
+            text-align: center;
+            margin-bottom: 3em;
+            width: fit-content;
+            margin: auto;
+            margin-bottom: 3em;
+        }
+
         .contactInfo_Container {
             padding-top: 1em;
+            @media (max-width: 860px) {
+                padding: 0 em;
+            }
+
+            >p {
+                display: flex;
+                justify-content: space-between;
+                padding-right: 1em;
+                margin: .5em 0;
+            }
         }
+    }
+
+    .title {
+        margin-right: 0.5em;
     }
 
     .col2 {
@@ -26,16 +143,35 @@
         flex-direction: column;
         padding: 0 2em;
 
+        @media (max-width: 860px) {
+            padding: 0;
+        }
+
         .titleAndFavSection_Container {
             display: flex;
             align-items: center;
             position: relative;
+
+            @media (max-width: 860px) {
+                position: initial;
+            }
+
+            .title,.location-icon {
+                @media (max-width: 860px) {
+                    display: none;
+                }
+            }
+
 
             .titleIcons {
                 display: flex;
                 position: absolute;
                 align-items: center;
                 right: 0;
+
+                @media (max-width: 860px) {
+                    top: 0
+                }
 
                 .BusinessDetailLikeIcon {
                     max-width: 1em;
@@ -52,6 +188,23 @@
                 }
             }
 
+        }
+
+        .section_Container {
+            list-style: none;
+            padding-left: 0;
+            margin-bottom: 3em;
+            h2 {
+                border-bottom: 1px solid #ddd;
+                border-color: #ff9d00;
+                margin-bottom: .3em;
+                padding-bottom: .2em;
+            }
+
+            ul {
+                list-style: none;
+                padding-left: 0;
+            }
         }
     }
 }

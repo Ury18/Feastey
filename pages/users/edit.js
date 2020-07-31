@@ -136,7 +136,7 @@ class EditUser extends Component {
 
     setSection = (e) => {
         this.setState({ section: e.target.name, errors: "", password: "", newPassword: "", newPasswordConfirmation: "", email: "" })
-        Router.replace(`/users/${this.props.user.id}/edit` + `?section=${e.target.name}`)
+        Router.replace(`/users/edit` + `?section=${e.target.name}`)
     }
 
     render() {
@@ -171,11 +171,11 @@ class EditUser extends Component {
 
                     <div style={{ display: "flex", flexDirection: "column" }}>
                         <label>Contraseña</label>
-                        <input onChange={(e) => setInputValue(e.target.name, e.target.value)} type="text" name="password" />
+                        <input onChange={(e) => setInputValue(e.target.name, e.target.value)} type="password" name="password" required/>
                     </div>
                     <div style={{ display: "flex", flexDirection: "column" }}>
                         <label>Nuevo Email</label>
-                        <input onChange={(e) => setInputValue(e.target.name, e.target.value)} type="text" name="email" />
+                        <input onChange={(e) => setInputValue(e.target.name, e.target.value)} type="email" name="email" required/>
                         <a style={{ cursor: "pointer" }} name="" onClick={e => setSection(e)}>volver</a>
                     </div>
                     <button type="submit">Guardar</button>
@@ -186,15 +186,15 @@ class EditUser extends Component {
 
                     <div style={{ display: "flex", flexDirection: "column" }}>
                         <label>Contraseña Actual</label>
-                        <input onChange={(e) => setInputValue(e.target.name, e.target.value)} type="text" name="password" />
+                        <input onChange={(e) => setInputValue(e.target.name, e.target.value)} type="password" name="password" required/>
                     </div>
                     <div style={{ display: "flex", flexDirection: "column" }}>
                         <label>Nueva Contraseña</label>
-                        <input onChange={(e) => setInputValue(e.target.name, e.target.value)} type="text" name="newPassword" />
+                        <input onChange={(e) => setInputValue(e.target.name, e.target.value)} type="password" name="newPassword" required/>
                     </div>
                     <div style={{ display: "flex", flexDirection: "column" }}>
                         <label>Nueva Contraseña</label>
-                        <input onChange={(e) => setInputValue(e.target.name, e.target.value)} type="text" name="newPasswordConfirmation" />
+                        <input onChange={(e) => setInputValue(e.target.name, e.target.value)} type="password" name="newPasswordConfirmation" required/>
                         <a style={{ cursor: "pointer" }} name="" onClick={e => setSection(e)}>volver</a>
                     </div>
                     <button type="submit">Guardar</button>

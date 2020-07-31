@@ -381,7 +381,7 @@ class CreateBusiness extends Component {
                     </div>
                     <div style={{ display: "flex", flexDirection: "column" }}>
                         <label>Descripción</label>
-                        <div>
+                        <div className="richtext">
                             <Editor toolbar={toolbar} onEditorStateChange={onDescriptionChange} />
                         </div>
                     </div>

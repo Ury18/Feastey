@@ -72,7 +72,7 @@ const BusinessCard = (props) => {
             <div className="businessCard_imgContainer">
                 <Link href={`/business/${business.id}`}>
                     <a>
-                        {<img className="businessCard_img" src={business.mainImage ? business.mainImage.url : business.images[0] ? business.images[0].url : "/img/Table-QR-Template.png"}/>}
+                        {<img className="businessCard_img" alt="Foto de perfil" src={business.mainImage ? business.mainImage.url : business.images[0] ? business.images[0].url : "/img/Table-QR-Template.png"}/>}
                     </a>
                 </Link>
             </div>
@@ -84,7 +84,7 @@ const BusinessCard = (props) => {
                         </a>
                     </Link>
                     <div className="favorite_Container">
-                        <img onClick={(e) => onToggleFav()} className="favoriteIconCard" src={isFaved ? favedImage : unfavedImage}></img>
+                        <img onClick={(e) => onToggleFav()} alt="icono favorito" className="favoriteIconCard" src={isFaved ? favedImage : unfavedImage}></img>
                     </div>
                 </div>
                 <p>{address}</p>

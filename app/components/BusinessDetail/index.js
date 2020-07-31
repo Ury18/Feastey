@@ -22,7 +22,11 @@ const Detail = ((props) => {
         business.images.forEach(element => {
             newGalleryImages.push({
                 original: element.url,
-                thumbnail: element.url
+                thumbnail: element.url,
+                originalAlt: element.name,
+                thumbnailAlt: element.name,
+                originalTitle: element.name,
+                thumbnailTitle: element.name
             })
         })
 
@@ -101,7 +105,7 @@ const Detail = ((props) => {
 
         return attachmentFiles.map(file => {
             return <li className="file_Container">
-                <a href={file.url}>
+                <a href={file.url} target="_blank">
                     <h3>{file.name}</h3>
                 </a>
             </li>
@@ -116,57 +120,59 @@ const Detail = ((props) => {
         })
     }
 
+    const profileImage = business.mainImage ? business.mainImage : business.images[0] ? business.images[0] : { url: "/img/Table-QR-Template.png", name: "placeholder" }
+
+
     return (
         <div className="BusinessDetail_MainContainer">
             <div className="col1">
                 {(business.owner == user.id)
                     &&
                     <Link href={`/business/${business.id}/edit`}>
-                        <a>Edit</a>
+                        <a className="edit-button">Editar Pagina</a>
                     </Link>
                 }
-                <div className="coverImage">
-                    <img src={business.mainImage ? business.mainImage.url : business.images[0] ? business.images[0].url : "/img/Table-QR-Template.png"}/>
+                <div className="title-container mobile">
+                    <h2 className="title">{business.name}</h2>
+                    <a className="location-icon" href="#map"><i class="fa fa-map-marker" aria-hidden="true" /></a>
                 </div>
-                {business.info !== undefined ?
-                    <div className="contactInfo_Container">
-                        {business.info.phone && <p>Telf: {business.info.phone}</p>}
-                        {business.info.email && <p>Email: {business.info.email}</p>}
-                        {business.info.instagram && <p>Instagram: {business.info.instagram}</p>}
-                        {business.info.facebook && <p>Facebook {business.info.facebook}</p>}
-                    </div> :
-                    <div className="contactInfo_Container">
-                        <p>Telf:</p>
-                        <p>Email:</p>
-                        <p>Instagram:</p>
-                        <p>Facebook:</p>
-                    </div>
-                }
+                <p className="address mobile">{business.address}</p>
+                <div className="coverImage">
+                    <img src={profileImage.url} alt={profileImage.name} />
+                </div>
+                {business.info && <div className="contactInfo_Container">
+                    {business.info.phone && <p><i class="fa fa-phone" aria-hidden="true" /><a href={`tel:+${business.info.phone}`}>{business.info.phone}</a></p>}
+                    {business.info.email && <p><i class="fa fa-envelope"></i>{business.info.email}</p>}
+                    {business.info.twitter && <p><i class="fa fa-twitter"></i><a target="_blank" href={`https://www.twitter.com/${business.info.twitter}`}>{business.info.instagram}</a></p>}
+                    {business.info.instagram && <p><i class="fa fa-instagram"></i><a target="_blank" href={`https://www.instagram.com/${business.info.instagram}`}>{business.info.instagram}</a></p>}
+                </div>}
             </div>
             <div className="col2">
                 <div className="titleAndFavSection_Container">
-                    <h2>{business.name}</h2>
-                    <p> Location Icon </p>
+                    <h2 className="title">{business.name}</h2>
+                    <a className="location-icon" href="#map"><i class="fa fa-map-marker" aria-hidden="true" /></a>
                     <div className="titleIcons">
                         {/* <p>200</p>
                         <img className="BusinessDetailLikeIcon" src={'/img/feastey_likeIcon.png'} /> */}
-                        <img onClick={(e) => onToggleFav()} className="BusinessDetailFavIcon" src={isFaved ? favedImage : unfavedImage} />
+
+                        <img onClick={(e) => onToggleFav()} className="BusinessDetailFavIcon" src={isFaved ? favedImage : unfavedImage} alt="favorite button" />
                     </div>
                 </div>
-                <p>{business.address}</p>
-                <div className="map-container">
-                    <GoogleMap class="map" lng={business.location.coordinates[0]} lat={business.location.coordinates[1]} />
-                </div>
-                <div dangerouslySetInnerHTML={{ __html: business.description }}></div>
+                <p className="address">{business.address}</p>
+
+                <div className="description" dangerouslySetInnerHTML={{ __html: business.description }} />
 
                 <ul className="section_Container">
                     {renderAttachmentsList()}
                 </ul>
                 <div className="gallery_Container">
-                    <ul>
-                        {/* {renderGalleryList()} */}
-                        {galleryImages.length > 0 && <ImageGallery items={galleryImages} showPlayButton={false}/>}
-                    </ul>
+                    {galleryImages.length > 0 && <ImageGallery items={galleryImages} showPlayButton={false} />}
+                </div>
+                <div id="map" className="map-container">
+                    <div className="directions">
+                        <a className="directions-link">Como llegar</a>
+                    </div>
+                    <GoogleMap class="map" lng={business.location.coordinates[0]} lat={business.location.coordinates[1]} />
                 </div>
             </div>
         </div>

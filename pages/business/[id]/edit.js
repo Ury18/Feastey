@@ -438,11 +438,10 @@ class EditBusiness extends Component {
                     </div>
                     <div style={{ display: "flex", flexDirection: "column" }}>
                         <label>Descripción</label>
-                        <div>
+                        <div className="richtext">
                             {/* <Editor/> */}
                             {descriptionEditorState && <Editor toolbar={toolbar} defaultEditorState={descriptionEditorState} onEditorStateChange={onDescriptionChange} />}
                         </div>
-                        <div dangerouslySetInnerHTML={{ __html: description }}></div>
                     </div>
                     <div style={{ display: "flex", flexDirection: "column" }}>
                         <label>Imagen de perfil</label>

@@ -6,6 +6,7 @@ import Cookie from "js-cookie"
 import Footer from '../Footer'
 import Head from 'next/head'
 
+
 const Layout = ((props) => {
     const { contentClasses } = props
     useEffect(() => {
@@ -17,6 +18,7 @@ const Layout = ((props) => {
         <div className="app">
             <Head>
                 <link rel="shortcut icon" href="/favicon/favicon.ico" />
+                <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"></link>
             </Head>
             <Header />
             <div className="content-container">
