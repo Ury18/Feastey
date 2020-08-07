@@ -106,6 +106,7 @@ const Detail = ((props) => {
         return attachmentFiles.map(file => {
             return <li className="file_Container">
                 <a href={file.url} target="_blank">
+                    <i class="fa fa-file"></i>
                     <h3>{file.name}</h3>
                 </a>
             </li>
