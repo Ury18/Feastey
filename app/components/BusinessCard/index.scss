@@ -1,22 +1,91 @@
 .businessCard_Container {
     display: flex;
     flex-flow: row;
-    background-color: #e1e1e1;
     padding: 2em;
-    border-radius: 1em;
-    box-shadow: 10px 10px 5px 0px rgba(0, 0, 0, 0.20);
+    box-shadow: 0px 0px 11px 7px rgba(90, 90, 90, 0.116);
     width: 50em;
+    position: relative;
 
+    @media (max-width: 920px) {
+        width: 40em;
+    }
+
+    @media (max-width: 745px) {
+        max-width: 30em;
+        display: block
+    }
+
+    @media (max-width: 588px) {
+        width: 100%;
+        padding: 2em 0;
+    }
 
     .businessCard_imgContainer {
         display: flex;
         align-items: center;
         justify-content: center;
 
+        > a {
+            @media (max-width:745px) {
+                text-align: center;
+                width: 88%;
+                height: auto;
+            }
+        }
+
         .businessCard_img {
             background-color: black;
             height: 20em;
             width: 20em;
+
+            @media (max-width: 745px) {
+                width: 100%;
+                height: auto;
+            }
+        }
+    }
+
+    .address.mobile {
+        text-align: center;
+    }
+
+    .businessCard_infoContainer_Header.mobile {
+        @media (min-width: 745px) {
+            display: none;
+        }
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
+
+        >a {
+            display: flex;
+            align-items: center;
+
+            i {
+                margin-right: 0.5em;
+                font-size: 1.3em;
+                color: #FFB135;
+            }
+        }
+
+
+    }
+
+    .address {
+        margin-bottom: 1em;
+        color: #797979;
+
+        &.mobile {
+            @media (min-width: 745px) {
+                display: none;
+            }
+        }
+
+        &:not(.mobile) {
+            @media (max-width: 745px) {
+                display: none;
+            }
         }
     }
 
@@ -25,19 +94,48 @@
         flex-flow: column;
         text-transform: capitalize;
         padding-left: 2em;
-        padding-bottom:3em;
+        padding-bottom: 4em;
         min-width: 24em;
         position: relative;
         flex:1;
+
+        @media (max-width: 920px) {
+            min-width: 0;
+        }
+
+        @media (max-width: 745px) {
+            width: 88%;
+            margin: auto;
+            padding-left: 0;
+        }
 
         .businessCard_infoContainer_Header {
             display: flex;
             min-width: 24em;
             justify-content: space-between;
 
+            @media (max-width: 920px) {
+                min-width: 0;
+            }
+
+            @media (max-width: 745px) {
+                display: none;
+            }
+
+            >a {
+                display: flex;
+                align-items: center;
+            }
+
+            i {
+                font-size: 1.3em;
+                margin-left: 0.5em;
+                color: #FFB135;
+            }
+
         }
 
-        .businessCard_infoContainer_Description{
+        .businessCard_infoContainer_Summary{
             word-break: break-all;
             max-width: 90%;
 
@@ -53,6 +151,29 @@
             right: 0;
             bottom: 0;
             padding-left: 2em;
+            display: flex;
+            flex-direction: column;
+
+            >p {
+                margin-top: .5em;
+            }
+
+            @media (max-width: 745px) {
+                padding-left: 0;
+                width: 88%;
+            }
+
+            .categories, .phone {
+                color: #797979;
+
+                i {
+                    margin-right: .5em;
+                }
+
+                *{
+                    color: #797979;
+                }
+            }
 
             .likesContainer {
                 display: flex;
@@ -69,6 +190,13 @@
 
     .favorite_Container {
         display: flex;
+
+        @media (max-width: 745px) {
+            position: absolute;
+            bottom: 2em;
+            right: 2em;
+            z-index: 3;
+        }
 
         .favoriteIconCard {
             height: 2em;
