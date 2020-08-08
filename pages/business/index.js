@@ -3,7 +3,7 @@ import BusinessList from '../../app/components/BusinessList'
 import { useState, useEffect } from 'react'
 import Router from 'next/router'
 import Head from 'next/head'
-
+import '../../stylesheets/searchForm.scss'
 const AllBusiness = (props) => {
     const { businessList } = props
 
@@ -152,21 +152,36 @@ const AllBusiness = (props) => {
                 <meta name="og:description" property="og:description" content="Descubre tu zona y conoce todos los negocios locales que te rodean! - Feastey" />
                 <meta property="og:site_name" content="ury.feastey.com" />
             </Head>
-            <form>
-                <input placeholder="Nombre del negocio" onChange={(e) => setName(e.target.value)}></input>
-                <input placeholder="Direccción, Ciudad, Codigo Postal" onChange={(e) => setTempAddress(e.target.value)}></input>
-                <p>Distance</p>
-                <input type="number" defaultValue={distance} onChange={(e) => setDistance(e.target.value)}></input>
-                <p>km</p>
-                <label>Categoría</label>
-                <select name="category" defaultValue={category} onChange={(e) => setCategory(e.target.value)}>
-                    <option value={""}>Ninguna</option>
-                    {renderCategoriesOptions()}
-                </select>
-                <input type="submit" value="submit" onClick={(e) => getBusinessesByDistance(e)} />
+            <form className="searchForm">
+                <div>
+                    <label>Categoría</label>
+                    <select name="category" defaultValue={category} onChange={(e) => setCategory(e.target.value)}>
+                        <option value={""}>Ninguna</option>
+                        {renderCategoriesOptions()}
+                    </select>
+                </div>
+                <div>
+                    <label>Nombre del negocio</label>
+                    <input placeholder="Nombre del negocio" onChange={(e) => setName(e.target.value)}></input>
+                </div>
+                <div>
+                    <label>Dirección</label>
+                    <input placeholder="Direccción, Ciudad, Codigo Postal" onChange={(e) => setTempAddress(e.target.value)}></input>
+                </div>
+                <div className="address">
+                    <label>Distancia <span style={{ "color": "#a9a9a9" }}>(km)</span></label>
+                    <div>
+                        <input type="number" defaultValue={distance} onChange={(e) => setDistance(e.target.value)}></input>
+                    </div>
+                </div>
+                <div className="button-container">
+                    <input type="submit" value="Buscar" onClick={(e) => getBusinessesByDistance(e)} />
+                </div>
             </form>
-            <BusinessList businessList={businesses} />
-            <button onClick={(e) => loadMore(e)}>Más</button>
+            <div className="search-businessList-container">
+                <BusinessList businessList={businesses} />
+            </div>
+            <button className="more-results" onClick={(e) => loadMore(e)}>Más</button>
         </Layout>
     )
 }
