@@ -45,8 +45,8 @@ class EditBusiness extends Component {
         paymentMethodId: "",
         last4: "",
         instagram: "",
-        twitter:"",
-        phone:"",
+        twitter: "",
+        phone: "",
         email: "",
     }
 
@@ -68,8 +68,8 @@ class EditBusiness extends Component {
                 stripe: {}
             })
 
-            if(business.info) {
-                this.setState({...business.info})
+            if (business.info) {
+                this.setState({ ...business.info })
             }
 
 
@@ -388,34 +388,45 @@ class EditBusiness extends Component {
                     <meta name="og:description" property="og:description" content={`Pagina de edición de ${business.name} - Feastey`} />
                     <meta property="og:site_name" content="ury.feastey.com" />
                 </Head>
-                <form onSubmit={(e) => editBusiness(e)} style={{ maxWidth: "200px" }}>
-                    <h1>Edit tu negocio</h1>
+                <form onSubmit={(e) => editBusiness(e)} style={{ maxWidth: "40% !important" }}>
+                    <h1 style={{ textAlign: "center" }}>Editando <br/>{business.name}</h1>
 
-                    <div style={{ display: "flex", flexDirection: "column" }}>
+                    <div style={{ display: "flex", flexDirection: "row", justifyContent: "space-between", alignItems: "center", marginBottom: "1.4em", width: "70%" }}>
                         <label>Publicado</label>
                         <input onChange={(e) => setInputValue(e.target.name, e.target.checked)} type="checkbox" checked={isPublished} name="isPublished" />
                     </div>
-                    <div style={{ display: "flex", flexDirection: "column" }}>
+                    <div style={{ display: "flex", flexDirection: "row", justifyContent: "space-between", alignItems: "center", marginBottom: "1.4em", width: "70%" }}>
                         <label>Nombre</label>
                         <input onChange={(e) => setInputValue(e.target.name, e.target.value)} type="text" defaultValue={name} name="name" />
                     </div>
-                    <div style={{ display: "flex", flexDirection: "column" }}>
+                    <div style={{ display: "flex", flexDirection: "row", justifyContent: "space-between", alignItems: "center", marginBottom: "1.4em", width: "70%" }}>
                         <label>Email</label>
-                        <input onChange={(e) => setInputValue(e.target.name, e.target.value)} name="email" defaultValue={email} type="email"  />
+                        <input onChange={(e) => setInputValue(e.target.name, e.target.value)} name="email" defaultValue={email} type="email" />
                     </div>
-                    <div style={{ display: "flex", flexDirection: "column" }}>
+                    <div style={{ display: "flex", flexDirection: "row", justifyContent: "space-between", alignItems: "center", marginBottom: "1.4em", width: "70%" }}>
                         <label>Telefono</label>
-                        <input onChange={(e) => setInputValue(e.target.name, e.target.value)} name="phone" defaultValue={phone} type="tel"  />
+                        <input onChange={(e) => setInputValue(e.target.name, e.target.value)} name="phone" defaultValue={phone} type="tel" />
                     </div>
-                    <div style={{ display: "flex", flexDirection: "column" }}>
+                    <div style={{ display: "flex", flexDirection: "row", justifyContent: "space-between", alignItems: "center", marginBottom: "1.4em", width: "70%" }}>
                         <label>Twitter</label>
-                        <input onChange={(e) => setInputValue(e.target.name, e.target.value)} name="twitter" defaultValue={twitter} type="text"  />
+                        <input onChange={(e) => setInputValue(e.target.name, e.target.value)} name="twitter" defaultValue={twitter} type="text" />
                     </div>
-                    <div style={{ display: "flex", flexDirection: "column" }}>
+                    <div style={{ display: "flex", flexDirection: "row", justifyContent: "space-between", alignItems: "center", marginBottom: "1.4em", width: "70%" }}>
                         <label>Instagram</label>
-                        <input onChange={(e) => setInputValue(e.target.name, e.target.value)} name="instagram" defaultValue={instagram} type="text"  />
+                        <input onChange={(e) => setInputValue(e.target.name, e.target.value)} name="instagram" defaultValue={instagram} type="text" />
                     </div>
-                    <div style={{ display: "flex", flexDirection: "column" }}>
+                    <div style={{ display: "flex", flexDirection: "row", justifyContent: "space-between", alignItems: "center", marginBottom: "1.4em", width: "70%"}}>
+                        <label>Resumen</label>
+                        <input onChange={(e) => setInputValue(e.target.name, e.target.value)} type="text" defaultValue={summary} name="summary" />
+                    </div>
+                    <div style={{ display: "flex", flexDirection: "row", justifyContent: "space-between", alignItems: "center", marginBottom: "1.4em", width: "70%"}}>
+                        <label>Categoría</label>
+                        <select name="category" defaultValue={category.id} onChange={(e) => setInputValue(e.target.name, e.target.value)}>
+                            <option value={""}>Ninguna</option>
+                            {renderCategoriesOptions()}
+                        </select>
+                    </div>
+                    <div style={{ display: "flex", flexDirection: "row", justifyContent: "space-between", alignItems: "center", marginBottom: "1.4em", width: "70%" }}>
                         <label>Dirección</label>
                         <div>
                             <input onChange={(e) => setInputValue(e.target.name, e.target.value)} defaultValue={address} name="address" type="text" required />
@@ -425,17 +436,8 @@ class EditBusiness extends Component {
                     {location && location.length > 0 && <div className="map-container">
                         <GoogleMap class="map" lng={location[0]} lat={location[1]} />
                     </div>}
-                    <div>
-                        <label>Categoría</label>
-                        <select name="category" defaultValue={category.id} onChange={(e) => setInputValue(e.target.name, e.target.value)}>
-                            <option value={""}>Ninguna</option>
-                            {renderCategoriesOptions()}
-                        </select>
-                    </div>
-                    <div style={{ display: "flex", flexDirection: "column" }}>
-                        <label>Resumen</label>
-                        <input onChange={(e) => setInputValue(e.target.name, e.target.value)} type="text" defaultValue={summary} name="summary" />
-                    </div>
+
+
                     <div style={{ display: "flex", flexDirection: "column" }}>
                         <label>Descripción</label>
                         <div className="richtext">

@@ -337,7 +337,7 @@ class CreateBusiness extends Component {
                     <meta property="og:site_name" content="ury.feastey.com" />
                 </Head>
                 <form onSubmit={(e) => createBusiness(e)} style={{ maxWidth: "200px" }}>
-                    <h1>Crea tu negocio</h1>
+                    <h1 style={{textAlign:"center"}}>Crea tu negocio</h1>
                     <div style={{ display: "flex", flexDirection: "column" }}>
                         <label>Nombre</label>
                         <input onChange={(e) => setInputValue(e.target.name, e.target.value)} name="name" type="text" required />
