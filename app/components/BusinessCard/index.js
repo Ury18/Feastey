@@ -70,16 +70,18 @@ const BusinessCard = (props) => {
     return (
         <div className="businessCard_Container">
             <div className="businessCard_infoContainer_Header mobile">
-                <Link href={`/business/${business.id}`}>
-                    <a>
-                        <h2>{name}</h2>
-                        <Link href={`/business/${business.id}#map`}>
-                            <a>
-                                <i class="fa fa-map-marker" aria-hidden="true" />
-                            </a>
-                        </Link>
-                    </a>
-                </Link>
+                <div>
+                    <Link href={`/business/${business.id}`}>
+                        <a>
+                            <h2>{name}</h2>
+                        </a>
+                    </Link>
+                    <Link href={`/business/${business.id}#map`}>
+                        <a>
+                            <i className="fas fa-map-marker-alt" aria-hidden="true" />
+                        </a>
+                    </Link>
+                </div>
                 <div className="favorite_Container">
                     <img onClick={(e) => onToggleFav()} alt="icono favorito" className="favoriteIconCard" src={isFaved ? favedImage : unfavedImage}></img>
                 </div>
@@ -94,16 +96,18 @@ const BusinessCard = (props) => {
             </div>
             <div className=" businessCard_infoContainer">
                 <div className="businessCard_infoContainer_Header">
-                    <Link href={`/business/${business.id}`}>
-                        <a>
-                            <h2>{name}</h2>
-                            <Link href={`/business/${business.id}#map`}>
-                                <a>
-                                    <i class="fa fa-map-marker" aria-hidden="true" />
-                                </a>
-                            </Link>
-                        </a>
-                    </Link>
+                    <div>
+                        <Link href={`/business/${business.id}`}>
+                            <a>
+                                <h2>{name}</h2>
+                            </a>
+                        </Link>
+                        <Link href={`/business/${business.id}#map`}>
+                            <a>
+                                <i className="fas fa-map-marker-alt" aria-hidden="true" />
+                            </a>
+                        </Link>
+                    </div>
                     <div className="favorite_Container">
                         <img onClick={(e) => onToggleFav()} alt="icono favorito" className="favoriteIconCard" src={isFaved ? favedImage : unfavedImage}></img>
                     </div>
@@ -111,7 +115,7 @@ const BusinessCard = (props) => {
                 <p className="address">{address}</p>
                 {summary && <p className="businessCard_infoContainer_Summary">{summary}</p>}
                 <div className="cardFooter">
-                    {business.info && business.info.phone && <p className="phone"><i class="fa fa-phone" aria-hidden="true" /><a href={`tel:+${business.info.phone}`}>{business.info.phone}</a></p>}
+                    {business.info && business.info.phone && <p className="phone"><i className="fas fa-phone-alt" aria-hidden="true" /><a href={`tel:+${business.info.phone}`}>{business.info.phone}</a></p>}
                     <p className="categories"><span>{category.name}</span></p>
                     {/* <div className="likesContainer">
                         <p>200</p>
