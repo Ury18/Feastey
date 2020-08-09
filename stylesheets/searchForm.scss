@@ -1,7 +1,49 @@
 .search-businessList-container {
     margin-top: 10em;
+    @media (max-width: 1080px) {
+        margin-top: 4em;
+    }
 }
 
+.openFiltersContainer {
+    font-size: 1.5em;
+    cursor: pointer;
+    position: fixed;
+    top: 3.35em;
+    padding: .55em;
+    width: 100%;
+    text-align: center;
+    background-color: white;
+    z-index: 3;
+    border-bottom: 1px solid #dadada;
+}
+
+.openFilters {
+    font-size: 1em;
+    margin-right: .5em;
+}
+
+.closeFilters {
+    position: absolute;
+    right: 3em;
+    font-size: 1.5em;
+}
+
+.openFilters,.closeFilters {
+    cursor: pointer;
+
+    @media (min-width: 1080px) {
+        display: none;
+    }
+}
+
+.icon {
+    margin-right: 0.5em;
+    width: 2em;
+    margin-left: .5em;
+    color: #FFB135;
+    z-index: 6;
+}
 .more-results {
     margin: 0;
     justify-self: center;
@@ -41,7 +83,28 @@
     padding-bottom: .1em;
     max-width: initial !important;
     z-index: 5;
-    display: none;
+
+
+    @media (max-width: 1080px) {
+        display: none;
+
+        &.mobile {
+            &.active {
+                display: block;
+                height: 100%;
+                position: fixed;
+
+                >div {
+                   height: auto;
+                   >div {
+                       justify-content: flex-start;
+                   }
+                }
+            }
+        }
+    }
+
+
     >div {
         display: flex;
         flex-direction: column;
