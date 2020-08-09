@@ -26,7 +26,6 @@
     "draftjs-to-html": "^0.9.1",
     "express": "^4.17.1",
     "firebase-admin": "^8.12.1",
-    "font-awesome": "^4.7.0",
     "google-maps-react": "^2.0.6",
     "html-to-draftjs": "1.4.0",
     "js-cookie": "^2.2.1",
