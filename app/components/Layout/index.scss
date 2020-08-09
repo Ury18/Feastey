@@ -110,6 +110,7 @@ form  {
     height: 100%;
     display: flex;
     flex-direction: column;
+    position: relative;
 
     .content-container {
         flex-grow: 1;

@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react'
 import Router from 'next/router'
 import Head from 'next/head'
 import '../../stylesheets/searchForm.scss'
+
 const AllBusiness = (props) => {
     const { businessList } = props
 
@@ -16,6 +17,7 @@ const AllBusiness = (props) => {
     const [tempAddress, setTempAddress] = useState("")
     const [name, setName] = useState("")
     const [errors, setErrors] = useState("")
+    const [showFilters, setShowFilters] = useState(false)
 
     useEffect(() => {
         getBusinessesByDistance(null, true)
@@ -90,9 +92,11 @@ const AllBusiness = (props) => {
             res = await res.json()
             if (res.error) {
                 setErrors(res.error)
+                setShowFilters(false)
             } else {
                 setErrors("")
                 setBusinesses(res)
+                setShowFilters(false)
                 if (firstLoad) {
                     Router.replace(Router.pathname + `?distance=${distance}&page=${page}&category=${category}`)
                 } else {
@@ -136,7 +140,7 @@ const AllBusiness = (props) => {
             if (item.id == category) {
                 selected = true
             }
-            return <option selected={selected} value={item.id}>{item.name}</option>
+            return <option value={item.id}>{item.name}</option>
         })
     }
 
@@ -178,6 +182,38 @@ const AllBusiness = (props) => {
                     <input type="submit" value="Buscar" onClick={(e) => getBusinessesByDistance(e)} />
                 </div>
             </form>
+            <div className="openFiltersContainer" onClick={(e) => setShowFilters(true)}>
+                <i className="openFilters fas fa-sliders-h" ></i>
+                <span>Filtros</span>
+            </div>
+            <form className={`searchForm mobile ${showFilters == true ? "active" : ""}`}>
+                <i className="closeFilters fas fa-times" onClick={(e) => setShowFilters(false)}></i>
+                <div>
+                    <label>Categoría</label>
+                    <select name="category" defaultValue={category} onChange={(e) => setCategory(e.target.value)}>
+                        <option value={""}>Ninguna</option>
+                        {renderCategoriesOptions()}
+                    </select>
+                </div>
+                <div>
+                    <label>Nombre del negocio</label>
+                    <input placeholder="Nombre del negocio" onChange={(e) => setName(e.target.value)}></input>
+                </div>
+                <div>
+                    <label>Dirección</label>
+                    <input placeholder="Direccción, Ciudad, Codigo Postal" onChange={(e) => setTempAddress(e.target.value)}></input>
+                </div>
+                <div className="address">
+                    <label>Distancia <span style={{ "color": "#a9a9a9" }}>(km)</span></label>
+                    <div>
+                        <input type="number" defaultValue={distance} onChange={(e) => setDistance(e.target.value)}></input>
+                    </div>
+                </div>
+                <div className="button-container">
+                    <input type="submit" value="Buscar" onClick={(e) => getBusinessesByDistance(e)} />
+                </div>
+            </form>
+
             <div className="search-businessList-container">
                 <BusinessList businessList={businesses} />
             </div>

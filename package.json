@@ -12,6 +12,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@fortawesome/fontawesome-free": "^5.14.0",
     "@stripe/react-stripe-js": "^1.1.2",
     "@stripe/stripe-js": "^1.8.0",
     "@zeit/next-css": "^1.0.1",
@@ -25,6 +26,7 @@
     "draftjs-to-html": "^0.9.1",
     "express": "^4.17.1",
     "firebase-admin": "^8.12.1",
+    "font-awesome": "^4.7.0",
     "google-maps-react": "^2.0.6",
     "html-to-draftjs": "1.4.0",
     "js-cookie": "^2.2.1",
@@ -50,5 +52,8 @@
     "redux-thunk": "^2.3.0",
     "streamifier": "^0.1.1",
     "stripe": "^8.77.0"
+  },
+  "devDependencies": {
+    "file-loader": "^6.0.0"
   }
 }

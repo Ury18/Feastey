@@ -106,7 +106,7 @@ const Detail = ((props) => {
         return attachmentFiles.map(file => {
             return <li className="file_Container">
                 <a href={file.url} target="_blank">
-                    <i class="fa fa-file"></i>
+                    <i class="fas fa-file"></i>
                     <h3>{file.name}</h3>
                 </a>
             </li>
@@ -135,23 +135,24 @@ const Detail = ((props) => {
                 }
                 <div className="title-container mobile">
                     <h2 className="title">{business.name}</h2>
-                    <a className="location-icon" href="#map"><i class="fa fa-map-marker" aria-hidden="true" /></a>
+                    <a className="location-icon" href="#map"><i class="fas fa-map-marker-alt" aria-hidden="true" /></a>
                 </div>
                 <p className="address mobile">{business.address}</p>
                 <div className="coverImage">
                     <img src={profileImage.url} alt={profileImage.name} />
                 </div>
                 {business.info && <div className="contactInfo_Container">
-                    {business.info.phone && <p><i class="fa fa-phone" aria-hidden="true" /><a href={`tel:+${business.info.phone}`}>{business.info.phone}</a></p>}
-                    {business.info.email && <p><i class="fa fa-envelope"></i>{business.info.email}</p>}
-                    {business.info.twitter && <p><i class="fa fa-twitter"></i><a target="_blank" href={`https://www.twitter.com/${business.info.twitter}`}>{business.info.instagram}</a></p>}
-                    {business.info.instagram && <p><i class="fa fa-instagram"></i><a target="_blank" href={`https://www.instagram.com/${business.info.instagram}`}>{business.info.instagram}</a></p>}
+                    {business.info.phone && <p><i class="fas fa-phone-alt" aria-hidden="true" /><a href={`tel:+${business.info.phone}`}>{business.info.phone}</a></p>}
+                    {business.info.email && <p><i class="fas fa-envelope"></i>{business.info.email}</p>}
+                    {business.info.twitter && <p><i class="fab fa-twitter"></i><a target="_blank" href={`https://www.twitter.com/${business.info.twitter}`}>{business.info.instagram}</a></p>}
+                    {business.info.instagram && <p><i class="fab fa-instagram-square"></i><a target="_blank" href={`https://www.instagram.com/${business.info.instagram}`}>{business.info.instagram}</a></p>}
+                    {business.info.facebook && <p><i class="fab fa-facebook"></i><a target="_blank" href={`https://www.facebook.com/${business.info.facebook}`}>{business.info.facebook}</a></p>}
                 </div>}
             </div>
             <div className="col2">
                 <div className="titleAndFavSection_Container">
                     <h2 className="title">{business.name}</h2>
-                    <a className="location-icon" href="#map"><i class="fa fa-map-marker" aria-hidden="true" /></a>
+                    <a className="location-icon" href="#map"><i class="fas fa-map-marker-alt" aria-hidden="true" /></a>
                     <div className="titleIcons">
                         {/* <p>200</p>
                         <img className="BusinessDetailLikeIcon" src={'/img/feastey_likeIcon.png'} /> */}

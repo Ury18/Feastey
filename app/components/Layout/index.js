@@ -5,7 +5,7 @@ import { connect } from 'react-redux'
 import Cookie from "js-cookie"
 import Footer from '../Footer'
 import Head from 'next/head'
-
+import '@fortawesome/fontawesome-free/css/all.css'
 
 const Layout = ((props) => {
     const { contentClasses } = props
@@ -18,7 +18,6 @@ const Layout = ((props) => {
         <div className="app">
             <Head>
                 <link rel="shortcut icon" href="/favicon/favicon.ico" />
-                <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"></link>
                 {/* <script data-ad-client="ca-pub-1746929838201665" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script> */}
             </Head>
             <Header />
