@@ -6,6 +6,9 @@ import AttachmentsSection from '../../../app/components/AttachmentsSection'
 import FileUploader from '../../../app/components/FileUploader'
 import GoogleMap from '../../../app/components/GoogleMap'
 import { updateUserData } from '../../../app/redux/user/action'
+import Head from 'next/head'
+import { parseCookies } from '../../../app/middleware/parseCookies'
+
 //Rich Text
 import dynamic from 'next/dynamic'
 const Editor = dynamic(() => import('react-draft-wysiwyg').then(mod => mod.Editor), { ssr: false })
@@ -13,14 +16,14 @@ import '../../../node_modules/react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 import draftToHtml from 'draftjs-to-html';
 import { convertToRaw, EditorState, ContentState } from 'draft-js'
 import htmlToDraft from 'html-to-draftjs';
-import { parseCookies } from '../../../app/middleware/parseCookies'
 
+//Stripe
 import PaymentInfoForm from '../../../app/components/PaymentInfoForm'
 import { loadStripe } from '@stripe/stripe-js';
 import { Elements } from '@stripe/react-stripe-js';
 const stripePromise = loadStripe(process.env.STRIPE_PUBLIC_KEY);
 
-import Head from 'next/head'
+import '../../../stylesheets/editBusinessPage.scss'
 
 class EditBusiness extends Component {
 
@@ -42,17 +45,17 @@ class EditBusiness extends Component {
         category: "",
         descriptionEditorState: {},
         priceId: "",
+        oldPriceId: "",
         paymentMethodId: "",
         last4: "",
         instagram: "",
         twitter: "",
         phone: "",
         email: "",
+        busy: false
     }
 
     componentDidMount = () => {
-
-
         const { business, user } = this.props
 
         if (user.id !== business.owner) {
@@ -63,6 +66,7 @@ class EditBusiness extends Component {
             this.setState({ location, finalAddress: business.address })
             this.setState({
                 priceId: business.stripe.priceId,
+                oldPriceId: business.stripe.priceId,
                 paymentMethodId: business.stripe.paymentMethodId,
                 last4: business.stripe.last4,
                 stripe: {}
@@ -102,7 +106,7 @@ class EditBusiness extends Component {
         const { user } = this.props
         const { token } = user
 
-        this.setState({ errors: "" })
+        this.setState({ errors: "", busy: true })
 
         let imageList = []
 
@@ -166,7 +170,7 @@ class EditBusiness extends Component {
             .then(res => res.json())
             .then(res => {
                 if (res.error) {
-                    this.setState({ errors: res.error })
+                    this.setState({ errors: res.error, busy: false })
                 } else {
                     this.setState({ errors: "" })
                     window.removeEventListener("beforeunload", this.onWindowClose)
@@ -356,6 +360,29 @@ class EditBusiness extends Component {
         this.setState({ descriptionEditorState: descriptionToDraft })
     }
 
+    renderPlanWarning = () => {
+        const {oldPriceId, priceId} = this.state
+
+        //Premium
+        if (oldPriceId =="price_1H7jWPHesZkxfUDSN4V0r8b0") {
+            if(oldPriceId !== priceId) {
+                return <p className="price-change-warning"><span>¡Cuidado!</span> <br/>Cambiar a un plan inferior eliminará automaticamente
+                los archivos e imagenes que excedan el limite del plan selecionado.<br/>
+                <span>Recomendamos tener copias de seguridad antes de cambiar de plan.</span>
+                </p>
+            }
+        }
+
+        //Plus
+        if (oldPriceId == "price_1H7jXCHesZkxfUDSo4o2xLrL") {
+            if (oldPriceId !== priceId && priceId !== "price_1H7jWPHesZkxfUDSN4V0r8b0")
+                return <p className="price-change-warning"><span>¡Cuidado!</span> <br />Cambiar a un plan inferior eliminará automaticamente
+                los archivos e imagenes que excedan el limite del plan selecionado.<br />
+                <span>Recomendamos tener copias de seguridad antes de cambiar de plan.</span>
+                </p>
+        }
+    }
+
     toolbar = {
         options: ['inline', 'blockType', 'fontSize', 'list', 'textAlign', 'colorPicker', 'link', 'embedded', 'emoji', 'image', 'remove', 'history'],
     }
@@ -366,14 +393,15 @@ class EditBusiness extends Component {
         const {
             name, description, location, address, errors, finalAddress,
             category, summary, descriptionEditorState, priceId, isPublished,
-            last4, mainImage, twitter, instagram, email, phone
+            last4, mainImage, twitter, instagram, email, phone, busy
         } = this.state
 
         const {
             setInputValue, editBusiness, renderAttachmentsSection,
             renderImagesUploader, onAcceptAddress,
             renderCategoriesOptions, onDescriptionChange, toolbar,
-            renderMainImageUploader, renderMainImageUploaderEmpty
+            renderMainImageUploader, renderMainImageUploaderEmpty,
+            renderPlanWarning
         } = this
 
         return (
@@ -388,60 +416,58 @@ class EditBusiness extends Component {
                     <meta name="og:description" property="og:description" content={`Pagina de edición de ${business.name} - Feastey`} />
                     <meta property="og:site_name" content="ury.feastey.com" />
                 </Head>
-                <form onSubmit={(e) => editBusiness(e)} style={{ maxWidth: "40% !important" }}>
-                    <h1 style={{ textAlign: "center" }}>Editando <br/>{business.name}</h1>
+                {busy && <div className="busy"/>}
+                <form onSubmit={(e) => editBusiness(e)} style={{ maxWidth: "55em !important" }}>
+                    <h1 style={{ textAlign: "center" }}>{`Editando ${business.name}`}</h1>
 
-                    <div style={{ display: "flex", flexDirection: "row", justifyContent: "space-between", alignItems: "center", marginBottom: "1.4em", width: "70%" }}>
+                    {/* <div style={{ display: "flex", flexDirection: "row", justifyContent: "space-between", alignItems: "center", marginBottom: "1.4em", width: "50%" }}>
                         <label>Publicado</label>
                         <input onChange={(e) => setInputValue(e.target.name, e.target.checked)} type="checkbox" checked={isPublished} name="isPublished" />
-                    </div>
-                    <div style={{ display: "flex", flexDirection: "row", justifyContent: "space-between", alignItems: "center", marginBottom: "1.4em", width: "70%" }}>
+                    </div> */}
+                    <div style={{ display: "flex", flexDirection: "row", justifyContent: "space-between", alignItems: "center", marginBottom: "1.4em", width: "50%" }}>
                         <label>Nombre</label>
                         <input onChange={(e) => setInputValue(e.target.name, e.target.value)} type="text" defaultValue={name} name="name" />
                     </div>
-                    <div style={{ display: "flex", flexDirection: "row", justifyContent: "space-between", alignItems: "center", marginBottom: "1.4em", width: "70%" }}>
+                    <div style={{ display: "flex", flexDirection: "row", justifyContent: "space-between", alignItems: "center", marginBottom: "1.4em", width: "50%" }}>
                         <label>Email</label>
                         <input onChange={(e) => setInputValue(e.target.name, e.target.value)} name="email" defaultValue={email} type="email" />
                     </div>
-                    <div style={{ display: "flex", flexDirection: "row", justifyContent: "space-between", alignItems: "center", marginBottom: "1.4em", width: "70%" }}>
+                    <div style={{ display: "flex", flexDirection: "row", justifyContent: "space-between", alignItems: "center", marginBottom: "1.4em", width: "50%" }}>
                         <label>Telefono</label>
                         <input onChange={(e) => setInputValue(e.target.name, e.target.value)} name="phone" defaultValue={phone} type="tel" />
                     </div>
-                    <div style={{ display: "flex", flexDirection: "row", justifyContent: "space-between", alignItems: "center", marginBottom: "1.4em", width: "70%" }}>
+                    <div style={{ display: "flex", flexDirection: "row", justifyContent: "space-between", alignItems: "center", marginBottom: "1.4em", width: "50%" }}>
                         <label>Twitter</label>
                         <input onChange={(e) => setInputValue(e.target.name, e.target.value)} name="twitter" defaultValue={twitter} type="text" />
                     </div>
-                    <div style={{ display: "flex", flexDirection: "row", justifyContent: "space-between", alignItems: "center", marginBottom: "1.4em", width: "70%" }}>
+                    <div style={{ display: "flex", flexDirection: "row", justifyContent: "space-between", alignItems: "center", marginBottom: "1.4em", width: "50%" }}>
                         <label>Instagram</label>
                         <input onChange={(e) => setInputValue(e.target.name, e.target.value)} name="instagram" defaultValue={instagram} type="text" />
                     </div>
-                    <div style={{ display: "flex", flexDirection: "row", justifyContent: "space-between", alignItems: "center", marginBottom: "1.4em", width: "70%"}}>
+                    <div style={{ display: "flex", flexDirection: "row", justifyContent: "space-between", alignItems: "center", marginBottom: "1.4em", width: "50%" }}>
                         <label>Resumen</label>
                         <input onChange={(e) => setInputValue(e.target.name, e.target.value)} type="text" defaultValue={summary} name="summary" />
                     </div>
-                    <div style={{ display: "flex", flexDirection: "row", justifyContent: "space-between", alignItems: "center", marginBottom: "1.4em", width: "70%"}}>
+                    <div style={{ display: "flex", flexDirection: "row", justifyContent: "space-between", alignItems: "center", marginBottom: "1.4em", width: "50%" }}>
                         <label>Categoría</label>
                         <select name="category" defaultValue={category.id} onChange={(e) => setInputValue(e.target.name, e.target.value)}>
                             <option value={""}>Ninguna</option>
                             {renderCategoriesOptions()}
                         </select>
                     </div>
-                    <div style={{ display: "flex", flexDirection: "row", justifyContent: "space-between", alignItems: "center", marginBottom: "1.4em", width: "70%" }}>
+                    <div className="address-container" style={{ display: "flex", flexDirection: "row", justifyContent: "space-between", alignItems: "center", marginBottom: "1.4em", width: "50%" }}>
                         <label>Dirección</label>
                         <div>
                             <input onChange={(e) => setInputValue(e.target.name, e.target.value)} defaultValue={address} name="address" type="text" required />
-                            {address && address !== finalAddress && <button onClick={(e) => onAcceptAddress(e)}>Aceptar</button>}
+                            {address && address !== finalAddress && <i className="fas fa-check" onClick={(e) => onAcceptAddress(e)} />}
                         </div>
                     </div>
                     {location && location.length > 0 && <div className="map-container">
                         <GoogleMap class="map" lng={location[0]} lat={location[1]} />
                     </div>}
-
-
-                    <div style={{ display: "flex", flexDirection: "column" }}>
-                        <label>Descripción</label>
+                    <div style={{ display: "flex", flexDirection: "column", marginBottom: "1em" }}>
+                        <label >Descripción</label>
                         <div className="richtext">
-                            {/* <Editor/> */}
                             {descriptionEditorState && <Editor toolbar={toolbar} defaultEditorState={descriptionEditorState} onEditorStateChange={onDescriptionChange} />}
                         </div>
                     </div>
@@ -455,16 +481,31 @@ class EditBusiness extends Component {
                         {renderImagesUploader()}
                     </div>
                     <div style={{ display: "flex", flexDirection: "column" }}>
-                        <h2>Attachments</h2>
+                        <h2 style={{ marginBottom: "1em", marginTop: "2em" }}>Secciones de archivos</h2>
                         {renderAttachmentsSection()}
                     </div>
-
-                    <div className={`price ${priceId == "price_1H7jXCHesZkxfUDSo4o2xLrL" ? " selected" : ""}`} onClick={(e) => setInputValue("priceId", "price_1H7jXCHesZkxfUDSo4o2xLrL")}>
-                        ANUAL
+                    <h2 style={{marginBottom: ".5em"}}>Tu plan</h2>
+                    <div className="priceList">
+                        <div className={`price ${priceId == "free" ? " selected" : ""}`} onClick={(e) => setInputValue("priceId", "free")}>
+                            <h3>Free</h3>
+                                <p>20 Imagenes</p>
+                                <p>4 Archivos</p>
+                            <h4>Gratis</h4>
+                        </div>
+                        <div className={`price ${priceId == "price_1H7jXCHesZkxfUDSo4o2xLrL" ? " selected" : ""}`} onClick={(e) => setInputValue("priceId", "price_1H7jXCHesZkxfUDSo4o2xLrL")}>
+                            <h3>Plus</h3>
+                                <p>30 Imagenes</p>
+                                <p>8 Archivos</p>
+                            <h4>4.99€ / mes</h4>
+                        </div>
+                        <div className={`price ${priceId == "price_1H7jWPHesZkxfUDSN4V0r8b0" ? " selected" : ""}`} onClick={(e) => setInputValue("priceId", "price_1H7jWPHesZkxfUDSN4V0r8b0")}>
+                            <h3>Premium</h3>
+                            <p>Imagenes Ilimitadas</p>
+                            <p>Archivos Ilimitados</p>
+                            <h4>14.99€ / mes</h4>
+                        </div>
                     </div>
-                    <div className={`price ${priceId == "price_1H7jWPHesZkxfUDSN4V0r8b0" ? " selected" : ""}`} onClick={(e) => setInputValue("priceId", "price_1H7jWPHesZkxfUDSN4V0r8b0")}>
-                        MONTHLY
-                    </div>
+                    {renderPlanWarning()}
                     {last4}
                     <Elements stripe={stripePromise}>
                         <PaymentInfoForm onSubmit={(paymentMethodId) => this.setState({ paymentMethodId })} />

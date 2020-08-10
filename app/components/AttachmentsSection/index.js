@@ -86,8 +86,9 @@ class AttachmentsSection extends Component {
         const { name } = this.state
         const { setInputValue, renderFilesUploader } = this
         return (
-            <div>
-                <input type="text" value={name} name="name" onChange={e => setInputValue(e.target.name, e.target.value)} />
+            <div style={{display: "flex", flexDirection: "column", marginBottom: "2em"}}>
+                <label>Nombre de la sección</label>
+                <input style={{ marginBottom: ".5em"}} type="text" value={name} name="name" onChange={e => setInputValue(e.target.name, e.target.value)} />
                 {renderFilesUploader()}
             </div >
         )

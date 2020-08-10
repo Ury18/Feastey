@@ -1,0 +1,85 @@
+.map-container {
+    width: 100%;
+    margin-bottom: 2em;
+    >div {
+        width: 100%;
+    }
+}
+
+.busy {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: white;
+    opacity: 0.4;
+    z-index: 10;
+}
+
+.price-change-warning {
+    margin: 1em;
+    text-align: center;
+    span {
+        color: red;
+        font-weight: 800;
+    }
+}
+
+.priceList {
+    display: flex;
+
+    .price {
+        padding: 1em;
+        margin: 0 .5em;
+        border: 1px solid gray;
+        cursor: pointer;
+        width: 10em;
+        border-radius: 10px;
+        &.selected {
+            color: white;
+            background-color: rgb(44, 44, 44);
+            border: 3px solid #ff9d00;
+        }
+
+        h3 {
+            margin-bottom: 1em;
+            color: #FFB135;
+        }
+
+        h4 {
+            margin-top: 1em;
+            color: #FFB135;
+        }
+
+    }
+}
+
+.address-container {
+    >div {
+        position: relative;
+    }
+    .fa-check {
+        color: rgb(35, 109, 35);
+        position: absolute;
+        top: 25%;
+        right: -1.5em;
+        cursor: pointer;
+    }
+}
+
+label {
+    font-size: 1.1em;
+    margin-bottom: 1em !important;
+}
+
+input[type="file"] {
+    // border: 0;
+    width: 100%;
+    height: auto;
+}
+
+h1 {
+    font-size: 2em;
+    margin-bottom: 2em;
+}

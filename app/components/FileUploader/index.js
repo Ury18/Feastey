@@ -12,6 +12,7 @@ const FileUploader = ((props) => {
     const [updated, setUpdated] = useState()
     const [url, setUrl] = useState()
     const [type, setType] = useState()
+    const [busy, setBusy] = useState(false)
 
     useEffect(() => {
         if (data) {
@@ -27,6 +28,7 @@ const FileUploader = ((props) => {
 
     function uploadFile(file) {
 
+        setBusy(true)
         let formData = new FormData()
         formData.append('file', file)
         formData.append('name', file.name)
@@ -42,6 +44,7 @@ const FileUploader = ((props) => {
             .then(res => {
                 if (res.error) {
                     console.log(res.error)
+                    setBusy(false)
                 } else {
                     setId(res.id)
                     setName(res.name)
@@ -50,6 +53,7 @@ const FileUploader = ((props) => {
                     setType(res.type.split("/")[0])
                     setTimeout(() => {
                         setUrl(res.url)
+                        setBusy(false)
                         if (uploadCallback) {
                             res.tempName = res.name
                             uploadCallback(res)
@@ -110,14 +114,18 @@ const FileUploader = ((props) => {
     }
 
     return (
-        <div>
+        <div style={{ position: "relative" }}>
+            {busy && <div className="fileUploader-busy" />}
             {!id && <input type="file" accept=".pdf,.png,.jpg,.jpeg" multiple={false} onChange={e => uploadFile(e.target.files[0])} />}
             {
-                id && <div>
-                    <input type="text" value={newName} onChange={e => updateName(e, e.target.value)} />
-                    <button onClick={e => deleteCallback(e, index) }>DELETE</button>
-                    {!updated && <button onClick={e => updateFile(e)}>Guardar</button>}
+                id && <div className="fileUploaderContainer">
                     {url && type == "image" && <img src={url} alt={name} loading="lazy" width="200px" />}
+                    {url && type !== "image" && <i className="fas fa-file" />}
+                    <div>
+                        <input type="text" value={newName} onChange={e => updateName(e, e.target.value)} />
+                        <i className="fas fa-trash" onClick={e => deleteCallback(e, index)}></i>
+                        {!updated && <i className="fas fa-check" onClick={e => updateFile(e)}></i>}
+                    </div>
                 </div>
             }
         </div>

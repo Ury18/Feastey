@@ -6,18 +6,20 @@ import Router from 'next/router'
 import FileUploader from '../../app/components/FileUploader'
 import AttachmentsSection from '../../app/components/AttachmentsSection'
 import GoogleMap from '../../app/components/GoogleMap'
+import Head from 'next/head'
 //Rich Text
 import dynamic from 'next/dynamic'
 const Editor = dynamic(() => import('react-draft-wysiwyg').then(mod => mod.Editor), { ssr: false })
 import '../../node_modules/react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 import draftToHtml from 'draftjs-to-html';
 import { convertToRaw } from 'draft-js'
+//Stripe
+import PaymentInfoForm from '../../app/components/PaymentInfoForm'
 import { loadStripe } from '@stripe/stripe-js';
 import { Elements } from '@stripe/react-stripe-js';
-import PaymentInfoForm from '../../app/components/PaymentInfoForm'
-import Head from 'next/head'
-
 const stripePromise = loadStripe(process.env.STRIPE_PUBLIC_KEY);
+
+import '../../stylesheets/editBusinessPage.scss'
 
 class CreateBusiness extends Component {
 
@@ -39,7 +41,8 @@ class CreateBusiness extends Component {
         email: "",
         phone: "",
         twitter: "",
-        instagram: ""
+        instagram: "",
+        busy: false
     }
 
     componentDidMount() {
@@ -136,7 +139,7 @@ class CreateBusiness extends Component {
         if (mainImage) data.mainImage = mainImage.id
 
 
-        this.setState({ errors: "" })
+        this.setState({ errors: "", busy: true})
 
         data.owner = id;
 
@@ -151,7 +154,7 @@ class CreateBusiness extends Component {
             .then(res => res.json())
             .then(res => {
                 if (res.error) {
-                    this.setState({ errors: res.error })
+                    this.setState({ errors: res.error, busy: false })
                 } else {
                     window.removeEventListener("beforeunload", this.onWindowClose)
 
@@ -321,7 +324,7 @@ class CreateBusiness extends Component {
 
     render() {
         const { user: { token, id } } = this.props
-        const { location, errors, address, finalAddress, priceId, mainImage } = this.state
+        const { location, errors, address, finalAddress, priceId, mainImage, busy } = this.state
         const { renderImagesUploader, setInputValue, createBusiness, renderAttachmentsSection, renderMainImageUploader, renderMainImageUploaderEmpty, onAcceptAddress, renderCategoriesOptions, onDescriptionChange, toolbar } = this
 
         return (
@@ -336,57 +339,58 @@ class CreateBusiness extends Component {
                     <meta name="og:description" property="og:description" content="Publica tu negocio ya en Feastey y aprovecha todas sus ventajas! - Feastey" />
                     <meta property="og:site_name" content="ury.feastey.com" />
                 </Head>
-                <form onSubmit={(e) => createBusiness(e)} style={{ maxWidth: "200px" }}>
-                    <h1 style={{textAlign:"center"}}>Crea tu negocio</h1>
-                    <div style={{ display: "flex", flexDirection: "column" }}>
+                {busy && <div className="busy" />}
+                <form onSubmit={(e) => createBusiness(e)} style={{ maxWidth: "55em !important" }}>
+                    <h1 style={{ textAlign: "center" }}>Crea tu negocio</h1>
+                    <div style={{ display: "flex", flexDirection: "row", justifyContent: "space-between", alignItems: "center", marginBottom: "1.4em", width: "50%" }}>
                         <label>Nombre</label>
                         <input onChange={(e) => setInputValue(e.target.name, e.target.value)} name="name" type="text" required />
                     </div>
-                    <div style={{ display: "flex", flexDirection: "column" }}>
+                    <div style={{ display: "flex", flexDirection: "row", justifyContent: "space-between", alignItems: "center", marginBottom: "1.4em", width: "50%" }}>
                         <label>Email</label>
                         <input onChange={(e) => setInputValue(e.target.name, e.target.value)} name="email" type="email" />
                     </div>
-                    <div style={{ display: "flex", flexDirection: "column" }}>
+                    <div style={{ display: "flex", flexDirection: "row", justifyContent: "space-between", alignItems: "center", marginBottom: "1.4em", width: "50%" }}>
                         <label>Telefono</label>
                         <input onChange={(e) => setInputValue(e.target.name, e.target.value)} name="phone" type="tel" />
                     </div>
-                    <div style={{ display: "flex", flexDirection: "column" }}>
+                    <div style={{ display: "flex", flexDirection: "row", justifyContent: "space-between", alignItems: "center", marginBottom: "1.4em", width: "50%" }}>
                         <label>Twitter</label>
                         <input onChange={(e) => setInputValue(e.target.name, e.target.value)} name="twitter" type="text" />
                     </div>
-                    <div style={{ display: "flex", flexDirection: "column" }}>
+                    <div style={{ display: "flex", flexDirection: "row", justifyContent: "space-between", alignItems: "center", marginBottom: "1.4em", width: "50%" }}>
                         <label>Instagram</label>
                         <input onChange={(e) => setInputValue(e.target.name, e.target.value)} name="instagram" type="text" />
                     </div>
-                    <div style={{ display: "flex", flexDirection: "column" }}>
-                        <label>Dirección</label>
-                        <div>
-                            <input onChange={(e) => setInputValue(e.target.name, e.target.value)} name="address" type="text" required />
-                            {address && address !== finalAddress && <button onClick={(e) => onAcceptAddress(e)}>Aceptar</button>}
-                        </div>
+                    <div style={{ display: "flex", flexDirection: "row", justifyContent: "space-between", alignItems: "center", marginBottom: "1.4em", width: "50%" }}>
+                        <label>Resumen</label>
+                        <input onChange={(e) => setInputValue(e.target.name, e.target.value)} name="summary" type="text" required />
                     </div>
-                    {location && location.length > 0 && <div className="map-container">
-                        <GoogleMap class="map" lng={location[0]} lat={location[1]} />
-                    </div>}
-                    <div>
+                    <div style={{ display: "flex", flexDirection: "row", justifyContent: "space-between", alignItems: "center", marginBottom: "1.4em", width: "50%" }}>
                         <label>Categoría</label>
                         <select name="category" onChange={(e) => setInputValue(e.target.name, e.target.value)}>
                             <option value={""}>Ninguna</option>
                             {renderCategoriesOptions()}
                         </select>
                     </div>
-                    <div style={{ display: "flex", flexDirection: "column" }}>
-                        <label>Resumen</label>
-                        <input onChange={(e) => setInputValue(e.target.name, e.target.value)} name="summary" type="text" required />
+                    <div className="address-container" style={{ display: "flex", flexDirection: "row", justifyContent: "space-between", alignItems: "center", marginBottom: "1.4em", width: "50%" }}>
+                        <label>Dirección</label>
+                        <div>
+                            <input onChange={(e) => setInputValue(e.target.name, e.target.value)} name="address" type="text" required />
+                            {address && address !== finalAddress && <i className="fas fa-check" onClick={(e) => onAcceptAddress(e)}/>}
+                        </div>
                     </div>
-                    <div style={{ display: "flex", flexDirection: "column" }}>
+                    {location && location.length > 0 && <div className="map-container">
+                        <GoogleMap class="map" lng={location[0]} lat={location[1]} />
+                    </div>}
+                    <div style={{ display: "flex", flexDirection: "column", marginBottom: "1em"  }}>
                         <label>Descripción</label>
                         <div className="richtext">
                             <Editor toolbar={toolbar} onEditorStateChange={onDescriptionChange} />
                         </div>
                     </div>
                     <div style={{ display: "flex", flexDirection: "column" }}>
-                        <label>Imagen principal</label>
+                        <label>Imagen de perfil</label>
                         {mainImage && renderMainImageUploader()}
                         {!mainImage && renderMainImageUploaderEmpty()}
                     </div>
@@ -396,15 +400,30 @@ class CreateBusiness extends Component {
                     </div>
 
                     <div style={{ display: "flex", flexDirection: "column" }}>
-                        <h2>Attachments</h2>
+                        <h2 style={{ marginBottom: "1em", marginTop: "2em" }}>Secciones de archivos</h2>
                         {renderAttachmentsSection()}
                     </div>
 
-                    <div className={`price ${priceId == process.env.STRIPE_PRICE_ANUAL ? " selected" : ""}`} onClick={(e) => setInputValue("priceId", process.env.STRIPE_PRICE_ANUAL)}>
-                        ANUAL
-                    </div>
-                    <div className={`price ${priceId == process.env.STRIPE_PRICE_MONTHLY ? " selected" : ""}`} onClick={(e) => setInputValue("priceId", process.env.STRIPE_PRICE_MONTHLY)}>
-                        MONTHLY
+                    <h2 style={{ marginBottom: ".5em" }}>Escoge tu plan</h2>
+                    <div className="priceList">
+                        <div className={`price ${priceId == "free" ? " selected" : ""}`} onClick={(e) => setInputValue("priceId", "free")}>
+                            <h3>Free</h3>
+                            <p>20 Imagenes</p>
+                            <p>4 Archivos</p>
+                            <h4>Gratis</h4>
+                        </div>
+                        <div className={`price ${priceId == "price_1H7jXCHesZkxfUDSo4o2xLrL" ? " selected" : ""}`} onClick={(e) => setInputValue("priceId", "price_1H7jXCHesZkxfUDSo4o2xLrL")}>
+                            <h3>Plus</h3>
+                            <p>30 Imagenes</p>
+                            <p>8 Archivos</p>
+                            <h4>4.99€ / mes</h4>
+                        </div>
+                        <div className={`price ${priceId == "price_1H7jWPHesZkxfUDSN4V0r8b0" ? " selected" : ""}`} onClick={(e) => setInputValue("priceId", "price_1H7jWPHesZkxfUDSN4V0r8b0")}>
+                            <h3>Premium</h3>
+                            <p>Imagenes Ilimitadas</p>
+                            <p>Archivos Ilimitados</p>
+                            <h4>14.99€ / mes</h4>
+                        </div>
                     </div>
 
 
