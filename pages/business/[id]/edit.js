@@ -44,9 +44,9 @@ class EditBusiness extends Component {
         deletedFiles: [],
         category: "",
         descriptionEditorState: {},
-        priceId: "",
-        oldPriceId: "",
-        paymentMethodId: "",
+        subscriptionPlan: "",
+        oldSubscriptionPlan: "",
+        paymentMethodId: null,
         last4: "",
         instagram: "",
         twitter: "",
@@ -63,18 +63,23 @@ class EditBusiness extends Component {
         } else {
             this.setState({ ...business })
             let location = business.location.coordinates
-            this.setState({ location, finalAddress: business.address })
-            this.setState({
-                priceId: business.stripe.priceId,
-                oldPriceId: business.stripe.priceId,
-                paymentMethodId: business.stripe.paymentMethodId,
-                last4: business.stripe.last4,
+            let newState = {
+                location,
+                finalAddress: business.address,
+                oldSubscriptionPlan: business.subscriptionPlan,
                 stripe: {}
-            })
+            }
+
+            if (business.stripe.paymentMethodId) {
+                newState.paymentMethodId = business.stripe.paymentMethodId
+                newState.last4 = business.stripe.last4
+            }
 
             if (business.info) {
                 this.setState({ ...business.info })
             }
+
+            this.setState(newState)
 
 
             this.onDescriptionExists()
@@ -101,7 +106,7 @@ class EditBusiness extends Component {
 
         const { id, name, description, location,
             images, attachments, deletedFiles, finalAddress,
-            category, summary, priceId, paymentMethodId, mainImage,
+            category, summary, subscriptionPlan, paymentMethodId, mainImage,
             twitter, instagram, email, phone } = this.state
         const { user } = this.props
         const { token } = user
@@ -147,7 +152,7 @@ class EditBusiness extends Component {
             attachments: attachmentsClean,
             owner: user.id,
             category: category.id,
-            priceId,
+            subscriptionPlan,
             paymentMethodId,
             info: {
                 email,
@@ -361,24 +366,24 @@ class EditBusiness extends Component {
     }
 
     renderPlanWarning = () => {
-        const {oldPriceId, priceId} = this.state
+        const { oldSubscriptionPlan, subscriptionPlan } = this.state
 
         //Premium
-        if (oldPriceId =="price_1H7jWPHesZkxfUDSN4V0r8b0") {
-            if(oldPriceId !== priceId) {
-                return <p className="price-change-warning"><span>¡Cuidado!</span> <br/>Cambiar a un plan inferior eliminará automaticamente
-                los archivos e imagenes que excedan el limite del plan selecionado.<br/>
-                <span>Recomendamos tener copias de seguridad antes de cambiar de plan.</span>
+        if (oldSubscriptionPlan == "premium") {
+            if (oldSubscriptionPlan !== subscriptionPlan) {
+                return <p className="price-change-warning"><span>¡Cuidado!</span> <br />Cambiar a un plan inferior eliminará automaticamente
+                los archivos e imagenes que excedan el limite del plan selecionado.<br />
+                    <span>Recomendamos tener copias de seguridad antes de cambiar de plan.</span>
                 </p>
             }
         }
 
         //Plus
-        if (oldPriceId == "price_1H7jXCHesZkxfUDSo4o2xLrL") {
-            if (oldPriceId !== priceId && priceId !== "price_1H7jWPHesZkxfUDSN4V0r8b0")
+        if (oldSubscriptionPlan == "plus") {
+            if (oldSubscriptionPlan !== subscriptionPlan && subscriptionPlan !== "premium")
                 return <p className="price-change-warning"><span>¡Cuidado!</span> <br />Cambiar a un plan inferior eliminará automaticamente
                 los archivos e imagenes que excedan el limite del plan selecionado.<br />
-                <span>Recomendamos tener copias de seguridad antes de cambiar de plan.</span>
+                    <span>Recomendamos tener copias de seguridad antes de cambiar de plan.</span>
                 </p>
         }
     }
@@ -391,8 +396,8 @@ class EditBusiness extends Component {
         const { business } = this.props
 
         const {
-            name, description, location, address, errors, finalAddress,
-            category, summary, descriptionEditorState, priceId, isPublished,
+            name, location, address, errors, finalAddress,
+            category, summary, descriptionEditorState, subscriptionPlan, isPublished,
             last4, mainImage, twitter, instagram, email, phone, busy
         } = this.state
 
@@ -416,7 +421,7 @@ class EditBusiness extends Component {
                     <meta name="og:description" property="og:description" content={`Pagina de edición de ${business.name} - Feastey`} />
                     <meta property="og:site_name" content="ury.feastey.com" />
                 </Head>
-                {busy && <div className="busy"/>}
+                {busy && <div className="busy" />}
                 <form onSubmit={(e) => editBusiness(e)} style={{ maxWidth: "55em !important" }}>
                     <h1 style={{ textAlign: "center" }}>{`Editando ${business.name}`}</h1>
 
@@ -446,7 +451,7 @@ class EditBusiness extends Component {
                     </div>
                     <div style={{ display: "flex", flexDirection: "row", justifyContent: "space-between", alignItems: "center", marginBottom: "1.4em", width: "50%" }}>
                         <label>Resumen</label>
-                        <input onChange={(e) => setInputValue(e.target.name, e.target.value)} type="text" defaultValue={summary} name="summary" />
+                        <textarea onChange={(e) => setInputValue(e.target.name, e.target.value)} type="text" defaultValue={summary} name="summary" />
                     </div>
                     <div style={{ display: "flex", flexDirection: "row", justifyContent: "space-between", alignItems: "center", marginBottom: "1.4em", width: "50%" }}>
                         <label>Categoría</label>
@@ -465,18 +470,18 @@ class EditBusiness extends Component {
                     {location && location.length > 0 && <div className="map-container">
                         <GoogleMap class="map" lng={location[0]} lat={location[1]} />
                     </div>}
-                    <div style={{ display: "flex", flexDirection: "column", marginBottom: "1em" }}>
+                    <div style={{ display: "flex", flexDirection: "column", marginBottom: "2.4em" }}>
                         <label >Descripción</label>
                         <div className="richtext">
                             {descriptionEditorState && <Editor toolbar={toolbar} defaultEditorState={descriptionEditorState} onEditorStateChange={onDescriptionChange} />}
                         </div>
                     </div>
-                    <div style={{ display: "flex", flexDirection: "column" }}>
+                    <div style={{ display: "flex", flexDirection: "column", marginBottom: "2.4em" }}>
                         <label>Imagen de perfil</label>
                         {mainImage && renderMainImageUploader()}
                         {!mainImage && renderMainImageUploaderEmpty()}
                     </div>
-                    <div style={{ display: "flex", flexDirection: "column" }}>
+                    <div style={{ display: "flex", flexDirection: "column", marginBottom: "2.4em" }}>
                         <label>Imagenes</label>
                         {renderImagesUploader()}
                     </div>
@@ -484,21 +489,21 @@ class EditBusiness extends Component {
                         <h2 style={{ marginBottom: "1em", marginTop: "2em" }}>Secciones de archivos</h2>
                         {renderAttachmentsSection()}
                     </div>
-                    <h2 style={{marginBottom: ".5em"}}>Tu plan</h2>
+                    <h2 style={{ marginBottom: ".5em" }}>Tu plan</h2>
                     <div className="priceList">
-                        <div className={`price ${priceId == "free" ? " selected" : ""}`} onClick={(e) => setInputValue("priceId", "free")}>
+                        <div className={`price ${subscriptionPlan == "free" ? " selected" : ""}`} onClick={(e) => setInputValue("subscriptionPlan", "free")}>
                             <h3>Free</h3>
-                                <p>20 Imagenes</p>
-                                <p>4 Archivos</p>
+                            <p>20 Imagenes</p>
+                            <p>4 Archivos</p>
                             <h4>Gratis</h4>
                         </div>
-                        <div className={`price ${priceId == "price_1H7jXCHesZkxfUDSo4o2xLrL" ? " selected" : ""}`} onClick={(e) => setInputValue("priceId", "price_1H7jXCHesZkxfUDSo4o2xLrL")}>
+                        <div className={`price ${subscriptionPlan == "plus" ? " selected" : ""}`} onClick={(e) => setInputValue("subscriptionPlan", "plus")}>
                             <h3>Plus</h3>
-                                <p>30 Imagenes</p>
-                                <p>8 Archivos</p>
+                            <p>30 Imagenes</p>
+                            <p>8 Archivos</p>
                             <h4>4.99€ / mes</h4>
                         </div>
-                        <div className={`price ${priceId == "price_1H7jWPHesZkxfUDSN4V0r8b0" ? " selected" : ""}`} onClick={(e) => setInputValue("priceId", "price_1H7jWPHesZkxfUDSN4V0r8b0")}>
+                        <div className={`price ${subscriptionPlan == "premium" ? " selected" : ""}`} onClick={(e) => setInputValue("subscriptionPlan", "premium")}>
                             <h3>Premium</h3>
                             <p>Imagenes Ilimitadas</p>
                             <p>Archivos Ilimitados</p>
@@ -529,7 +534,7 @@ EditBusiness.getInitialProps = async (ctx) => {
                 authorization: `Bearer ${cookie.authToken}`
             }
         })
-    const business = await res.json()
+    let business = await res.json()
     let categories = await fetch(`${process.env.FEASTEY_API_URL}/categories`)
     categories = await categories.json()
     return { business, categories }

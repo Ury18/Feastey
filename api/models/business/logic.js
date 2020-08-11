@@ -137,7 +137,7 @@ logic = {
                     } else {
                         delete business.mainImage
                     }
-                    if(business.images.length > 0) {
+                    if (business.images.length > 0) {
                         business.images.forEach(element => {
                             element.id = element._id
                             delete element._id
@@ -159,13 +159,13 @@ logic = {
             business.id = business._id
             delete business._id
 
-            if(business.mainImage) {
+            if (business.mainImage) {
                 business.mainImage.id = business.mainImage._id
                 delete business.mainImage._id
                 delete business.mainImage.__v
             }
 
-            if(business.images.length > 0) {
+            if (business.images.length > 0) {
                 business.images.forEach(element => {
                     element.id = element._id
                     delete element._id
@@ -188,9 +188,8 @@ logic = {
             throw Error("Owner is needed")
         }
 
-        if (creatorRole !== "admin") {
+        if (creatorRole !== "admin" && data.subscriptionPlan !== "free") {
             if (!data.paymentMethodId) throw Error("Please introduce a valid payment method")
-            if (!data.priceId) throw Error("Please select a price")
         }
 
         const create = () => {
@@ -204,26 +203,30 @@ logic = {
                                     business.qr_codes.push(file.id)
                                     let stripeCustomer = await stripeHelper.createSubscriber(data.ownerEmail)
                                     business.stripe.customerId = stripeCustomer.id
-                                    let stripeSubscription = await stripeHelper.createSubscription(stripeCustomer.id, data.paymentMethodId, data.priceId)
+                                    let priceId = business.subscriptionPlan == "free" ? process.env.STRIPE_PRICE_FREE : business.subscriptionPlan == "plus" ? process.env.STRIPE_PRICE_PLUS : process.env.STRIPE_PRICE_PREMIUM
+                                    let stripeSubscription = await stripeHelper.createSubscription(stripeCustomer.id, data.paymentMethodId || null, priceId)
+
                                     if (stripeSubscription.error) {
                                         stripeHelper.deleteSubscriber(stripeCustomer.id)
                                         throw Error(stripeSubscription.error)
                                     }
-                                    if (stripeSubscription.latest_invoice.payment_intent.status !== 'succeeded') {
+                                    if (stripeSubscription.latest_invoice.status !== 'paid') {
                                         stripeHelper.deleteSubscriber(stripeCustomer.id)
                                         throw Error("No se ha podido completar el pago, porfavor, introduce otro metodo de pago.")
                                     }
 
-
-                                    let paymentInfo = await stripeHelper.retrivePaymentInfo(data.paymentMethodId)
-
                                     business.stripe.lastPayment = "success"
-                                    business.stripe.last4 = paymentInfo.card.last4
                                     business.stripe.subscriptionId = stripeSubscription.id
-                                    business.stripe.priceId = data.priceId
+                                    business.stripe.priceId = priceId
                                     business.stripe.productId = stripeSubscription.plan.product
-                                    business.stripe.paymentMethodId = data.paymentMethodId
                                     business.isEnabled = true
+
+                                    if (data.paymentMethodId) {
+                                        let paymentInfo = await stripeHelper.retrivePaymentInfo(data.paymentMethodId)
+                                        business.stripe.last4 = paymentInfo.card.last4
+                                        business.stripe.paymentMethodId = data.paymentMethodId
+                                    }
+
                                     return business.save()
                                         .then(() => {
                                             return Business.findById(business._id).select('-__v').lean()
@@ -293,9 +296,11 @@ logic = {
 
     editBusiness(editorId, editorRole, businessId, data) {
         const edit = async (business) => {
-            let { paymentMethodId, priceId } = data
-            if (data.priceId) delete data.priceId
+            let { paymentMethodId, subscriptionPlan } = data
+            if (data.subscriptionPlan) delete data.subscriptionPlan
             if (data.paymentMethodId) delete data.paymentMethodId
+
+            let priceId = subscriptionPlan == "free" ? process.env.STRIPE_PRICE_FREE : subscriptionPlan == "plus" ? process.env.STRIPE_PRICE_PLUS : process.env.STRIPE_PRICE_PREMIUM
 
             if (business.stripe.paymentMethodId !== paymentMethodId) {
                 let customer = await stripeHelper.changePaymentMethod(business.stripe.customerId, business.stripe.paymentMethodId, paymentMethodId)
@@ -322,12 +327,25 @@ logic = {
                 }
             }
 
+            if (business.subscriptionPlan !== subscriptionPlan) {
+                if (subscriptionPlan == "free") {
+                    business.planDowngrade = true
+                } else if (subscriptionPlan == "plus") {
+                    if (business.subscriptionPlan == "premium") {
+                        business.planDowngrade = true
+                    }
+                }
+            }
+
             if (business.stripe.priceId !== priceId) {
                 let stripePlan = await stripeHelper.changeSubscriptionPrice(business.stripe.subscriptionId, priceId)
                 if (stripePlan.plan.id == priceId) {
                     business.stripe.priceId = priceId
+                    business.subscriptionPlan = subscriptionPlan
                 }
             }
+
+
 
             var keys = Object.keys(data)
 
@@ -366,13 +384,14 @@ logic = {
             return Business.findOne({ "stripe.subscriptionId": data.data.object.subscription }).populate("owner")
                 .then(business => {
                     if (business) {
-                        if (!business.isEnabled) return "Nothing to do"
-                        business.isEnabled = false
                         business.stripe.lastPayment = "failed"
                         PaymentFailed.send({ to: user.email, business })
+                        if (data.status == "uncollectible") {
+                            //Delete excessing files and images
+                        }
                         return business.save()
                             .then(business => {
-                                return "Business disabled"
+                                return "Tasks completed"
                             })
                     } else {
                         throw Error("Business not found")
@@ -386,13 +405,15 @@ logic = {
             return Business.findOne({ "stripe.subscriptionId": data.data.object.subscription }).populate("owner")
                 .then(business => {
                     if (business) {
-                        if (business.isEnabled) return "Nothing to do"
-                        business.isEnabled = true
+                        if (business.planDowngrade) {
+                            //Delete excessing files and images
+                            business.planDowngrade = false
+                        }
                         business.stripe.lastPayment = "success"
-                        PaymentSucceeded.send({ to: user.email, business})
+                        PaymentSucceeded.send({ to: user.email, business })
                         return business.save()
                             .then(business => {
-                                return "Business enabled"
+                                return "Tasks completed"
                             })
                     } else {
                         throw Error("Business not found")

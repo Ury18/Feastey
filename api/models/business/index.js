@@ -73,7 +73,7 @@ const Business = new Schema({
 
     mainImage: {
         type: ObjectId,
-        ref:"File"
+        ref: "File"
     },
 
     images: [{
@@ -104,6 +104,13 @@ const Business = new Schema({
         required: true
     },
 
+    subscriptionPlan: {
+        type: String,
+        enum: ['free','plus','premium'],
+        default: "free",
+        required: true
+    },
+
     stripe: {
         customerId: {
             type: String
@@ -122,7 +129,8 @@ const Business = new Schema({
         },
 
         paymentMethodId: {
-            type: String
+            type: String,
+            default: null
         },
 
         last4: {

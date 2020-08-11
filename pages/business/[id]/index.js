@@ -29,8 +29,10 @@ const Business = (props) => {
 
 Business.getInitialProps = async (ctx) => {
     const res = await fetch(`${process.env.FEASTEY_API_URL}/business/${ctx.query.id}`)
-    const business = await res.json()
+    let business = await res.json()
     business.images = business.images.reverse()
+    if(business.stripe) delete business.stripe
+
     return { business }
 }
 

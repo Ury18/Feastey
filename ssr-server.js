@@ -26,6 +26,8 @@ const httpsOptions = {
 const httpsServer = express()
 const httpServer = express()
 
+const feasteyBoilerplate = require('./api/scripts/feastey-boilerplate')
+
 if (dev) {
     // process.env["NODE_TLS_REJECT_UNAUTHORIZED"] = 0;
 }
@@ -38,7 +40,7 @@ mongoose.connect(db_url, {
     .then(() => {
         nextApp.prepare()
             .then(() => {
-
+                feasteyBoilerplate()
                 httpServer.all("*", function (req, res) {
                     if (dev) {
                         res.redirect("https://" + req.hostname + ":" + httpsPort + req.path);

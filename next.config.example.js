@@ -10,7 +10,5 @@ module.exports = withCss(withSass(withImages({
         GOOGLE_MAPS_GEOCODE_URL: "https://maps.googleapis.com/maps/api/geocode/json?",
         FEASTEY_API_URL: "https://example.feastey.com/api",
         STRIPE_PUBLIC_KEY: "pk_...",
-        STRIPE_PRICE_MONTHLY: "price_...",
-        STRIPE_PRICE_ANUAL: "price_..."
     }
 })))

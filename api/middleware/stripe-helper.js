@@ -20,23 +20,25 @@ const stripeHelper = {
     },
 
     async createSubscription(customerId, paymentMethodId, priceId) {
-        try {
-            await stripe.paymentMethods.attach(paymentMethodId, {
-                customer: customerId,
-            });
-        } catch ({ message}) {
-            return({error:message})
-        }
-
-        // Change the default invoice settings on the customer to the new payment method
-        await stripe.customers.update(
-            customerId,
-            {
-                invoice_settings: {
-                    default_payment_method: paymentMethodId,
-                },
+        if (paymentMethodId) {
+            try {
+                await stripe.paymentMethods.attach(paymentMethodId, {
+                    customer: customerId,
+                });
+            } catch ({ message }) {
+                return ({ error: message })
             }
-        );
+
+            // Change the default invoice settings on the customer to the new payment method
+            await stripe.customers.update(
+                customerId,
+                {
+                    invoice_settings: {
+                        default_payment_method: paymentMethodId,
+                    },
+                }
+            );
+        }
 
         // Create the subscription
         let subscription = await stripe.subscriptions.create({
@@ -49,7 +51,6 @@ const stripeHelper = {
     },
 
     async changeSubscriptionPrice(subscriptionId, priceId) {
-        console.log(subscriptionId, priceId)
         const subscription = await stripe.subscriptions.retrieve(
             subscriptionId
         )
@@ -57,7 +58,7 @@ const stripeHelper = {
             subscriptionId,
             {
                 cancel_at_period_end: false,
-                items:[
+                items: [
                     {
                         id: subscription.items.data[0].id,
                         price: priceId
@@ -75,7 +76,7 @@ const stripeHelper = {
         //Add new payment method to customer
         const newPayment = await stripe.paymentMethods.attach(
             newPaymentMethodId,
-            {customer: customerId}
+            { customer: customerId }
         )
         //Sets new payment method as default
         const customer = await stripe.customers.update(customerId, {
@@ -85,7 +86,9 @@ const stripeHelper = {
         })
 
         //Remove old payment method
-        const removedOldPayment = await stripe.paymentMethods.detach(paymentMethodId)
+        if(paymentMethodId) {
+            const removedOldPayment = await stripe.paymentMethods.detach(paymentMethodId)
+        }
 
         return customer
 

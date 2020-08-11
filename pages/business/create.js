@@ -36,12 +36,12 @@ class CreateBusiness extends Component {
         attachments: [],
         deletedFiles: [],
         category: "",
-        priceId: "",
-        paymentMethodId: "",
+        paymentMethodId: null,
         email: "",
         phone: "",
         twitter: "",
         instagram: "",
+        subscriptionPlan: "",
         busy: false
     }
 
@@ -84,7 +84,7 @@ class CreateBusiness extends Component {
 
         const { name, description, location, images, attachments,
             deletedFiles, finalAddress, category, summary,
-            priceId, paymentMethodId, mainImage, email, phone, twitter, instagram } = this.state
+            paymentMethodId, mainImage, email, phone, twitter, instagram, subscriptionPlan } = this.state
 
         const { id, token } = this.props.user
         let imageList = []
@@ -126,8 +126,8 @@ class CreateBusiness extends Component {
             attachments: attachmentsClean,
             category,
             ownerEmail: this.props.user.email,
-            priceId,
             paymentMethodId,
+            subscriptionPlan,
             info: {
                 email,
                 phone,
@@ -139,7 +139,7 @@ class CreateBusiness extends Component {
         if (mainImage) data.mainImage = mainImage.id
 
 
-        this.setState({ errors: "", busy: true})
+        this.setState({ errors: "", busy: true })
 
         data.owner = id;
 
@@ -324,7 +324,7 @@ class CreateBusiness extends Component {
 
     render() {
         const { user: { token, id } } = this.props
-        const { location, errors, address, finalAddress, priceId, mainImage, busy } = this.state
+        const { location, errors, address, finalAddress, priceId, mainImage, busy, subscriptionPlan } = this.state
         const { renderImagesUploader, setInputValue, createBusiness, renderAttachmentsSection, renderMainImageUploader, renderMainImageUploaderEmpty, onAcceptAddress, renderCategoriesOptions, onDescriptionChange, toolbar } = this
 
         return (
@@ -364,7 +364,7 @@ class CreateBusiness extends Component {
                     </div>
                     <div style={{ display: "flex", flexDirection: "row", justifyContent: "space-between", alignItems: "center", marginBottom: "1.4em", width: "50%" }}>
                         <label>Resumen</label>
-                        <input onChange={(e) => setInputValue(e.target.name, e.target.value)} name="summary" type="text" required />
+                        <textarea onChange={(e) => setInputValue(e.target.name, e.target.value)} name="summary" type="text" required />
                     </div>
                     <div style={{ display: "flex", flexDirection: "row", justifyContent: "space-between", alignItems: "center", marginBottom: "1.4em", width: "50%" }}>
                         <label>Categoría</label>
@@ -377,24 +377,24 @@ class CreateBusiness extends Component {
                         <label>Dirección</label>
                         <div>
                             <input onChange={(e) => setInputValue(e.target.name, e.target.value)} name="address" type="text" required />
-                            {address && address !== finalAddress && <i className="fas fa-check" onClick={(e) => onAcceptAddress(e)}/>}
+                            {address && address !== finalAddress && <i className="fas fa-check" onClick={(e) => onAcceptAddress(e)} />}
                         </div>
                     </div>
                     {location && location.length > 0 && <div className="map-container">
                         <GoogleMap class="map" lng={location[0]} lat={location[1]} />
                     </div>}
-                    <div style={{ display: "flex", flexDirection: "column", marginBottom: "1em"  }}>
+                    <div style={{ display: "flex", flexDirection: "column", marginBottom: "2.4em" }}>
                         <label>Descripción</label>
                         <div className="richtext">
                             <Editor toolbar={toolbar} onEditorStateChange={onDescriptionChange} />
                         </div>
                     </div>
-                    <div style={{ display: "flex", flexDirection: "column" }}>
+                    <div style={{ display: "flex", flexDirection: "column", marginBottom: "2.4em" }}>
                         <label>Imagen de perfil</label>
                         {mainImage && renderMainImageUploader()}
                         {!mainImage && renderMainImageUploaderEmpty()}
                     </div>
-                    <div style={{ display: "flex", flexDirection: "column" }}>
+                    <div style={{ display: "flex", flexDirection: "column", marginBottom: "2.4em" }}>
                         <label>Imagenes</label>
                         {renderImagesUploader()}
                     </div>
@@ -406,19 +406,25 @@ class CreateBusiness extends Component {
 
                     <h2 style={{ marginBottom: ".5em" }}>Escoge tu plan</h2>
                     <div className="priceList">
-                        <div className={`price ${priceId == "free" ? " selected" : ""}`} onClick={(e) => setInputValue("priceId", "free")}>
+                        <div className={`price ${subscriptionPlan == "free" ? " selected" : ""}`} onClick={(e) => {
+                            setInputValue("subscriptionPlan", "free")
+                        }}>
                             <h3>Free</h3>
                             <p>20 Imagenes</p>
                             <p>4 Archivos</p>
                             <h4>Gratis</h4>
                         </div>
-                        <div className={`price ${priceId == "price_1H7jXCHesZkxfUDSo4o2xLrL" ? " selected" : ""}`} onClick={(e) => setInputValue("priceId", "price_1H7jXCHesZkxfUDSo4o2xLrL")}>
+                        <div className={`price ${subscriptionPlan == "plus" ? " selected" : ""}`} onClick={(e) => {
+                            setInputValue("subscriptionPlan", "plus")
+                        }}>
                             <h3>Plus</h3>
                             <p>30 Imagenes</p>
                             <p>8 Archivos</p>
                             <h4>4.99€ / mes</h4>
                         </div>
-                        <div className={`price ${priceId == "price_1H7jWPHesZkxfUDSN4V0r8b0" ? " selected" : ""}`} onClick={(e) => setInputValue("priceId", "price_1H7jWPHesZkxfUDSN4V0r8b0")}>
+                        <div className={`price ${subscriptionPlan == "premium" ? " selected" : ""}`} onClick={(e) => {
+                            setInputValue("subscriptionPlan", "premium")
+                        }}>
                             <h3>Premium</h3>
                             <p>Imagenes Ilimitadas</p>
                             <p>Archivos Ilimitados</p>
