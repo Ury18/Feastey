@@ -111,6 +111,20 @@ const Business = new Schema({
         required: true
     },
 
+    newSubscriptionPlan: {
+        type: String,
+        enum: ['free', 'plus', 'premium']
+    },
+
+    planDowngrade : {
+        type: Boolean,
+        default: false
+    },
+
+    nextPayment : {
+        type: Date,
+    },
+
     stripe: {
         customerId: {
             type: String

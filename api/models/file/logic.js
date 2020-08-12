@@ -138,6 +138,7 @@ logic = {
         return File.findById(fileId)
             .then(file => {
                 if (file) {
+                    console.log("here")
                     if (deleterRole == "admin" || deleterId == file.owner) {
                         const bucket = admin.storage().bucket()
                         const stored_file = bucket.file(file.file_title)

@@ -1,10 +1,12 @@
+const fs = require('fs')
+const moment = require("moment")
+const { Types: { ObjectId } } = require('mongoose')
 const Business = require('./index')
 const UserLogic = require('../user/logic')
 const FileLogic = require('../file/logic')
 const qrHelper = require('../../middleware/qr-helper')
 const stripeHelper = require('../../middleware/stripe-helper')
-const fs = require('fs')
-const { Types: { ObjectId } } = require('mongoose')
+const PaymentSucceeded = require("../../mails/payment-succeeded")
 const NODE_PATH = process.env.NODE_PATH
 
 logic = {
@@ -188,9 +190,42 @@ logic = {
             throw Error("Owner is needed")
         }
 
+        if (!data.subscriptionPlan) {
+            throw Error("Please select a valid subscription plan")
+        }
+
         if (creatorRole !== "admin" && data.subscriptionPlan !== "free") {
             if (!data.paymentMethodId) throw Error("Please introduce a valid payment method")
         }
+
+        //Delete empty attachments sections
+        let newAttachments = []
+
+        for (var i = 0; i < data.attachments.length; i++) {
+            if (data.attachments[i].files.length !== 0) newAttachments.push(data.attachments[i])
+        }
+
+        data.attachments = newAttachments
+
+        //Check that it's not surpassing maximum files and images depending on plan
+        if (data.subscriptionPlan == "free" || data.subscriptionPlan == "plus") {
+            let imageLimit = data.subscriptionPlan == "free" ? 20 : 30
+            let filesLimit = data.subscriptionPlan == "free" ? 4 : 8
+
+            let filesLength = 0;
+
+            if (data.images.length > imageLimit) throw Error(`Has excedido el limite de imagenes de tu plan (${imageLimit}), por favor, elimina las imagenes excedentes para contiunar`)
+
+            data.attachments.forEach(element => {
+                element.files.forEach(file => {
+                    filesLength++
+                })
+            })
+
+            if (filesLength > filesLimit) throw Error(`Has excedido el limite de archivos de tu plan (${filesLimit}), por favor, elimina los archivos excedentes para contiunar`)
+
+        }
+
 
         const create = () => {
             let business = new Business({ ...data })
@@ -220,6 +255,7 @@ logic = {
                                     business.stripe.priceId = priceId
                                     business.stripe.productId = stripeSubscription.plan.product
                                     business.isEnabled = true
+                                    business.nextPayment = new Date(stripeSubscription.current_period_end * 1000)
 
                                     if (data.paymentMethodId) {
                                         let paymentInfo = await stripeHelper.retrivePaymentInfo(data.paymentMethodId)
@@ -321,18 +357,9 @@ logic = {
                             business.isEnabled = true
                             business.stripe.subscriptionId = stripeSubscription.id
                             business.stripe.productId = stripeSubscription.plan.product
+                            business.nextPayment = new Date(stripeSubscription.current_period_end * 1000)
                             PaymentSucceeded.send({ to: business.user.email, business })
                         }
-                    }
-                }
-            }
-
-            if (business.subscriptionPlan !== subscriptionPlan) {
-                if (subscriptionPlan == "free") {
-                    business.planDowngrade = true
-                } else if (subscriptionPlan == "plus") {
-                    if (business.subscriptionPlan == "premium") {
-                        business.planDowngrade = true
                     }
                 }
             }
@@ -340,12 +367,54 @@ logic = {
             if (business.stripe.priceId !== priceId) {
                 let stripePlan = await stripeHelper.changeSubscriptionPrice(business.stripe.subscriptionId, priceId)
                 if (stripePlan.plan.id == priceId) {
+
+                    if (subscriptionPlan == "free") {
+                        business.planDowngrade = true
+                        business.newSubscriptionPlan = subscriptionPlan
+                    } else if (subscriptionPlan == "plus") {
+                        console.log("plus")
+                        if (business.subscriptionPlan == "premium") {
+                            business.planDowngrade = true
+                            business.newSubscriptionPlan = subscriptionPlan
+                        } else {
+                            console.log("plus upgrade")
+                            business.subscriptionPlan = subscriptionPlan
+                        }
+                    } else {
+                        business.subscriptionPlan = subscriptionPlan
+                    }
+
                     business.stripe.priceId = priceId
-                    business.subscriptionPlan = subscriptionPlan
                 }
             }
 
+            //Delete empty attachments sections
+            let newAttachments = []
 
+            for (var i = 0; i < data.attachments.length; i++) {
+                if (data.attachments[i].files.length !== 0) newAttachments.push(data.attachments[i])
+            }
+
+            data.attachments = newAttachments
+
+            //Check that it's not surpassing maximum files and images depending on plan
+            if (business.subscriptionPlan == "free" || business.subscriptionPlan == "plus") {
+                let imageLimit = business.subscriptionPlan == "free" ? 20 : 30
+                let filesLimit = business.subscriptionPlan == "free" ? 4 : 8
+
+                let filesLength = 0;
+
+                if (data.images.length > imageLimit) throw Error(`Has excedido el limite de imagenes de tu plan (${imageLimit}), por favor, elimina las imagenes excedentes para contiunar`)
+
+                data.attachments.forEach(element => {
+                    element.files.forEach(file => {
+                        filesLength++
+                    })
+                })
+
+                if (filesLength > filesLimit) throw Error(`Has excedido el limite de archivos de tu plan (${filesLimit}), por favor, elimina los archivos excedentes para contiunar`)
+
+            }
 
             var keys = Object.keys(data)
 
@@ -379,15 +448,85 @@ logic = {
             })
     },
 
+    async planDowngradeDeleteFiles(business) {
+        if (business.planDowngrade) {
+            let newPlan = business.newSubscriptionPlan
+            //Check that it's not surpassing maximum files and images depending on plan
+            if (newPlan == "free" || newPlan == "plus") {
+                let imageLimit = newPlan == "free" ? 20 : 30
+                let filesLimit = newPlan == "free" ? 4 : 8
+
+                let files = [];
+
+                business.attachments.forEach(element => {
+                    element.files.forEach(file => {
+                        files.push(file)
+                    })
+                })
+
+                if (business.images.length > imageLimit) {
+                    let deletingImages = business.images.slice(0, imageLimit)
+                    let remainingImages = business.images.slice(imageLimit)
+
+                    //Borrar imagenes excedentes
+                    let deletedImages = await FileLogic.deleteMultipleFiles(business.owner._id, "admin", deletingImages)
+
+                    business.images = remainingImages
+                }
+
+                if (files.length > filesLimit) {
+                    console.log(files)
+                    let deletingFiles = files.slice(filesLimit)
+                    let remainingFiles = files.slice(0, filesLimit)
+                    console.log(deletingFiles)
+                    console.log(remainingFiles)
+
+                    //Borrar archivos excedentes
+                    let deletedFiles = await FileLogic.deleteMultipleFiles(business.owner._id, "admin", deletingFiles)
+
+                    business.attachments.forEach(element => {
+                        for (var i = 0; i < deletingFiles.length; i++) {
+                            let index = element.files.indexOf(deletingFiles[i])
+                            if (index !== "-1") {
+                                element.files.splice(index, 1)
+                            }
+                        }
+                    })
+
+                    let newAttachments = []
+
+                    for (var i = 0; i < business.attachments.length; i++) {
+                        if (business.attachments[i].files.length !== 0) newAttachments.push(business.attachments[i])
+                    }
+
+                    business.attachments = newAttachments
+                }
+
+            }
+
+            business.subscriptionPlan = newPlan
+            business.planDowngrade = false
+            business = await business.save()
+            return business
+        } else {
+            return business
+        }
+    },
+
     onPaymentFailed(data) {
         if (data.type == "invoice.payment_failed") {
+            if (data.data.billing_reason !== "subscription_create") return "Nothing to do"
+
             return Business.findOne({ "stripe.subscriptionId": data.data.object.subscription }).populate("owner")
                 .then(business => {
                     if (business) {
                         business.stripe.lastPayment = "failed"
                         PaymentFailed.send({ to: user.email, business })
                         if (data.status == "uncollectible") {
-                            //Delete excessing files and images
+                            business.planDowngrade = false
+                            business.subscriptionPlan = "free"
+                            business.newSubscriptionPlan = "free"
+                            this.planDowngradeDeleteFiles(business._id)
                         }
                         return business.save()
                             .then(business => {
@@ -402,15 +541,26 @@ logic = {
 
     onPaymentSuccess(data) {
         if (data.type == "invoice.payment_succeeded") {
+
+            if (data.data.billing_reason !== "subscription_create") return "Nothing to do"
+
             return Business.findOne({ "stripe.subscriptionId": data.data.object.subscription }).populate("owner")
                 .then(business => {
                     if (business) {
+                        let nextPaymentDate = new Date(data.data.object.period_end * 1000)
+                        nextPaymentDate = moment(nextPaymentDate)
+                        nextPaymentDate.add(1, "months")
+                        nextPaymentDate = new Date(nextPaymentDate)
+
                         if (business.planDowngrade) {
-                            //Delete excessing files and images
                             business.planDowngrade = false
+                            business.subscriptionPlan = business.newSubscriptionPlan
+                            this.planDowngradeDeleteFiles(business._id)
                         }
+
+                        business.nextPayment = nextPaymentDate
                         business.stripe.lastPayment = "success"
-                        PaymentSucceeded.send({ to: user.email, business })
+                        PaymentSucceeded.send({ to: business.owner.email, business })
                         return business.save()
                             .then(business => {
                                 return "Tasks completed"
