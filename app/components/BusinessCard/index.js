@@ -3,8 +3,10 @@ import Link from 'next/link'
 import { useState, useEffect } from 'react'
 import { updateUserData } from '../../redux/user/action'
 import { connect } from 'react-redux'
+import { useRouter } from 'next/router'
 
 const BusinessCard = (props) => {
+    const router = useRouter()
 
     const { business, user, updateUserData } = props
     const { token } = user
@@ -38,13 +40,19 @@ const BusinessCard = (props) => {
 
         let favorites = props.user.favorites
 
-        if (isFaved) {
-            let index = favorites.indexOf(business.id)
-            favorites.splice(index, 1)
-            setIsFaved(false)
-        } else {
-            favorites.push(business.id)
-            setIsFaved(true)
+        if (!props.user.id) {
+            router.push("/login")
+        }
+        else {
+
+            if (isFaved) {
+                let index = favorites.indexOf(business.id)
+                favorites.splice(index, 1)
+                setIsFaved(false)
+            } else {
+                favorites.push(business.id)
+                setIsFaved(true)
+            }
         }
 
 

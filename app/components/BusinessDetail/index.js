@@ -5,8 +5,10 @@ import { useState, useEffect } from 'react'
 import GoogleMap from '../GoogleMap'
 import { updateUserData } from '../../redux/user/action'
 import ImageGallery from 'react-image-gallery'
+import { useRouter } from 'next/router'
 
 const Detail = ((props) => {
+    const router = useRouter()
 
     const { business, user } = props
     const { token } = user
@@ -57,7 +59,7 @@ const Detail = ((props) => {
         let favorites = props.user.favorites
 
         if (!props.user.id) {
-            debugger
+            router.push("/login")
             console.log("Log in to add to favorites")
         } else {
             if (isFaved) {
