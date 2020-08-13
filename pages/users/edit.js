@@ -135,6 +135,7 @@ class EditUser extends Component {
     }
 
     setSection = (e) => {
+        e.preventDefault()
         this.setState({ section: e.target.name, errors: "", password: "", newPassword: "", newPasswordConfirmation: "", email: "" })
         Router.replace(`/users/edit` + `?section=${e.target.name}`)
     }

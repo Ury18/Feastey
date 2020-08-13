@@ -64,17 +64,21 @@ form  {
         }
     }
 
-    button {
+    button,.button {
         border: none;
-        background-color: #FFB135;
-        color: #313131;
-        border: 2px solid #313131;
-        font-weight: 600;
         padding: .5em 1.2em;
         border-radius: .5em;
-        font-size: 1.1em;
         cursor: pointer;
-        transition: all 0.2s ease;
+        background-color: #FFB135;
+        color: black;
+        font-weight: 600;
+        font-size: 1em;
+        width: fit-content;
+        min-width: auto !important;
+        height: 2em;
+        padding: 0 2em;
+        border: 0;
+        transition: all .2s ease;
 
         &:hover {
             color: #FFB135;

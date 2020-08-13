@@ -26,8 +26,45 @@
     }
 }
 
+form {
+    max-width: 55em !important;
+}
+
+.stripeCardContainer {
+    width: 20em !important;
+    max-width: initial !important;
+}
+
+.sections {
+    text-align: center;
+    margin-bottom: 1em;
+    a {
+        margin: 0 1em;
+        position: relative;
+
+        &:after {
+            content: "";
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            border-bottom: 2px solid #FFB135;
+        }
+
+        &.selected {
+            &:after{
+                width: 100%;
+            }
+        }
+    }
+}
+
 .priceList {
     display: flex;
+
+    @media (max-width: 745px) {
+        flex-direction: column;
+    }
 
     .price {
         padding: 1em;
@@ -36,6 +73,11 @@
         cursor: pointer;
         width: 10em;
         border-radius: 10px;
+
+        @media (max-width: 745px) {
+            margin: 0.5em 0;
+        }
+
         &.selected {
             color: white;
             background-color: rgb(44, 44, 44);

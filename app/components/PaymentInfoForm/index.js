@@ -40,9 +40,9 @@ function PaymentInfoForm(props) {
     };
 
     return (
-        <div style={{ "width": "20em !important", "maxWidth": "initial !important", "display": "block !important" }}>
+        <div className="stripeCardContainer">
             <CardSection />
-            <button disabled={!stripe} onClick={handleSubmit}>Confirmar metodo de pago</button>
+            <button style={{marginBottom:"1em"}} disabled={!stripe} onClick={handleSubmit}>Confirmar metodo de pago</button>
         </div>
     );
 }

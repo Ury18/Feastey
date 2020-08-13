@@ -139,7 +139,8 @@
 
     .button-container {
         justify-content: center;
-        align-self: center;
+        margin-top: 1em;
+        align-self: flex-end;
 
         input {
             margin: 0;
