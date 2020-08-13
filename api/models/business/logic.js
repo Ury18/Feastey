@@ -336,66 +336,70 @@ logic = {
             if (data.subscriptionPlan) delete data.subscriptionPlan
             if (data.paymentMethodId) delete data.paymentMethodId
 
-            let priceId = subscriptionPlan == "free" ? process.env.STRIPE_PRICE_FREE : subscriptionPlan == "plus" ? process.env.STRIPE_PRICE_PLUS : process.env.STRIPE_PRICE_PREMIUM
+            if (paymentMethodId) {
+                let priceId = subscriptionPlan == "free" ? process.env.STRIPE_PRICE_FREE : subscriptionPlan == "plus" ? process.env.STRIPE_PRICE_PLUS : process.env.STRIPE_PRICE_PREMIUM
 
-            if (business.stripe.paymentMethodId !== paymentMethodId) {
-                let customer = await stripeHelper.changePaymentMethod(business.stripe.customerId, business.stripe.paymentMethodId, paymentMethodId)
+                if (business.stripe.paymentMethodId !== paymentMethodId) {
+                    let customer = await stripeHelper.changePaymentMethod(business.stripe.customerId, business.stripe.paymentMethodId, paymentMethodId)
 
-                if (customer.invoice_settings.default_payment_method == paymentMethodId) {
-                    business.stripe.paymentMethodId = paymentMethodId
-                    const paymentInfo = await stripeHelper.retrivePaymentInfo(paymentMethodId)
-                    business.stripe.last4 = paymentInfo.card.last4
+                    if (customer.invoice_settings.default_payment_method == paymentMethodId) {
+                        business.stripe.paymentMethodId = paymentMethodId
+                        const paymentInfo = await stripeHelper.retrivePaymentInfo(paymentMethodId)
+                        business.stripe.last4 = paymentInfo.card.last4
 
-                    if (business.stripe.lastPayment == "failed") {
-                        let canceledSubscription = await stripeHelper.cancelSubscription(business.stripe.subscriptionId)
-                        let stripeSubscription = await stripeHelper.createSubscription(business.stripe.customerId, paymentMethodId, priceId)
+                        if (business.stripe.lastPayment == "failed") {
+                            let canceledSubscription = await stripeHelper.cancelSubscription(business.stripe.subscriptionId)
+                            let stripeSubscription = await stripeHelper.createSubscription(business.stripe.customerId, paymentMethodId, priceId)
 
-                        if (stripeSubscription.latest_invoice.payment_intent.status !== 'succeeded') {
-                            throw Error("No se ha podido completar el pago, porfavor, introduce otro metodo de pago.")
-                        } else {
-                            business.stripe.lastPayment = "success"
-                            business.isEnabled = true
-                            business.stripe.subscriptionId = stripeSubscription.id
-                            business.stripe.productId = stripeSubscription.plan.product
-                            business.nextPayment = new Date(stripeSubscription.current_period_end * 1000)
-                            PaymentSucceeded.send({ to: business.user.email, business })
+                            if (stripeSubscription.latest_invoice.payment_intent.status !== 'succeeded') {
+                                throw Error("No se ha podido completar el pago, porfavor, introduce otro metodo de pago.")
+                            } else {
+                                business.stripe.lastPayment = "success"
+                                business.isEnabled = true
+                                business.stripe.subscriptionId = stripeSubscription.id
+                                business.stripe.productId = stripeSubscription.plan.product
+                                business.nextPayment = new Date(stripeSubscription.current_period_end * 1000)
+                                PaymentSucceeded.send({ to: business.user.email, business })
+                            }
                         }
                     }
                 }
-            }
 
-            if (business.stripe.priceId !== priceId) {
-                let stripePlan = await stripeHelper.changeSubscriptionPrice(business.stripe.subscriptionId, priceId)
-                if (stripePlan.plan.id == priceId) {
+                if (business.stripe.priceId !== priceId) {
+                    let stripePlan = await stripeHelper.changeSubscriptionPrice(business.stripe.subscriptionId, priceId)
+                    if (stripePlan.plan.id == priceId) {
 
-                    if (subscriptionPlan == "free") {
-                        business.planDowngrade = true
-                        business.newSubscriptionPlan = subscriptionPlan
-                    } else if (subscriptionPlan == "plus") {
-                        console.log("plus")
-                        if (business.subscriptionPlan == "premium") {
+                        if (subscriptionPlan == "free") {
                             business.planDowngrade = true
                             business.newSubscriptionPlan = subscriptionPlan
+                        } else if (subscriptionPlan == "plus") {
+                            console.log("plus")
+                            if (business.subscriptionPlan == "premium") {
+                                business.planDowngrade = true
+                                business.newSubscriptionPlan = subscriptionPlan
+                            } else {
+                                business.subscriptionPlan = subscriptionPlan
+                            }
                         } else {
-                            console.log("plus upgrade")
                             business.subscriptionPlan = subscriptionPlan
                         }
-                    } else {
-                        business.subscriptionPlan = subscriptionPlan
-                    }
 
-                    business.stripe.priceId = priceId
+                        business.stripe.priceId = priceId
+                    }
                 }
             }
 
-            //Delete empty attachments sections
-            let newAttachments = []
+            if (data.attachments) {
 
-            for (var i = 0; i < data.attachments.length; i++) {
-                if (data.attachments[i].files.length !== 0) newAttachments.push(data.attachments[i])
+                //Delete empty attachments sections
+                let newAttachments = []
+
+                for (var i = 0; i < data.attachments.length; i++) {
+                    if (data.attachments[i].files.length !== 0) newAttachments.push(data.attachments[i])
+                }
+
+                data.attachments = newAttachments
             }
-
-            data.attachments = newAttachments
 
             //Check that it's not surpassing maximum files and images depending on plan
             if (business.subscriptionPlan == "free" || business.subscriptionPlan == "plus") {
@@ -404,13 +408,16 @@ logic = {
 
                 let filesLength = 0;
 
-                if (data.images.length > imageLimit) throw Error(`Has excedido el limite de imagenes de tu plan (${imageLimit}), por favor, elimina las imagenes excedentes para contiunar`)
+                if (data.images && data.images.length > imageLimit) throw Error(`Has excedido el limite de imagenes de tu plan (${imageLimit}), por favor, elimina las imagenes excedentes para contiunar`)
 
-                data.attachments.forEach(element => {
-                    element.files.forEach(file => {
-                        filesLength++
+                if (data.attachments) {
+
+                    data.attachments.forEach(element => {
+                        element.files.forEach(file => {
+                            filesLength++
+                        })
                     })
-                })
+                }
 
                 if (filesLength > filesLimit) throw Error(`Has excedido el limite de archivos de tu plan (${filesLimit}), por favor, elimina los archivos excedentes para contiunar`)
 
