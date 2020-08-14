@@ -39,6 +39,24 @@ userRouter.route('/')
         }
     })
 
+//Endpoint to verifyu email
+userRouter.route('/verify')
+    .get(tokenVerifierMiddleware, (req, res) => {
+        try {
+            logic.verifyUser(req.tokenUserId)
+                .then((user) => {
+                    const token = createToken(user.id)
+                    user.token = token
+                    res.json(user)
+                })
+                .catch(({ message }) => {
+                    res.status(401).json({ error: message })
+                })
+        } catch ({ message }) {
+            res.status(400).send({ error: message })
+        }
+    })
+
 //Endpoint to authenticate
 userRouter.route('/authenticate')
     .post((req, res) => {
