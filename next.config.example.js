@@ -10,5 +10,25 @@ module.exports = withCss(withSass(withImages({
         GOOGLE_MAPS_GEOCODE_URL: "https://maps.googleapis.com/maps/api/geocode/json?",
         FEASTEY_API_URL: "https://example.feastey.com/api",
         STRIPE_PUBLIC_KEY: "pk_...",
-    }
+    },
+    webpack: config => {
+        config.module.rules.push(
+            {
+                test: /\.(woff(2)?|ttf|eot|svg)(\?v=\d+\.\d+\.\d+)?$/,
+                use: [
+                    {
+                        loader: 'file-loader',
+                        options: {
+                            // optional, just to prettify file names
+                            outputPath: 'static/webfonts/',
+                            publicPath: '../webfonts/',
+                            name: '[name].[ext]',
+                            esModule: false
+                        }
+                    },
+                ],
+            },
+        );
+        return config;
+    },
 })))
