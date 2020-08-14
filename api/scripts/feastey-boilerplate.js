@@ -1,4 +1,5 @@
 const User = require("../models/user")
+const Category = require("../models/category")
 const bcrypt = require('bcrypt')
 
 module.exports = async () => {
@@ -16,6 +17,8 @@ module.exports = async () => {
             isVerified: true
         }
 
+
+
         let admin = new User(adminData)
         let hash = await bcrypt.hash(admin.password, 10)
         admin.password = hash
@@ -25,7 +28,15 @@ module.exports = async () => {
         delete admin._id
         delete admin.password
         console.log("Admin Created")
-        return admin
+
+        let restaurantCategory = {
+            name:"Restauración"
+        }
+
+        let restauracion = new Category(restaurantCategory)
+        await restauracion.save()
+
+        console.log("Categoria de restauración creada")
 
     }
 }

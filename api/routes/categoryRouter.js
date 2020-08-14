@@ -1,5 +1,5 @@
 const express = require('express')
-const logic = require('../models/categories/logic')
+const logic = require('../models/category/logic')
 const { tokenVerifierMiddleware } = require('../middleware/token-helper')
 
 
