@@ -2,9 +2,11 @@ import Layout from '../app/components/Layout'
 import { useState } from 'react'
 import { connect } from 'react-redux'
 import { updateUserData } from '../app/redux/user/action'
+import { useRouter } from 'next/router'
 import Head from 'next/head'
 
 const SignupBusiness = (props) => {
+    const router = useRouter()
 
     const [username, setUsername] = useState("")
     const [email, setEmail] = useState("")

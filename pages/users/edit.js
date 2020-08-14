@@ -84,6 +84,8 @@ class EditUser extends Component {
                 if (res.error) {
                     this.setState({ errors: res.error })
                 } else {
+                    this.setState({ section: "", errors: "", password: "", newPassword: "", newPasswordConfirmation: "", email: "" })
+                    Router.replace(`/users/edit`)
                     updateUserData(res)
                 }
             })
@@ -120,6 +122,8 @@ class EditUser extends Component {
                 if (res.error) {
                     this.setState({ errors: res.error })
                 } else {
+                    this.setState({ section: "", errors: "", password: "", newPassword: "", newPasswordConfirmation: "", email: "" })
+                    Router.replace(`/users/edit`)
                     updateUserData(res)
                 }
             })
