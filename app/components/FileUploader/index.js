@@ -122,6 +122,7 @@ const FileUploader = ((props) => {
                     {url && type == "image" && <img src={url} alt={name} loading="lazy" width="200px" />}
                     {url && type !== "image" && <i className="fas fa-file" />}
                     <div>
+                        <label>Nombre</label>
                         <input type="text" value={newName} onChange={e => updateName(e, e.target.value)} />
                         <i className="fas fa-trash" onClick={e => deleteCallback(e, index)}></i>
                         {!updated && <i className="fas fa-check" onClick={e => updateFile(e)}></i>}
