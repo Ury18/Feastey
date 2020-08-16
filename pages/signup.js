@@ -4,6 +4,7 @@ import { connect } from 'react-redux'
 import { updateUserData } from '../app/redux/user/action'
 import { useRouter } from 'next/router'
 import Head from 'next/head'
+import '../stylesheets/signupForm.scss'
 
 const Signup = (props) => {
 
@@ -14,6 +15,7 @@ const Signup = (props) => {
     const [password, setPassword] = useState("")
     const [passwordConfirmation, setPasswordConfirmation] = useState("")
     const [errors, setErrors] = useState("")
+    const [role, setRole] = useState("user")
 
     const registerUser = (e, data) => {
 
@@ -58,8 +60,12 @@ const Signup = (props) => {
                 <meta name="og:description" property="og:description" content="No esperes mas y registrate ya en feastey.com! Pagina de registro - Feastey" />
                 <meta property="og:site_name" content="ury.feastey.com" />
             </Head>
-            <form onSubmit={(e) => registerUser(e, { username, email, password, passwordConfirmation })} style={{ maxWidth: "200px" }}>
-                <h1>Crea tu cuenta</h1>
+            <form className="signup-form" onSubmit={(e) => registerUser(e, { username, email, password, passwordConfirmation, role })} style={{ maxWidth: "200px" }}>
+                <h2>Crea tu cuenta</h2>
+                <div className="roles">
+                    <p className={`${role == "user" ? "selected":""}`} onClick={e => setRole("user")}>Usuario</p>
+                    <p className={`${role == "businessOwner" ? "selected" : ""}`} onClick={e => setRole("businessOwner")}>Profesional</p>
+                </div>
                 <div style={{ display: "flex", flexDirection: "column" }}>
                     <label>Username</label>
                     <input onChange={(e) => setUsername(e.target.value)} type="text" name="text" required/>
@@ -79,7 +85,7 @@ const Signup = (props) => {
 
                 {errors && <p className="errors">{errors}</p>}
 
-                <button type="submit">Send</button>
+                <button type="submit">Enviar</button>
             </form>
         </Layout>
     )
