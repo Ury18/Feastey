@@ -123,7 +123,7 @@ const Detail = ((props) => {
         })
     }
 
-    const profileImage = business.mainImage ? business.mainImage : business.images[0] ? business.images[0] : { url: "/img/Table-QR-Template.png", name: "placeholder" }
+    const profileImage = business.mainImage ? business.mainImage : business.images[0] ? business.images[0] : { url: "/img/business-placeholder.jpeg", name: "placeholder" }
 
 
     return (

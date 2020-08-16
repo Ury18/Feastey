@@ -98,7 +98,7 @@ const BusinessCard = (props) => {
             <div className="businessCard_imgContainer">
                 <Link href={`/business/${business.id}`}>
                     <a>
-                        {<img className="businessCard_img" alt="Foto de perfil" src={business.mainImage ? business.mainImage.url : business.images[0] ? business.images[0].url : "/img/Table-QR-Template.png"} />}
+                        {<img className="businessCard_img" alt="Foto de perfil" src={business.mainImage ? business.mainImage.url : business.images[0] ? business.images[0].url : "/img/business-placeholder.jpeg"} />}
                     </a>
                 </Link>
             </div>
