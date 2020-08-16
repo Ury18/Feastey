@@ -3,6 +3,7 @@ import { connect } from 'react-redux'
 import Layout from '../../app/components/Layout'
 import BusinessList from '../../app/components/BusinessList'
 import Head from 'next/head'
+import Link from 'next/link'
 
 const MyBusinesses = (props) => {
 
@@ -46,7 +47,13 @@ const MyBusinesses = (props) => {
                 <meta name="og:description" property="og:description" content="Pagina de visualizacion de negocios - Feastey" />
                 <meta property="og:site_name" content="ury.feastey.com" />
             </Head>
+            <h2 style={{ marginBottom: "1em" }}>Mis negocios</h2>
             <BusinessList businessList={myBusinesseslist} />
+            <Link href={`/business/create`}>
+                <a className="button">
+                    Crear nuevo negocio
+                </a>
+            </Link>
         </Layout>
     )
 }

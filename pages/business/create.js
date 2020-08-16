@@ -373,7 +373,7 @@ class CreateBusiness extends Component {
                             {renderCategoriesOptions()}
                         </select>
                     </div>
-                    <div className="address-container" className="info-field">
+                    <div className="info-field address-container">
                         <label>Dirección</label>
                         <div>
                             <input onChange={(e) => setInputValue(e.target.name, e.target.value)} name="address" type="text" required />
