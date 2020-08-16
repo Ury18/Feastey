@@ -548,7 +548,7 @@ class EditBusiness extends Component {
                         </form>
                     }
                     {section == "payment" &&
-                        <form onSubmit={(e) => editPaymentsInfo(e)} style={{ maxWidth: "55em !important" }}>
+                        <form onSubmit={(e) => editPaymentsInfo(e)}>
                             <h2 style={{ marginBottom: ".5em" }}>Tu plan</h2>
                             <div className="priceList">
                                 <div className={`price ${subscriptionPlan == "free" ? " selected" : ""}`} onClick={(e) => setInputValue("subscriptionPlan", "free")}>
@@ -581,7 +581,10 @@ class EditBusiness extends Component {
                         </form>
                     }
                     {section == "qrs" &&
+                    <form>
+                        <p style={{marginTop:"1em"}}><strong>Haz click derecho</strong> sobre el código QR y selecciona <strong>"Guardar imagen como"</strong> para descargar el código</p>
                         <img style={{ marginTop: "1em" }} src={business.qr_codes[0].url} />
+                    </form>
                     }
                 </div>}
 
