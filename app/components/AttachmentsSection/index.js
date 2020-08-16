@@ -62,8 +62,14 @@ class AttachmentsSection extends Component {
     }
 
     setInputValue = (name, value) => {
+        const { updateCallback, index } = this.props
+
         if (name && value) {
-            this.setState({ [name]: value })
+            this.setState({ [name]: value }, () => {
+                if (updateCallback) {
+                    updateCallback(index, this.state)
+                }
+            })
         }
     }
 
@@ -86,9 +92,9 @@ class AttachmentsSection extends Component {
         const { name } = this.state
         const { setInputValue, renderFilesUploader } = this
         return (
-            <div style={{display: "flex", flexDirection: "column", marginBottom: "4em"}}>
+            <div style={{ display: "flex", flexDirection: "column", marginBottom: "4em" }}>
                 <label>Nombre de la sección</label>
-                <input style={{ marginBottom: ".5em"}} type="text" value={name} name="name" onChange={e => setInputValue(e.target.name, e.target.value)} />
+                <input style={{ marginBottom: ".5em" }} type="text" value={name} name="name" onChange={e => setInputValue(e.target.name, e.target.value)} />
                 {renderFilesUploader()}
             </div >
         )
