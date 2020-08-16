@@ -9,7 +9,6 @@ import { updateUserData } from '../../redux/user/action'
 const MainNav = ((props) => {
 
     const router = useRouter()
-    const [registerBoxActive, setRegisterBoxActive] = useState(false)
     const [accountBoxActive, setAccountBoxActive] = useState(false)
     const [navActive, setNavActive] = useState(false)
     const { updateUserData } = props
@@ -24,21 +23,9 @@ const MainNav = ((props) => {
     }, [])
 
     const eventClick = (e) => {
-        if (e.target.id !== "registerButtonBox" && e.target.id !== "registerBox") {
-            setRegisterBoxActive(false)
-        }
 
         if (e.target.id !== "accountBoxButton" && e.target.id !== "accountBox") {
             setAccountBoxActive(false)
-        }
-    }
-
-    const registerButtonClick = (e) => {
-        e.preventDefault()
-        if (registerBoxActive) {
-            setRegisterBoxActive(false)
-        } else {
-            setRegisterBoxActive(true)
         }
     }
 
@@ -78,19 +65,9 @@ const MainNav = ((props) => {
             <nav className="mainNav">
                 <ul>
                     {!props.user.token && <li>
-                        <button id="registerButtonBox" onClick={(e) => registerButtonClick(e)}>Registrarse</button>
-                        {registerBoxActive && <ul id="registerBox">
-                            <li>
-                                <Link href="/signup">
-                                    <a className={router.pathname == "/signup" ? "active" : ""}>Usuario</a>
-                                </Link>
-                            </li>
-                            <li>
-                                <Link href="/business-signup">
-                                    <a className={router.pathname == "/business-signup" ? "active" : ""}>Profesional</a>
-                                </Link>
-                            </li>
-                        </ul>}
+                        <Link href="/signup">
+                            <a className={router.pathname == "/signup" ? "active" : ""}>Registrarse</a>
+                        </Link>
                     </li>}
                     {!props.user.token && <li>
                         <Link href="/login">
@@ -122,24 +99,14 @@ const MainNav = ((props) => {
                     </li>}
                 </ul>
             </nav>
-            <i className="fas fa-bars button-mobile" aria-hidden="true" onClick={e => setNavActive(!navActive)}/>
+            <i className="fas fa-bars button-mobile" aria-hidden="true" onClick={e => setNavActive(!navActive)} />
             <nav className={`mainNav mobile ${navActive ? "active" : ""}`}>
                 <i className="closeMenu fas fa-times" onClick={(e) => setNavActive(false)}></i>
                 <ul>
                     {!props.user.token && <li>
-                        <label>Registrarse</label>
-                        <ul id="registerBox">
-                            <li>
-                                <Link href="/signup">
-                                    <a className={router.pathname == "/signup" ? "active" : ""}>Usuario</a>
-                                </Link>
-                            </li>
-                            <li>
-                                <Link href="/business-signup">
-                                    <a className={router.pathname == "/business-signup" ? "active" : ""}>Profesional</a>
-                                </Link>
-                            </li>
-                        </ul>
+                        <Link href="/signup">
+                            <a className={router.pathname == "/signup" ? "active" : ""}>Registrarse</a>
+                        </Link>
                     </li>}
                     {!props.user.token && <li>
                         <Link href="/login">
