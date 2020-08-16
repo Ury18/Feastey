@@ -82,8 +82,14 @@ const Business = new Schema({
     }],
 
     qr_codes: [{
-        type: ObjectId,
-        ref: 'File'
+        language: {
+            type: String,
+            required: true
+        },
+        files: [{
+            type: ObjectId,
+            ref: 'File'
+        }]
     }],
 
     attachments: [{
@@ -106,7 +112,7 @@ const Business = new Schema({
 
     subscriptionPlan: {
         type: String,
-        enum: ['free','plus','premium'],
+        enum: ['free', 'plus', 'premium'],
         default: "free",
         required: true
     },
@@ -116,12 +122,12 @@ const Business = new Schema({
         enum: ['free', 'plus', 'premium']
     },
 
-    planDowngrade : {
+    planDowngrade: {
         type: Boolean,
         default: false
     },
 
-    nextPayment : {
+    nextPayment: {
         type: Date,
     },
 

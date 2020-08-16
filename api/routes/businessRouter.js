@@ -49,6 +49,22 @@ businessRouter.route('/geobusiness')
         }
     })
 
+businessRouter.route('/generate-qrs')
+    .post(tokenVerifierMiddleware, (req, res) => {
+        if(req.tokenUserRole !=="businessOwner" && req.tokenUserRole !=="admin")res.status(400).json({error:"Insuficient Permissions"})
+        try {
+            logic.createQrsByLanguage(req.body.businessId, req.body.lang)
+                .then((business) => {
+                    res.status(201).send(business)
+                })
+                .catch(({ message }) => {
+                    res.status(400).json({ error: message })
+                })
+        } catch ({ message }) {
+            res.status(400).send({ error: message })
+        }
+    })
+
 businessRouter.route('/multiple-businesses')
     .post((req, res) => {
         try {

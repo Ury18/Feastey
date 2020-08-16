@@ -39,6 +39,7 @@ class EditBusiness extends Component {
         errors: "",
         images: [],
         mainImage: "",
+        qr_codes: [],
         attachments: [],
         tempFiles: [],
         deletedFiles: [],
@@ -53,7 +54,8 @@ class EditBusiness extends Component {
         phone: "",
         email: "",
         busy: false,
-        section: ""
+        section: "",
+        qrsLanguage: ""
     }
 
     componentDidMount = () => {
@@ -229,6 +231,41 @@ class EditBusiness extends Component {
                 } else {
                     this.setState({ errors: "" })
                     Router.push(`/business/${res.id}`)
+                }
+            })
+            .catch(err => {
+                this.setState({ errors: err.error })
+            })
+    }
+
+    generateQrs = (e) => {
+        e.preventDefault()
+        const { id, qrsLanguage } = this.state
+        const { user: { token } } = this.props
+
+        this.setState({ errors: "", busy: true })
+
+        let data = {
+            lang: qrsLanguage,
+            businessId: id
+        }
+
+        fetch(`${process.env.FEASTEY_API_URL}/business/generate-qrs`, {
+            method: "POST",
+            headers: {
+                "content-type": "application/json",
+                "authorization": `Bearer ${token}`
+            },
+            body: JSON.stringify(data)
+        })
+            .then(res => res.json())
+            .then(res => {
+                if (res.error) {
+                    this.setState({ errors: res.error, busy: false })
+                } else {
+                    setTimeout(() => {
+                        this.setState({ errors: "", qr_codes: res.qr_codes, busy: false })
+                    }, 800)
                 }
             })
             .catch(err => {
@@ -433,6 +470,21 @@ class EditBusiness extends Component {
         Router.replace('/business/[id]/edit', `/business/${this.state.id}/edit` + `?section=${e.target.name}`)
     }
 
+    renderQrs = () => {
+        const { qr_codes } = this.state
+
+        return qr_codes.map(element => {
+            return <div className="qr-section-container">
+                <label>{element.language}</label>
+                <div>
+                    {element.files.map(file => {
+                        return <img src={file.url} />
+                    })}
+                </div>
+            </div>
+        })
+    }
+
     toolbar = {
         options: ['inline', 'blockType', 'fontSize', 'list', 'textAlign', 'colorPicker', 'link', 'embedded', 'emoji', 'image', 'remove', 'history'],
     }
@@ -443,7 +495,7 @@ class EditBusiness extends Component {
         const {
             name, location, address, errors, finalAddress,
             category, summary, descriptionEditorState, subscriptionPlan,
-            last4, mainImage, twitter, instagram, email, phone, busy, section
+            last4, mainImage, twitter, instagram, email, phone, busy, section, qr_codes
         } = this.state
 
         const {
@@ -451,7 +503,7 @@ class EditBusiness extends Component {
             renderImagesUploader, onAcceptAddress,
             renderCategoriesOptions, onDescriptionChange, toolbar,
             renderMainImageUploader, renderMainImageUploaderEmpty,
-            renderPlanWarning, setSection, editPaymentsInfo
+            renderPlanWarning, setSection, editPaymentsInfo, generateQrs, renderQrs
         } = this
 
         return (
@@ -581,10 +633,20 @@ class EditBusiness extends Component {
                         </form>
                     }
                     {section == "qrs" &&
-                    <form>
-                        <p style={{marginTop:"1em"}}><strong>Haz click derecho</strong> sobre el código QR y selecciona <strong>"Guardar imagen como"</strong> para descargar el código</p>
-                        <img style={{ marginTop: "1em" }} src={business.qr_codes[0].url} />
-                    </form>
+                        <form onSubmit={e => generateQrs(e)}>
+                            {qr_codes.length > 0 && <p style={{ marginTop: "1em" }}><strong>Haz click derecho</strong> sobre el código QR y selecciona <strong>"Guardar imagen como"</strong> para descargar el código</p>}
+                            <p style={{ marginTop: "1em", marginBottom: "1em" }}>Selecciona el idioma que desees y haz click en generar para obtener los codigos QR de tu negocio.</p>
+                            <div>
+                                <label>Idioma</label>
+                                <select name="qrsLanguage" onChange={e => setInputValue(e.target.name, e.target.value)}>
+                                    <option value="">Ninguno</option>
+                                    <option value="es">Español</option>
+                                </select>
+                            </div>
+                            {errors && <p className="errors">{errors}</p>}
+                            <button type="submit">Generar</button>
+                            {qr_codes.length > 0 && renderQrs()}
+                        </form>
                     }
                 </div>}
 

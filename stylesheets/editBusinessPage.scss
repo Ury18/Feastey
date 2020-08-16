@@ -6,6 +6,38 @@
     }
 }
 
+.qr-section-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 50%;
+    margin-top: 2em;
+
+    @media (max-width: 900px) {
+        width: 60%;
+    }
+
+    @media (max-width: 555px) {
+        width: 80%;
+    }
+
+    label {
+        margin: 0;
+    }
+
+    >div {
+        display:flex;
+        flex-direction: column;
+        width: 100%;
+        img {
+            width: 100%;
+            margin-bottom: 1em;
+            border: 1px solid #ddd;
+        }
+    }
+}
+
 .busy {
     position: absolute;
     top: 0;

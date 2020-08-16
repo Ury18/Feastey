@@ -23,7 +23,7 @@ logic = {
     },
 
     getBusinessById(businessId) {
-        return Business.findById(businessId).populate("images").populate("attachments.files").populate("qr_codes").populate("category").populate("mainImage").select('-__v').lean()
+        return Business.findById(businessId).populate("images").populate("attachments.files").populate("qr_codes.files").populate("category").populate("mainImage").select('-__v').lean()
             .then(business => {
                 business.id = business._id
                 delete business._id
@@ -183,6 +183,47 @@ logic = {
         return businessList
     },
 
+    async createQrsByLanguage(businessId, lang) {
+
+        if (!lang) throw Error("Please, select a language")
+
+        let business = await Business.findById(businessId)
+
+        for (var i = 0; i < business.qr_codes.length; i++) {
+            if (business.qr_codes[i].language == lang) throw Error("You already have these qrs")
+        }
+
+        if (business.qr_codes.length == 0) {
+
+            let file = await this.generateBusinessQrById(business._id, business.owner, "table-qr-template", "normal", null)
+            let newQrs = {
+                language: "multilingual",
+                files: [file.id]
+            }
+
+            business.qr_codes.push(newQrs)
+
+        }
+
+        let file1 = await this.generateBusinessQrById(business._id, business.owner, "table2-qr-template", "normal2", lang)
+        let file2 = await this.generateBusinessQrById(business._id, business.owner, "sticker-qr-template", "sticker", lang, 1200, { x: 180, y: 460 })
+        let file3 = await this.generateBusinessQrById(business._id, business.owner, "sticker-qr-template-white", "sticker-white", lang, 1200, { x: 180, y: 460 })
+
+        let newQrs = {
+            language: lang,
+            files: [file1.id, file2.id, file3.id]
+        }
+
+        business.qr_codes.push(newQrs)
+
+        business = await business.save()
+        business = Business.findById(business._id).populate("qr_codes.files").select('-__v').lean()
+        business.id = business._id
+        delete business._id
+        return business
+
+    },
+
     createBusiness(creatorId, creatorRole, data) {
         const { attachments, owner } = data
 
@@ -192,6 +233,14 @@ logic = {
 
         if (!data.subscriptionPlan) {
             throw Error("Please select a valid subscription plan")
+        }
+
+        if (!data.category) {
+            throw Error("Please select a category")
+        }
+
+        if (!data.location) {
+            throw Error("Please enter a valid address")
         }
 
         if (creatorRole !== "admin" && data.subscriptionPlan !== "free") {
@@ -232,45 +281,41 @@ logic = {
             return business.save()
                 .then(business => {
                     return UserLogic.addMyBusiness(owner, business._id)
-                        .then(() => {
-                            return this.generateBusinessQrById(business._id, owner)
-                                .then(async (file) => {
-                                    business.qr_codes.push(file.id)
-                                    let stripeCustomer = await stripeHelper.createSubscriber(data.ownerEmail)
-                                    business.stripe.customerId = stripeCustomer.id
-                                    let priceId = business.subscriptionPlan == "free" ? process.env.STRIPE_PRICE_FREE : business.subscriptionPlan == "plus" ? process.env.STRIPE_PRICE_PLUS : process.env.STRIPE_PRICE_PREMIUM
-                                    let stripeSubscription = await stripeHelper.createSubscription(stripeCustomer.id, data.paymentMethodId || null, priceId)
+                        .then(async () => {
+                            let stripeCustomer = await stripeHelper.createSubscriber(data.ownerEmail)
+                            business.stripe.customerId = stripeCustomer.id
+                            let priceId = business.subscriptionPlan == "free" ? process.env.STRIPE_PRICE_FREE : business.subscriptionPlan == "plus" ? process.env.STRIPE_PRICE_PLUS : process.env.STRIPE_PRICE_PREMIUM
+                            let stripeSubscription = await stripeHelper.createSubscription(stripeCustomer.id, data.paymentMethodId || null, priceId)
 
-                                    if (stripeSubscription.error) {
-                                        stripeHelper.deleteSubscriber(stripeCustomer.id)
-                                        throw Error(stripeSubscription.error)
-                                    }
-                                    if (stripeSubscription.latest_invoice.status !== 'paid') {
-                                        stripeHelper.deleteSubscriber(stripeCustomer.id)
-                                        throw Error("No se ha podido completar el pago, porfavor, introduce otro metodo de pago.")
-                                    }
+                            if (stripeSubscription.error) {
+                                stripeHelper.deleteSubscriber(stripeCustomer.id)
+                                throw Error(stripeSubscription.error)
+                            }
+                            if (stripeSubscription.latest_invoice.status !== 'paid') {
+                                stripeHelper.deleteSubscriber(stripeCustomer.id)
+                                throw Error("No se ha podido completar el pago, porfavor, introduce otro metodo de pago.")
+                            }
 
-                                    business.stripe.lastPayment = "success"
-                                    business.stripe.subscriptionId = stripeSubscription.id
-                                    business.stripe.priceId = priceId
-                                    business.stripe.productId = stripeSubscription.plan.product
-                                    business.isEnabled = true
-                                    business.nextPayment = new Date(stripeSubscription.current_period_end * 1000)
+                            business.stripe.lastPayment = "success"
+                            business.stripe.subscriptionId = stripeSubscription.id
+                            business.stripe.priceId = priceId
+                            business.stripe.productId = stripeSubscription.plan.product
+                            business.isEnabled = true
+                            business.nextPayment = new Date(stripeSubscription.current_period_end * 1000)
 
-                                    if (data.paymentMethodId) {
-                                        let paymentInfo = await stripeHelper.retrivePaymentInfo(data.paymentMethodId)
-                                        business.stripe.last4 = paymentInfo.card.last4
-                                        business.stripe.paymentMethodId = data.paymentMethodId
-                                    }
+                            if (data.paymentMethodId) {
+                                let paymentInfo = await stripeHelper.retrivePaymentInfo(data.paymentMethodId)
+                                business.stripe.last4 = paymentInfo.card.last4
+                                business.stripe.paymentMethodId = data.paymentMethodId
+                            }
 
-                                    return business.save()
-                                        .then(() => {
-                                            return Business.findById(business._id).select('-__v').lean()
-                                                .then(business => {
-                                                    business.id = business._id
-                                                    delete business._id
-                                                    return business
-                                                })
+                            return business.save()
+                                .then(() => {
+                                    return Business.findById(business._id).select('-__v').lean()
+                                        .then(business => {
+                                            business.id = business._id
+                                            delete business._id
+                                            return business
                                         })
                                 })
                         })
@@ -298,10 +343,10 @@ logic = {
         }
     },
 
-    generateBusinessQrById(businessId, owner) {
-        return qrHelper.generateQr(businessId)
+    generateBusinessQrById(businessId, owner, fileName, altName, lang, width, position) {
+        return qrHelper.generateQr(businessId, width)
             .then(() => {
-                return qrHelper.mergeQr(businessId)
+                return qrHelper.mergeQr(businessId, fileName, altName, lang, position)
                     .then(() => {
                         let file = {
                             mimetype: "image/png",
@@ -309,11 +354,11 @@ logic = {
                         }
                         let data = {
                             owner: owner,
-                            name: `finalQR-${businessId}`,
+                            name: `finalQR-${altName}-${businessId}${lang ? "_" + lang : ""}`,
                         }
                         return new Promise((resolve, reject) => {
 
-                            fs.readFile(`${NODE_PATH}/public/tmp/qr/finalQR-${businessId}.png`, function (err, buffer) {
+                            fs.readFile(`${NODE_PATH}/public/tmp/qr/finalQR-${altName}-${businessId}${lang ? "_" + lang : ""}.png`, function (err, buffer) {
                                 if (err) console.log(err)
                                 file.buffer = buffer
                                 resolve(FileLogic.uploadFile(owner, "businessOwner", data, file))
@@ -321,13 +366,14 @@ logic = {
                         })
                             .then(file => {
                                 return new Promise((resolve, reject) => {
-                                    fs.unlink(`${NODE_PATH}/public/tmp/qr/finalQR-${businessId}.png`, function (err) {
+                                    fs.unlink(`${NODE_PATH}/public/tmp/qr/finalQR-${altName}-${businessId}${lang ? "_" + lang : ""}.png`, function (err) {
                                         resolve(file)
                                     })
                                 })
                             })
                     })
             })
+
     },
 
     editBusiness(editorId, editorRole, businessId, data) {
