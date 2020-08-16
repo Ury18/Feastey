@@ -49,7 +49,7 @@ const Signup = (props) => {
     }
 
     return (
-        <Layout contentClasses="centered">
+        <Layout contentClasses="centered background-gray">
             <Head>
                 <title>Registrate ya! - Feastey</title>
                 <meta name="viewport" content="initial-scale=1.0, width=device-width" />

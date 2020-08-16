@@ -9,6 +9,10 @@
     position: relative;
     width: fit-content;
 
+    @media (max-width: 530px) {
+        flex-direction: column;
+    }
+
     >div {
         position: relative;
         display: flex;

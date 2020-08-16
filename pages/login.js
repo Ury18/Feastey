@@ -44,7 +44,7 @@ const LogIn = (props) => {
     }
 
     return (
-        <Layout contentClasses="centered">
+        <Layout contentClasses="centered background-gray">
             <Head>
                 <title>Inicia seión - Feastey</title>
                 <meta name="viewport" content="initial-scale=1.0, width=device-width" />
