@@ -31,6 +31,7 @@
         display: flex;
         justify-content: center;
         align-items: center;
+        margin-top: 2em;
         @media (min-width: 860px) {
             display: none;
         }
@@ -95,10 +96,16 @@
     .edit-button {
         position: absolute;
         left: 0;
-        top: -30px;
+        top: -45px;
+        background-color: #FFB135;
+        color: black;
+        font-weight: bold;
+        padding: .5em;
+        border-radius: .3em;
+
         @media (max-width: 860px) {
-            top: .2em;
-            left: -4.2em;
+            position: unset;
+            margin-top: 1em;
         }
     }
 
@@ -120,6 +127,7 @@
             width: fit-content;
             margin: auto;
             margin-bottom: 3em;
+            margin-top: 1em;
         }
 
         .contactInfo_Container {

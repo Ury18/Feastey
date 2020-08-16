@@ -43,6 +43,27 @@ select {
     color: #4e4e4e;
 }
 
+.button {
+    border: none;
+    border-radius: .5em;
+    cursor: pointer;
+    background-color: #FFB135;
+    color: black;
+    font-weight: 600;
+    font-size: 1em;
+    width: fit-content;
+    min-width: auto !important;
+    padding: .5em 1em;
+    border: 0;
+    transition: all .2s ease;
+
+    &:hover {
+        color: #FFB135;
+        background-color: #313131;
+        border-color:#FFB135;
+    }
+}
+
 form  {
     justify-self: center;
     margin: 0;
