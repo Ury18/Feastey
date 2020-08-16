@@ -1,0 +1,36 @@
+.signup-form {
+    input {
+        margin-bottom: 1em;
+    }
+
+    h2 {
+        font-size: 2em;
+        color: #383838;
+        margin-bottom: 1em;
+    }
+
+    .roles {
+        display: flex;
+
+        p {
+            margin: 0em 1em 2em 0;
+            cursor: pointer;
+            position: relative;
+            &:after {
+                content: "";
+                position: absolute;
+                bottom: -5px;
+                left: 0;
+                width: 0;
+                border-bottom: 2px solid #FFB135;
+                transition: all 0.2s ease;
+            }
+
+            &.selected {
+                &:after{
+                    width: 100%;
+                }
+            }
+        }
+    }
+}

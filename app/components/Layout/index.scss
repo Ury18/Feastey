@@ -56,7 +56,6 @@ form  {
         background-color: rgb(243, 242, 242);
         padding: 1em;
         border: 1px solid #dddd;
-        width: 100%;
 
         .rdw-editor-main {
             height: 15em;
@@ -137,6 +136,10 @@ form  {
 
             &.centered {
                 justify-content: center;
+            }
+
+            &.background-gray {
+                background-color: #eee ;
             }
         }
     }

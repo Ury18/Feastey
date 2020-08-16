@@ -17,6 +17,22 @@
     z-index: 10;
 }
 
+.info-field {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.4em;
+    width: 50%;
+
+    @media (max-width: 860px){
+        flex-direction: column;
+        justify-content: initial;
+        align-items: flex-start;
+        width: auto;
+    }
+}
+
 .price-change-warning {
     margin: 1em;
     text-align: center;
@@ -28,6 +44,9 @@
 
 form {
     max-width: 55em !important;
+    background-color: white;
+    padding: 0 5em;
+    padding-bottom: 2em;
 }
 
 .stripeCardContainer {
@@ -58,6 +77,8 @@ form {
         }
     }
 }
+
+
 
 .priceList {
     display: flex;
