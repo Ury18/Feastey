@@ -328,7 +328,7 @@ class CreateBusiness extends Component {
         const { renderImagesUploader, setInputValue, createBusiness, renderAttachmentsSection, renderMainImageUploader, renderMainImageUploaderEmpty, onAcceptAddress, renderCategoriesOptions, onDescriptionChange, toolbar } = this
 
         return (
-            <Layout contentClasses="centered">
+            <Layout contentClasses="background-gray">
                 <Head>
                     <title>Publica tu negocio! - Feastey</title>
                     <meta name="viewport" content="initial-scale=1.0, width=device-width" />
@@ -342,38 +342,38 @@ class CreateBusiness extends Component {
                 {busy && <div className="busy" />}
                 <form onSubmit={(e) => createBusiness(e)} style={{ maxWidth: "55em !important" }}>
                     <h1 style={{ textAlign: "center" }}>Crea tu negocio</h1>
-                    <div style={{ display: "flex", flexDirection: "row", justifyContent: "space-between", alignItems: "center", marginBottom: "1.4em", width: "50%" }}>
+                    <div className="info-field">
                         <label>Nombre</label>
                         <input onChange={(e) => setInputValue(e.target.name, e.target.value)} name="name" type="text" required />
                     </div>
-                    <div style={{ display: "flex", flexDirection: "row", justifyContent: "space-between", alignItems: "center", marginBottom: "1.4em", width: "50%" }}>
+                    <div className="info-field">
                         <label>Email</label>
                         <input onChange={(e) => setInputValue(e.target.name, e.target.value)} name="email" type="email" />
                     </div>
-                    <div style={{ display: "flex", flexDirection: "row", justifyContent: "space-between", alignItems: "center", marginBottom: "1.4em", width: "50%" }}>
+                    <div className="info-field">
                         <label>Telefono</label>
                         <input onChange={(e) => setInputValue(e.target.name, e.target.value)} name="phone" type="tel" />
                     </div>
-                    <div style={{ display: "flex", flexDirection: "row", justifyContent: "space-between", alignItems: "center", marginBottom: "1.4em", width: "50%" }}>
+                    <div className="info-field">
                         <label>Twitter</label>
                         <input onChange={(e) => setInputValue(e.target.name, e.target.value)} name="twitter" type="text" />
                     </div>
-                    <div style={{ display: "flex", flexDirection: "row", justifyContent: "space-between", alignItems: "center", marginBottom: "1.4em", width: "50%" }}>
+                    <div className="info-field">
                         <label>Instagram</label>
                         <input onChange={(e) => setInputValue(e.target.name, e.target.value)} name="instagram" type="text" />
                     </div>
-                    <div style={{ display: "flex", flexDirection: "row", justifyContent: "space-between", alignItems: "center", marginBottom: "1.4em", width: "50%" }}>
+                    <div className="info-field">
                         <label>Resumen</label>
                         <textarea onChange={(e) => setInputValue(e.target.name, e.target.value)} name="summary" type="text" required />
                     </div>
-                    <div style={{ display: "flex", flexDirection: "row", justifyContent: "space-between", alignItems: "center", marginBottom: "1.4em", width: "50%" }}>
+                    <div className="info-field">
                         <label>Categoría</label>
                         <select name="category" onChange={(e) => setInputValue(e.target.name, e.target.value)}>
                             <option value={""}>Ninguna</option>
                             {renderCategoriesOptions()}
                         </select>
                     </div>
-                    <div className="address-container" style={{ display: "flex", flexDirection: "row", justifyContent: "space-between", alignItems: "center", marginBottom: "1.4em", width: "50%" }}>
+                    <div className="address-container" className="info-field">
                         <label>Dirección</label>
                         <div>
                             <input onChange={(e) => setInputValue(e.target.name, e.target.value)} name="address" type="text" required />

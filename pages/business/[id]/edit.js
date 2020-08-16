@@ -455,7 +455,7 @@ class EditBusiness extends Component {
         } = this
 
         return (
-            <Layout>
+            <Layout contentClasses="background-gray">
                 <Head>
                     <title>{`Editando ${business.name} - Feastey`}</title>
                     <meta name="viewport" content="initial-scale=1.0, width=device-width" />
@@ -481,38 +481,38 @@ class EditBusiness extends Component {
                         <label>Publicado</label>
                         <input onChange={(e) => setInputValue(e.target.name, e.target.checked)} type="checkbox" checked={isPublished} name="isPublished" />
                     </div> */}
-                            <div style={{ display: "flex", flexDirection: "row", justifyContent: "space-between", alignItems: "center", marginBottom: "1.4em", width: "50%" }}>
+                            <div className="info-field">
                                 <label>Nombre</label>
                                 <input onChange={(e) => setInputValue(e.target.name, e.target.value)} type="text" defaultValue={name} name="name" />
                             </div>
-                            <div style={{ display: "flex", flexDirection: "row", justifyContent: "space-between", alignItems: "center", marginBottom: "1.4em", width: "50%" }}>
+                            <div className="info-field">
                                 <label>Email</label>
                                 <input onChange={(e) => setInputValue(e.target.name, e.target.value)} name="email" defaultValue={email} type="email" />
                             </div>
-                            <div style={{ display: "flex", flexDirection: "row", justifyContent: "space-between", alignItems: "center", marginBottom: "1.4em", width: "50%" }}>
+                            <div className="info-field">
                                 <label>Telefono</label>
                                 <input onChange={(e) => setInputValue(e.target.name, e.target.value)} name="phone" defaultValue={phone} type="tel" />
                             </div>
-                            <div style={{ display: "flex", flexDirection: "row", justifyContent: "space-between", alignItems: "center", marginBottom: "1.4em", width: "50%" }}>
+                            <div className="info-field">
                                 <label>Twitter</label>
                                 <input onChange={(e) => setInputValue(e.target.name, e.target.value)} name="twitter" defaultValue={twitter} type="text" />
                             </div>
-                            <div style={{ display: "flex", flexDirection: "row", justifyContent: "space-between", alignItems: "center", marginBottom: "1.4em", width: "50%" }}>
+                            <div className="info-field">
                                 <label>Instagram</label>
                                 <input onChange={(e) => setInputValue(e.target.name, e.target.value)} name="instagram" defaultValue={instagram} type="text" />
                             </div>
-                            <div style={{ display: "flex", flexDirection: "row", justifyContent: "space-between", alignItems: "center", marginBottom: "1.4em", width: "50%" }}>
+                            <div className="info-field">
                                 <label>Resumen</label>
                                 <textarea onChange={(e) => setInputValue(e.target.name, e.target.value)} type="text" defaultValue={summary} name="summary" />
                             </div>
-                            <div style={{ display: "flex", flexDirection: "row", justifyContent: "space-between", alignItems: "center", marginBottom: "1.4em", width: "50%" }}>
+                            <div className="info-field">
                                 <label>Categoría</label>
                                 <select name="category" defaultValue={category.id} onChange={(e) => setInputValue(e.target.name, e.target.value)}>
                                     <option value={""}>Ninguna</option>
                                     {renderCategoriesOptions()}
                                 </select>
                             </div>
-                            <div className="address-container" style={{ display: "flex", flexDirection: "row", justifyContent: "space-between", alignItems: "center", marginBottom: "1.4em", width: "50%" }}>
+                            <div className="address-container info-field">
                                 <label>Dirección</label>
                                 <div>
                                     <input onChange={(e) => setInputValue(e.target.name, e.target.value)} defaultValue={address} name="address" type="text" required />
@@ -603,7 +603,7 @@ EditBusiness.getInitialProps = async (ctx) => {
     let categories = await fetch(`${process.env.FEASTEY_API_URL}/categories`)
     categories = await categories.json()
 
-    const section = ctx.query.section || ""
+    const section = ctx.query.section || "business"
 
     return { business, categories, section }
 }

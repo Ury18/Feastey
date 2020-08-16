@@ -6,6 +6,7 @@ import { useState } from 'react'
 import { connect } from 'react-redux'
 import { updateUserData } from '../app/redux/user/action'
 import { useRouter } from 'next/router'
+import '../stylesheets/signupForm.scss'
 
 const LogIn = (props) => {
 
@@ -54,8 +55,8 @@ const LogIn = (props) => {
                 <meta name="og:description" property="og:description" content="Pagina de Inicia seión - Feastey" />
                 <meta property="og:site_name" content="ury.feastey.com" />
             </Head>
-            <form onSubmit={(e) => logIn(e, { email, password })} style={{ maxWidth: "200px" }}>
-                <h1>Inicia sessión</h1>
+            <form className="signup-form" onSubmit={(e) => logIn(e, { email, password })} style={{ maxWidth: "200px" }}>
+                <h2>Inicia sessión</h2>
                 <div style={{ display: "flex", flexDirection: "column" }}>
                     <label>Email</label>
                     <input onChange={(e) => setEmail(e.target.value)} type="email" name="email" />
@@ -69,7 +70,7 @@ const LogIn = (props) => {
                 </div>
 
                 {errors && <p className="errors">{errors}</p>}
-                <button type="submit">Enviar</button>
+                <button type="submit">Iniciar Sesión</button>
             </form>
         </Layout>
     )
