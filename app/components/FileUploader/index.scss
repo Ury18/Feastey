@@ -8,6 +8,7 @@
     padding: 1em;
     position: relative;
     width: fit-content;
+    min-height: 5em;
 
     @media (max-width: 530px) {
         flex-direction: column;
