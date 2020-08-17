@@ -35,12 +35,13 @@
 
         .businessCard_img {
             background-color: black;
-            height: 20em;
-            width: 20em;
+            height: 17em;
+            width: 17em;
 
             @media (max-width: 745px) {
                 width: 100%;
                 height: auto;
+                margin-bottom: 1em;
             }
         }
     }
@@ -99,7 +100,6 @@
     .businessCard_infoContainer {
         display: flex;
         flex-flow: column;
-        text-transform: capitalize;
         padding-left: 2em;
         padding-bottom: 4em;
         min-width: 24em;
