@@ -132,8 +132,9 @@ logic = {
             limit: count
         }
         return Business.aggregatePaginate(aggregate, options)
-            .then((businesses) => {
-                businesses = businesses.docs
+            .then((list) => {
+
+                businesses = list.docs
                 businesses.forEach(business => {
                     business.id = business._id
                     business.category = business.categoryInfo[0]
@@ -156,7 +157,7 @@ logic = {
                     delete business.__v
                 })
 
-                return businesses
+                return {businesses, nextPage: list.nextPage}
             })
 
     },

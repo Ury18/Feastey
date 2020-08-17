@@ -17,6 +17,7 @@ const AllBusiness = (props) => {
     const [tempAddress, setTempAddress] = useState("")
     const [name, setName] = useState("")
     const [errors, setErrors] = useState("")
+    const [nextPage, setNextpage] = useState("")
     const [showFilters, setShowFilters] = useState(false)
 
     useEffect(() => {
@@ -40,11 +41,12 @@ const AllBusiness = (props) => {
             setErrors(res.error)
         } else {
             setErrors("")
-            if (res.length > 0) {
-                res.forEach(element => {
+            if (res.businesses.length > 0) {
+                res.businesses.forEach(element => {
                     businesses.push(element)
                 });
                 setBusinesses(businesses)
+                setNextpage(res.nextPage)
                 setPage(newPage)
                 Router.replace(Router.pathname + `?distance=${distance}&page=${newPage}&category=${category}`)
             }
@@ -95,7 +97,8 @@ const AllBusiness = (props) => {
                 setShowFilters(false)
             } else {
                 setErrors("")
-                setBusinesses(res)
+                setBusinesses(res.businesses)
+                setNextpage(res.nextPage)
                 setShowFilters(false)
                 if (firstLoad) {
                     Router.replace(Router.pathname + `?distance=${distance}&page=${page}&category=${category}`)
@@ -217,7 +220,7 @@ const AllBusiness = (props) => {
             <div className="search-businessList-container">
                 <BusinessList businessList={businesses} />
             </div>
-            <button className="more-results" onClick={(e) => loadMore(e)}>Más</button>
+            {nextPage && <button className="more-results" onClick={(e) => loadMore(e)}>Más</button>}
         </Layout>
     )
 }
