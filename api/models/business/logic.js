@@ -96,11 +96,12 @@ logic = {
         )
         filters.push(
             {
-                $lookup: { from: 'categories', localField: "category", foreignField: "_id", as: "category" }
+                $lookup: { from: 'categories', localField: "category", foreignField: "_id", as: "categoryInfo" }
             }
         )
 
         if (category) {
+            console.log(category)
             filters.push(
                 {
                     $match: {
@@ -109,6 +110,8 @@ logic = {
                 }
             )
         }
+
+
         if (name) {
             filters.push(
                 {
@@ -133,7 +136,10 @@ logic = {
                 businesses = businesses.docs
                 businesses.forEach(business => {
                     business.id = business._id
-                    business.category = business.category[0]
+                    business.category = business.categoryInfo[0]
+                    delete business.categoryInfo
+                    business.category.id = business.category._id
+                    delete business.category._id
                     if (business.mainImage && business.mainImage.length > 0) {
                         business.mainImage = business.mainImage[0]
                     } else {
