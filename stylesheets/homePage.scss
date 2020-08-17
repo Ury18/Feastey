@@ -1,0 +1,230 @@
+.home {
+
+    .content {
+        padding-left: 0 !important;
+        padding-right: 0 !important;
+    }
+
+    section {
+        width: 100%;
+        padding: 4em 0;
+
+        @media (max-width: 1220px) {
+            padding: 4em 1em;
+            width: auto;
+        }
+
+        >div {
+            max-width: 75em;
+            margin: auto;
+            // padding: 1em;
+        }
+
+        p {
+            line-break: auto;
+            text-overflow: ellipsis;
+            font-size: 1.1em;
+        }
+
+        h2 {
+            font-size: 4em;
+            @media (max-width: 960px){
+                font-size: 3em;
+            }
+        }
+
+        h1 {
+            @media (max-width: 960px){
+                font-size: 4em;
+            }
+        }
+
+        h1,h2 {
+            color: #FFB135;
+            margin: 0;
+        }
+
+        strong {
+            color: #ec9200;
+        }
+
+        &.white {
+            background-color: white;
+        }
+
+        &.dark {
+            background-color: #222222;
+
+            p {
+                color: white;
+            }
+        }
+    }
+
+    .welcome {
+        h1 {
+            margin-bottom: .3em;
+        }
+        h2 {
+            margin-top: 1em;
+            margin-bottom: .3em;
+        }
+    }
+
+    .qr-section{
+
+        h2 {
+            margin-bottom: .3em;
+        }
+
+        >div {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+
+            @media (max-width: 750px) {
+                flex-direction: column;
+            }
+
+            >div {
+                flex: 1;
+                height: fit-content;
+            }
+
+        }
+
+
+
+        .image-container {
+            text-align: right;
+
+            @media (max-width: 750px) {
+                text-align: center;
+                margin-top: 3em;
+            }
+
+
+            >img {
+                max-height: 30em;
+            }
+
+        }
+    }
+
+    .radar-section {
+
+        h2 {
+            margin-bottom: .3em;
+        }
+
+        p {
+            margin: 1em 0;
+        }
+
+        >div {
+
+            >div {
+                display: flex;
+                justify-content: center;
+                flex-wrap: wrap;
+
+                @media (max-width: 750px) {
+                    flex-direction: column;
+                }
+
+                >div {
+                    flex: 1;
+                    height: fit-content;
+                }
+            }
+
+        }
+        .image-container {
+            text-align: right;
+
+            @media (max-width: 750px) {
+                text-align: center;
+                margin-top: 3em;
+            }
+
+            >img {
+                max-width: 22em;
+            }
+
+        }
+    }
+
+    .prices {
+        h2 {
+            margin-bottom: .3em;
+        }
+        text-align: center;
+    }
+
+    .alt-prices {
+        display: flex;
+        justify-content: center;
+
+        @media (max-width: 750px) {
+            flex-direction: column;
+            align-items: center;
+            margin: 2em 0;
+        }
+
+    }
+
+    .price {
+        padding: 1em;
+        margin: 3em .5em;
+        border: 1px solid #FFB135;
+        width: 15em;
+        height: 15em;
+        border-radius: 10px;
+        background-color: #2e2e2e;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        text-align: center;
+
+        @media (max-width: 750px) {
+            margin: 0.5em 0;
+        }
+
+        p {
+            font-size: 1.3em;
+        }
+
+        h3 {
+             color: #FFB135;
+            font-weight: bold;
+            font-size: 3em;
+        }
+
+        h4 {
+            font-weight: bold;
+            color: white;
+            font-size: 2em;
+
+        }
+
+    }
+
+    .why-feastey-icons-container {
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
+        flex-wrap: wrap;
+
+        >div {
+            flex: 1;
+            max-width: 20em;
+            text-align: center;
+            margin: 1em;
+        }
+
+        img {
+            width: 200px;
+        }
+    }
+}

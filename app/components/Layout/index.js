@@ -8,14 +8,14 @@ import Head from 'next/head'
 import '@fortawesome/fontawesome-free/css/all.css'
 
 const Layout = ((props) => {
-    const { contentClasses } = props
+    const { contentClasses, className } = props
     useEffect(() => {
         if(!props.user.token) {
             Cookie.remove("authToken")
         }
     },[])
     return (
-        <div className="app">
+        <div className={`app ${className}`}>
             <Head>
                 <link rel="shortcut icon" href="/favicon/favicon.ico" />
                 {/* <script data-ad-client="ca-pub-1746929838201665" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script> */}
