@@ -125,7 +125,7 @@ logic = {
         const aggregate = Business.aggregate(filters)
 
         if (!page) page = 1
-        if (!count) count = 1
+        if (!count) count = 10
 
         const options = {
             page: page,

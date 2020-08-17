@@ -55,7 +55,7 @@ const AllBusiness = (props) => {
         if (e) e.preventDefault()
 
         let newPage = 1
-        let count = 1
+        let count = 10
 
         if (firstLoad) {
             count = count * page
