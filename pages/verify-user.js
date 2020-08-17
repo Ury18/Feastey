@@ -28,7 +28,7 @@ const VerifyUser = (props) => {
                 <meta property="og:type" content="website" />
                 <meta name="og:title" property="og:title" content="Verificación de usuario - Feastey" />
                 <meta name="og:description" property="og:description" content="Pagina de verificación de usuarios - Feastey" />
-                <meta property="og:site_name" content="ury.feastey.com" />
+                <meta property="og:site_name" content={`${process.env.HOST}`} />
                 {/* <meta name="twitter:card" content="summary" />
                 <meta name="twitter:title" content="" />
                 <meta name="twitter:description" content={props.desc} />

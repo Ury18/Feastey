@@ -53,7 +53,7 @@ const LogIn = (props) => {
                 <meta property="og:type" content="website" />
                 <meta name="og:title" property="og:title" content="Inicia seión - Feastey" />
                 <meta name="og:description" property="og:description" content="Pagina de Inicia seión - Feastey" />
-                <meta property="og:site_name" content="ury.feastey.com" />
+                <meta property="og:site_name" content={`${process.env.HOST}`} />
             </Head>
             <form className="signup-form" onSubmit={(e) => logIn(e, { email, password })} style={{ maxWidth: "200px" }}>
                 <h2>Inicia sessión</h2>

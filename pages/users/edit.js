@@ -157,7 +157,7 @@ class EditUser extends Component {
                     <meta property="og:type" content="website" />
                     <meta name="og:title" property="og:title" content="información de usuario - Feastey" />
                     <meta name="og:description" property="og:description" content="Pagina de visualizacion de información de usuario - Feastey" />
-                    <meta property="og:site_name" content="ury.feastey.com" />
+                    <meta property="og:site_name" content={`${process.env.HOST}`} />
                 </Head>
                 {!section && <form onSubmit={(e) => editUsername(e)} style={{ maxWidth: "200px" }}>
                     <h1>Change username</h1>

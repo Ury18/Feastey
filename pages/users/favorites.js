@@ -44,7 +44,7 @@ const Favorites = (props) => {
                 <meta property="og:type" content="website" />
                 <meta name="og:title" property="og:title" content="Mis negocios favoritos - Feastey" />
                 <meta name="og:description" property="og:description" content="Pagina de visualizacion de mis negocios favoritos - Feastey" />
-                <meta property="og:site_name" content="ury.feastey.com" />
+                <meta property="og:site_name" content={`${process.env.HOST}`} />
             </Head>
             <h2>Mis negocios favoritos</h2>
             {favoritesList.length>0 && <BusinessList businessList={favoritesList} />}

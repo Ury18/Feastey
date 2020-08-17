@@ -337,7 +337,7 @@ class CreateBusiness extends Component {
                     <meta property="og:type" content="website" />
                     <meta name="og:title" property="og:title" content="Publica tu negocio! - Feastey" />
                     <meta name="og:description" property="og:description" content="Publica tu negocio ya en Feastey y aprovecha todas sus ventajas! - Feastey" />
-                    <meta property="og:site_name" content="ury.feastey.com" />
+                    <meta property="og:site_name" content={`${process.env.HOST}`} />
                 </Head>
                 {busy && <div className="busy" />}
                 <form onSubmit={(e) => createBusiness(e)} style={{ maxWidth: "55em !important" }}>

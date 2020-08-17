@@ -45,7 +45,7 @@ const MyBusinesses = (props) => {
                 <meta property="og:type" content="website" />
                 <meta name="og:title" property="og:title" content="Mis negocios - Feastey" />
                 <meta name="og:description" property="og:description" content="Pagina de visualizacion de negocios - Feastey" />
-                <meta property="og:site_name" content="ury.feastey.com" />
+                <meta property="og:site_name" content={`${process.env.HOST}`} />
             </Head>
             <h2 style={{ marginBottom: "1em" }}>Mis negocios</h2>
             <BusinessList businessList={myBusinesseslist} />

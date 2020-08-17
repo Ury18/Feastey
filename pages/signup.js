@@ -58,7 +58,7 @@ const Signup = (props) => {
                 <meta property="og:type" content="website" />
                 <meta name="og:title" property="og:title" content="Registrate ya! - Feastey" />
                 <meta name="og:description" property="og:description" content="No esperes mas y registrate ya en feastey.com! Pagina de registro - Feastey" />
-                <meta property="og:site_name" content="ury.feastey.com" />
+                <meta property="og:site_name" content={`${process.env.HOST}`} />
             </Head>
             <form className="signup-form" onSubmit={(e) => registerUser(e, { username, email, password, passwordConfirmation, role })} style={{ maxWidth: "200px" }}>
                 <h2>Crea tu cuenta</h2>

@@ -20,7 +20,7 @@ const Business = (props) => {
                 <meta name="og:description" property="og:description" content={`Pagina de ${business.name} - ${business.summary}.
                 Dirección: ${business.address}.
                 Categoria: ${business.category.name} - Feastey`} />
-                <meta property="og:site_name" content="ury.feastey.com" />
+                <meta property="og:site_name" content={`${process.env.HOST}`} />
             </Head>
             <DetailBusiness business={business} />
         </Layout>

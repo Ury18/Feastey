@@ -15,7 +15,7 @@ const Index = (props) => {
                 <meta property="og:type" content="website" />
                 <meta name="og:title" property="og:title" content="Política de Privacidad - Feastey" />
                 <meta name="og:description" property="og:description" content="Pagina de Política de Privacidad - Feastey" />
-                <meta property="og:site_name" content="ury.feastey.com" />
+                <meta property="og:site_name" content={`${process.env.HOST}`} />
             </Head>
             <div>
                 <h2>Política de Privacidad</h2>

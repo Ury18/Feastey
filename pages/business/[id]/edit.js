@@ -516,7 +516,7 @@ class EditBusiness extends Component {
                     <meta property="og:type" content="website" />
                     <meta name="og:title" property="og:title" content={`Editando ${business.name} - Feastey`} />
                     <meta name="og:description" property="og:description" content={`Pagina de edición de ${business.name} - Feastey`} />
-                    <meta property="og:site_name" content="ury.feastey.com" />
+                    <meta property="og:site_name" content={`${process.env.HOST}`} />
                 </Head>
                 {user.id == business.owner && <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
                     <div className="sections">

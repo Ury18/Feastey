@@ -8,7 +8,7 @@ import '../stylesheets/homePage.scss'
 const Index = (props) => {
     const { updateUserData } = props
     return (
-        <Layout className="home">
+        <Layout className="home" contentClasses="no-padding-bottom">
             <Head>
                 <title>Bienvenido a Feastey</title>
                 <meta name="viewport" content="initial-scale=1.0, width=device-width" />
@@ -17,9 +17,9 @@ const Index = (props) => {
                 <meta property="og:type" content="website" />
                 <meta name="og:title" property="og:title" content="Bienvenido a Feastey" />
                 <meta name="og:description" property="og:description" content="Bienvenido a Feastey - Descubre tu barrio" />
-                <meta property="og:site_name" content="ury.feastey.com" />
+                <meta property="og:site_name" content={`${process.env.HOST}`} />
             </Head>
-            {/* <Discover/> */}
+            <Discover/>
             <section className="white welcome">
                 <div>
                     <h1>Bienvenido a Feastey</h1>

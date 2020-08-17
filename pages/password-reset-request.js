@@ -39,7 +39,7 @@ const ResetPasswordRequest = (props) => {
                 <meta property="og:type" content="website" />
                 <meta name="og:title" property="og:title" content="Solicitud de cambio de contraseña - Feastey" />
                 <meta name="og:description" property="og:description" content="Pagina de Solicitud de cambio de contraseña - Feastey" />
-                <meta property="og:site_name" content="ury.feastey.com" />
+                <meta property="og:site_name" content={`${process.env.HOST}`} />
             </Head>
             {!emailSent && <form onSubmit={(e) => onSubmitForm(e)}>
                 <div style={{ display: "flex", flexDirection: "column" }}>

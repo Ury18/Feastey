@@ -157,7 +157,7 @@ const AllBusiness = (props) => {
                 <meta property="og:type" content="website" />
                 <meta name="og:title" property="og:title" content="Descubre tu zona - Feastey" />
                 <meta name="og:description" property="og:description" content="Descubre tu zona y conoce todos los negocios locales que te rodean! - Feastey" />
-                <meta property="og:site_name" content="ury.feastey.com" />
+                <meta property="og:site_name" content={`${process.env.HOST}`} />
             </Head>
             <form className="searchForm">
                 <div>
