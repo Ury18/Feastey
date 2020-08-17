@@ -1,0 +1,63 @@
+.custom-catalogue {
+
+    section {
+        width: 100%;
+        padding: 4em 0;
+
+        >div {
+            max-width: 75em;
+            margin: auto;
+        }
+    }
+
+    h3 {
+        color: #FFB135;
+        font-weight: bold;
+        font-size: 2em;
+    }
+
+    h2 {
+        color: #FFB135;
+        font-weight: bold;
+        font-size: 3.5em;
+    }
+
+    strong {
+        color: #ec9200 !important;
+
+        &.black {
+            color: black !important;
+        }
+    }
+
+    p {
+        font-size: 1.2em !important;
+        margin: 1em 0;
+
+        a {
+            color: #ec9200;
+        }
+    }
+
+    .thumbnails {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-wrap: wrap;
+
+        >div {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            margin: 1em;
+            img {
+                border: 1px solid #ddd;
+                height: 200px;
+                width: 140px;
+                margin: 1em;
+            }
+        }
+    }
+
+}
