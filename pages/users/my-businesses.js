@@ -48,12 +48,12 @@ const MyBusinesses = (props) => {
                 <meta property="og:site_name" content={`${process.env.HOST}`} />
             </Head>
             <h2 style={{ marginBottom: "1em" }}>Mis negocios</h2>
-            <BusinessList businessList={myBusinesseslist} />
             <Link href={`/business/create`}>
-                <a className="button">
+                <a style={{ marginBottom: "2em" }} className="button">
                     Crear nuevo negocio
                 </a>
             </Link>
+            <BusinessList businessList={myBusinesseslist} />
         </Layout>
     )
 }
