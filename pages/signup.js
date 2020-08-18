@@ -4,6 +4,7 @@ import { connect } from 'react-redux'
 import { updateUserData } from '../app/redux/user/action'
 import { useRouter } from 'next/router'
 import Head from 'next/head'
+import Link from 'next/link'
 import '../stylesheets/signupForm.scss'
 
 const Signup = (props) => {
@@ -63,29 +64,39 @@ const Signup = (props) => {
             <form className="signup-form" onSubmit={(e) => registerUser(e, { username, email, password, passwordConfirmation, role })} style={{ maxWidth: "200px" }}>
                 <h2>Crea tu cuenta</h2>
                 <div className="roles">
-                    <p className={`${role == "user" ? "selected":""}`} onClick={e => setRole("user")}>Usuario</p>
+                    <p className={`${role == "user" ? "selected" : ""}`} onClick={e => setRole("user")}>Usuario</p>
                     <p className={`${role == "businessOwner" ? "selected" : ""}`} onClick={e => setRole("businessOwner")}>Profesional</p>
                 </div>
                 <div style={{ display: "flex", flexDirection: "column" }}>
                     <label>Username</label>
-                    <input onChange={(e) => setUsername(e.target.value)} type="text" name="text" required/>
+                    <input onChange={(e) => setUsername(e.target.value)} type="text" name="text" required />
                 </div>
                 <div style={{ display: "flex", flexDirection: "column" }}>
                     <label>Email</label>
-                    <input onChange={(e) => setEmail(e.target.value)} type="email" name="email" required/>
+                    <input onChange={(e) => setEmail(e.target.value)} type="email" name="email" required />
                 </div>
                 <div style={{ display: "flex", flexDirection: "column" }}>
                     <label>Password</label>
-                    <input onChange={(e) => setPassword(e.target.value)} type="password" name="password" required/>
+                    <input onChange={(e) => setPassword(e.target.value)} type="password" name="password" required />
                 </div>
                 <div style={{ display: "flex", flexDirection: "column" }}>
                     <label>Password Confirmation</label>
-                    <input onChange={(e) => setPasswordConfirmation(e.target.value)} type="password" name="passwordConfirmation" required/>
+                    <input onChange={(e) => setPasswordConfirmation(e.target.value)} type="password" name="passwordConfirmation" required />
                 </div>
 
                 {errors && <p className="errors">{errors}</p>}
 
                 <button type="submit">Enviar</button>
+
+                <p className="alt-message">
+                    ¿Ya tienes cuenta? <br />
+                    <Link href="/login">
+                        <a>
+                            <strong>Inicia Sesión</strong>
+                        </a>
+                    </Link>
+                </p>
+
             </form>
         </Layout>
     )

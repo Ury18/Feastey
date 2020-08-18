@@ -71,6 +71,16 @@ const LogIn = (props) => {
 
                 {errors && <p className="errors">{errors}</p>}
                 <button type="submit">Iniciar Sesión</button>
+
+                <p className="alt-message">
+                    ¿No tienes cuenta? <br />
+                    <Link href="/signup">
+                        <a>
+                            <strong>Regístrate</strong>
+                        </a>
+                    </Link>
+                </p>
+
             </form>
         </Layout>
     )

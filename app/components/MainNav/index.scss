@@ -64,7 +64,10 @@
                 padding: 0;
 
                 &#registerButtonBox,&#accountBoxButton {
-
+                    i {
+                        font-size: 1em;
+                        margin-right: .2em;
+                    }
                     &:focus {
                         outline: none;
                     }
@@ -86,6 +89,7 @@
 
 
     a {
+        font-size: 1.3em;
         position: relative;
         &:after {
             content: "";
@@ -109,7 +113,7 @@
         padding-left: 0;
 
         >li {
-            margin: 1em 0;
+            margin: 2em 0;
         }
 
         ul {
