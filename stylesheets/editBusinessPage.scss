@@ -86,6 +86,20 @@ form {
 
 }
 
+.payment-info {
+    >p {
+        margin: 2em 0;
+    }
+    >h2 {
+        margin: 2em 0 1em 0 !important;
+        text-align: center;
+    }
+
+    .stripeCardContainer {
+        margin-top: 0;
+    }
+}
+
 .payment {
     a {
         color: #ec9200;

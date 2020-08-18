@@ -652,13 +652,15 @@ class EditBusiness extends Component {
                                 </div>
                             </div>
                             {renderPlanWarning()}
-                            {last4}
-                            <Elements stripe={stripePromise}>
-                                <PaymentInfoForm onSubmit={(paymentMethodId) => this.setState({ paymentMethodId })} />
-                            </Elements>
-                            {errors && <p className="errors">{errors}</p>}
-
-                            <button type="submit">Guardar</button>
+                            <div className="payment-info">
+                                {last4 && <p>Tarjeta en uso actualmente: **** **** **** {last4}</p>}
+                                <h2>Cambiar Tarjeta</h2>
+                                <Elements stripe={stripePromise}>
+                                    <PaymentInfoForm onSubmit={(paymentMethodId) => this.setState({ paymentMethodId })} />
+                                </Elements>
+                                {errors && <p className="errors">{errors}</p>}
+                            </div>
+                                <button type="submit">Guardar</button>
                         </form>
                     }
                     {section == "qrs" &&
