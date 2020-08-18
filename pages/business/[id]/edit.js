@@ -640,17 +640,20 @@ class EditBusiness extends Component {
                     }
                     {section == "qrs" &&
                         <form onSubmit={e => generateQrs(e)}>
-                            {qr_codes.length > 0 && <p style={{ marginTop: "1em" }}><strong>Haz click derecho</strong> sobre el código QR y selecciona <strong>"Guardar imagen como"</strong> para descargar el código</p>}
-                            <p style={{ marginTop: "1em", marginBottom: "1em" }}>Selecciona el idioma que desees y haz click en generar para obtener los codigos QR de tu negocio.</p>
-                            <div>
-                                <label>Idioma</label>
-                                <select name="qrsLanguage" onChange={e => setInputValue(e.target.name, e.target.value)}>
-                                    <option value="">Ninguno</option>
-                                    <option value="es">Español</option>
-                                </select>
+                            <p style={{ marginTop: "2em", marginBottom: "2em" }}>Selecciona el idioma que desees y haz click en generar para obtener los codigos QR de tu negocio.</p>
+                            <div className="qr-generator-section">
+                                <div>
+                                    <label>Idioma</label>
+                                    <select name="qrsLanguage" onChange={e => setInputValue(e.target.name, e.target.value)}>
+                                        <option value="">Ninguno</option>
+                                        <option value="es">Español</option>
+                                    </select>
+                                </div>
+                                <button type="submit">Generar</button>
                             </div>
                             {errors && <p className="errors">{errors}</p>}
-                            <button type="submit">Generar</button>
+                            {qr_codes.length > 0 && <h2>Tus Códigos QR</h2>}
+                            {qr_codes.length > 0 && <p style={{ marginTop: "1em" }}><strong>Haz click derecho</strong> sobre el código QR y selecciona <strong>"Guardar imagen como"</strong> para descargar el código</p>}
                             {qr_codes.length > 0 && renderQrs()}
                         </form>
                     }
