@@ -8,7 +8,7 @@ export default ((props) => {
             <div>
                 <Link href="/business">
                     <a className="discover_button button">
-                        <i class="fas fa-search-location discover_icon" />
+                        <i className="fas fa-search-location discover_icon" />
                     Descubre tu zona
                 </a>
                 </Link>

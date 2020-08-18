@@ -4,6 +4,7 @@ import Layout from '../../app/components/Layout'
 import { updateUserData } from '../../app/redux/user/action'
 import Router from 'next/router'
 import Head from 'next/head'
+import '../../stylesheets/editUser.scss'
 
 class EditUser extends Component {
 
@@ -19,7 +20,6 @@ class EditUser extends Component {
 
     componentDidMount = () => {
         const { user, section } = this.props
-        this.setState({ username: user.username })
         this.setState({ section })
     }
 
@@ -49,7 +49,8 @@ class EditUser extends Component {
                 if (res.error) {
                     this.setState({ errors: res.error })
                 } else {
-                    Router.push(Router.asPath)
+                    this.setState({ section: "info", errors: "", password: "", newPassword: "", newPasswordConfirmation: "", email: "", username: "" })
+                    window.location = "/users/edit"
                 }
             })
             .catch(err => {
@@ -84,9 +85,8 @@ class EditUser extends Component {
                 if (res.error) {
                     this.setState({ errors: res.error })
                 } else {
-                    this.setState({ section: "", errors: "", password: "", newPassword: "", newPasswordConfirmation: "", email: "" })
-                    Router.replace(`/users/edit`)
-                    updateUserData(res)
+                    this.setState({ section: "info", errors: "", password: "", newPassword: "", newPasswordConfirmation: "", email: "", username: "" })
+                    window.location = "/users/edit"
                 }
             })
             .catch(err => {
@@ -122,9 +122,8 @@ class EditUser extends Component {
                 if (res.error) {
                     this.setState({ errors: res.error })
                 } else {
-                    this.setState({ section: "", errors: "", password: "", newPassword: "", newPasswordConfirmation: "", email: "" })
-                    Router.replace(`/users/edit`)
-                    updateUserData(res)
+                    this.setState({ section: "info", errors: "", password: "", newPassword: "", newPasswordConfirmation: "", email: "", username: "" })
+                    window.location = "/users/edit"
                 }
             })
             .catch(err => {
@@ -140,15 +139,16 @@ class EditUser extends Component {
 
     setSection = (e) => {
         e.preventDefault()
-        this.setState({ section: e.target.name, errors: "", password: "", newPassword: "", newPasswordConfirmation: "", email: "" })
+        this.setState({ section: e.target.name, errors: "", password: "", newPassword: "", newPasswordConfirmation: "", email: "", username: "" })
         Router.replace(`/users/edit` + `?section=${e.target.name}`)
     }
 
     render() {
-        const { username, errors, section } = this.state
+        const { errors, section } = this.state
+        const { user } = this.props
         const { setInputValue, editUsername, setSection, editEmail, editPassword } = this
         return (
-            <Layout contentClasses="centered">
+            <Layout contentClasses="background-gray" className="edit-user">
                 <Head>
                     <title>Editar información - Feastey</title>
                     <meta name="viewport" content="initial-scale=1.0, width=device-width" />
@@ -159,48 +159,59 @@ class EditUser extends Component {
                     <meta name="og:description" property="og:description" content="Pagina de visualizacion de información de usuario - Feastey" />
                     <meta property="og:site_name" content={`${process.env.HOST}`} />
                 </Head>
-                {!section && <form onSubmit={(e) => editUsername(e)} style={{ maxWidth: "200px" }}>
-                    <h1>Change username</h1>
+
+                <div className="sections">
+                    <a href="#" className={`section ${section == "info" ? "selected" : ""}`} style={{ cursor: "pointer" }} name="info" onClick={e => setSection(e)}>Información</a>
+                    <a href="#" className={`section ${section == "username" ? "selected" : ""}`} style={{ cursor: "pointer" }} name="username" onClick={e => setSection(e)}>Cambiar nombre de usuario</a>
+                    <a href="#" className={`section ${section == "email" ? "selected" : ""}`} style={{ cursor: "pointer" }} name="email" onClick={e => setSection(e)}>Cambiar de dirección de correo</a>
+                    <a href="#" className={`section ${section == "password" ? "selected" : ""}`} style={{ cursor: "pointer" }} name="password" onClick={e => setSection(e)}>Cambiar Contraseña</a>
+                </div>
+
+                {section && section == "info" && <form>
+                    <h2>Tu información</h2>
+                    <div style={{textAlign: "left"}}>
+                        <p><span>Nombre de usuario: </span> {user.username}</p>
+                        <p><span>Dirección de correo: </span> {user.email}</p>
+                    </div>
+                </form>}
+                {section && section == "username" && <form onSubmit={(e) => editUsername(e)} style={{ maxWidth: "200px" }}>
+                    <h2>Cambiar Nombre</h2>
 
                     <div style={{ display: "flex", flexDirection: "column" }}>
                         <label>Nombre</label>
-                        <input onChange={(e) => setInputValue(e.target.name, e.target.value)} type="text" defaultValue={username} name="username" />
-                        <a style={{ cursor: "pointer" }} name="email" onClick={e => setSection(e)}>Cambiar Email</a>
-                        <a style={{ cursor: "pointer" }} name="password" onClick={e => setSection(e)}>Cambiar Contraseña</a>
+                        <input onChange={(e) => setInputValue(e.target.name, e.target.value)} type="text" name="username" />
                     </div>
                     <button type="submit">Guardar</button>
                     {errors && <p className="errors">{errors}</p>}
                 </form>}
                 {section && section == "email" && <form onSubmit={(e) => editEmail(e)} style={{ maxWidth: "200px" }}>
-                    <h1>Change email</h1>
+                    <h2>Cambiar dirección de correo</h2>
 
                     <div style={{ display: "flex", flexDirection: "column" }}>
                         <label>Contraseña</label>
-                        <input onChange={(e) => setInputValue(e.target.name, e.target.value)} type="password" name="password" required/>
+                        <input onChange={(e) => setInputValue(e.target.name, e.target.value)} type="password" name="password" required />
                     </div>
                     <div style={{ display: "flex", flexDirection: "column" }}>
                         <label>Nuevo Email</label>
-                        <input onChange={(e) => setInputValue(e.target.name, e.target.value)} type="email" name="email" required/>
-                        <a style={{ cursor: "pointer" }} name="" onClick={e => setSection(e)}>volver</a>
+                        <input onChange={(e) => setInputValue(e.target.name, e.target.value)} type="email" name="email" required />
                     </div>
                     <button type="submit">Guardar</button>
                     {errors && <p className="errors">{errors}</p>}
                 </form>}
                 {section && section == "password" && <form onSubmit={(e) => editPassword(e)} style={{ maxWidth: "200px" }}>
-                    <h1>Change pass</h1>
+                    <h2>Cambiar Contraseña</h2>
 
                     <div style={{ display: "flex", flexDirection: "column" }}>
                         <label>Contraseña Actual</label>
-                        <input onChange={(e) => setInputValue(e.target.name, e.target.value)} type="password" name="password" required/>
+                        <input onChange={(e) => setInputValue(e.target.name, e.target.value)} type="password" name="password" required />
                     </div>
                     <div style={{ display: "flex", flexDirection: "column" }}>
                         <label>Nueva Contraseña</label>
-                        <input onChange={(e) => setInputValue(e.target.name, e.target.value)} type="password" name="newPassword" required/>
+                        <input onChange={(e) => setInputValue(e.target.name, e.target.value)} type="password" name="newPassword" required />
                     </div>
                     <div style={{ display: "flex", flexDirection: "column" }}>
                         <label>Nueva Contraseña</label>
-                        <input onChange={(e) => setInputValue(e.target.name, e.target.value)} type="password" name="newPasswordConfirmation" required/>
-                        <a style={{ cursor: "pointer" }} name="" onClick={e => setSection(e)}>volver</a>
+                        <input onChange={(e) => setInputValue(e.target.name, e.target.value)} type="password" name="newPasswordConfirmation" required />
                     </div>
                     <button type="submit">Guardar</button>
                     {errors && <p className="errors">{errors}</p>}
@@ -212,7 +223,7 @@ class EditUser extends Component {
 }
 
 EditUser.getInitialProps = async (ctx) => {
-    const section = ctx.query.section || ""
+    const section = ctx.query.section || "info"
     return { section }
 }
 

@@ -388,7 +388,7 @@ class CreateBusiness extends Component {
                         </div>
                     </div>
                     {location && location.length > 0 && <div className="map-container">
-                        <GoogleMap class="map" lng={location[0]} lat={location[1]} />
+                        <GoogleMap className="map" lng={location[0]} lat={location[1]} />
                     </div>}
                     <div style={{ display: "flex", flexDirection: "column", marginBottom: "2.4em" }}>
                         <label>Descripción</label>

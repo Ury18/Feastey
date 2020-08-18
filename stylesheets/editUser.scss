@@ -1,0 +1,91 @@
+.edit-user {
+    form {
+
+        background-color: white;
+        padding: 2em;
+        border-radius: 1em;
+        max-width: none !important;
+        input {
+            margin-bottom: 1em;
+        }
+
+        h2 {
+            font-size: 2em;
+            color: #383838;
+            margin-bottom: 1em;
+        }
+
+        .alt-message {
+            margin-top: 1em;
+            text-align: center;
+
+            strong {
+                color: #ec9200;
+                transition: color .2s ease;
+                &:hover {
+                    color: black;
+                }
+            }
+
+        }
+
+        .roles {
+            display: flex;
+
+            p {
+                margin: 0em 1em 2em 0;
+                cursor: pointer;
+                position: relative;
+                &:after {
+                    content: "";
+                    position: absolute;
+                    bottom: -5px;
+                    left: 0;
+                    width: 0;
+                    border-bottom: 2px solid #FFB135;
+                    transition: all 0.2s ease;
+                }
+
+                &.selected {
+                    &:after{
+                        width: 100%;
+                    }
+                }
+            }
+        }
+    }
+}
+
+span {
+    color: rgb(88, 88, 88);
+}
+
+.sections {
+    margin-bottom: 1em;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    text-align: center;
+
+    a {
+        margin: .3em 1em;
+        position: relative;
+
+        &:after {
+            content: "";
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            border-bottom: 2px solid #FFB135;
+        }
+
+        &.selected {
+            &:after{
+                width: 100%;
+            }
+        }
+    }
+}
