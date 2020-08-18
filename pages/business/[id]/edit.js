@@ -532,6 +532,12 @@ class EditBusiness extends Component {
                     {(section == "business" || section == "") &&
                         <form onSubmit={(e) => editBusiness(e)}>
                             <h1 style={{ textAlign: "center" }}>{`Editando ${business.name}`}</h1>
+                            <p style={{ marginBottom: "3em" }}>
+                                Si necestitas ayuda para crear el perfil de tu negocio
+                                <Link href="/help">
+                                    <a style={{ color: "#ec9200 !important", fontWeight: "bold" }}> haz click aqui</a>
+                                </Link>
+                            </p>
                             {/* <div style={{ display: "flex", flexDirection: "row", justifyContent: "space-between", alignItems: "center", marginBottom: "1.4em", width: "50%" }}>
                         <label>Publicado</label>
                         <input onChange={(e) => setInputValue(e.target.name, e.target.checked)} type="checkbox" checked={isPublished} name="isPublished" />
@@ -613,8 +619,14 @@ class EditBusiness extends Component {
                         </form>
                     }
                     {section == "payment" &&
-                        <form onSubmit={(e) => editPaymentsInfo(e)}>
-                            <h2 style={{ marginBottom: ".5em" }}>Tu plan</h2>
+                        <form className="payment" onSubmit={(e) => editPaymentsInfo(e)}>
+                            <h1 style={{ marginBottom: ".5em" }}>Tu plan</h1>
+                            <p style={{ marginBottom: "3em" }}>
+                                Si necestitas ayuda para crear el perfil de tu negocio
+                                <Link href="/help">
+                                    <a style={{fontWeight: "bold" }}> haz click aqui</a>
+                                </Link>
+                            </p>
                             <div className="priceList">
                                 <div className={`price ${subscriptionPlan == "free" ? " selected" : ""}`} onClick={(e) => setInputValue("subscriptionPlan", "free")}>
                                     <h3>Free</h3>

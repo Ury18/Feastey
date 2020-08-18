@@ -345,6 +345,12 @@ class CreateBusiness extends Component {
                 {busy && <div className="busy" />}
                 <form onSubmit={(e) => createBusiness(e)} style={{ maxWidth: "55em !important" }}>
                     <h1 style={{ textAlign: "center" }}>Crea tu negocio</h1>
+                    <p style={{ marginBottom: "3em"}}>
+                        Si necestitas ayuda para crear el perfil de tu negocio
+                            <Link href="/help">
+                            <a style={{ color: "#ec9200 !important", fontWeight: "bold" }}> haz click aqui</a>
+                        </Link>
+                    </p>
                     <div className="info-field">
                         <label>Nombre</label>
                         <input onChange={(e) => setInputValue(e.target.name, e.target.value)} name="name" type="text" required />
