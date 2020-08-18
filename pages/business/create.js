@@ -42,7 +42,7 @@ class CreateBusiness extends Component {
         whatsapp:"",
         twitter: "",
         instagram: "",
-        subscriptionPlan: "",
+        subscriptionPlan: "free",
         busy: false
     }
 
