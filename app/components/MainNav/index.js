@@ -64,6 +64,16 @@ const MainNav = ((props) => {
         <div>
             <nav className="mainNav">
                 <ul>
+                    <li>
+                        <Link href="/contact">
+                            <a className={router.pathname == "/contact" ? "active" : ""}>Contacto</a>
+                        </Link>
+                    </li>
+                    <li>
+                        <Link href="/help">
+                            <a className={router.pathname == "/help" ? "active" : ""}>Ayuda</a>
+                        </Link>
+                    </li>
                     {!props.user.token && <li>
                         <Link href="/signup">
                             <a className={router.pathname == "/signup" ? "active" : ""}>Registrarse</a>
@@ -103,6 +113,16 @@ const MainNav = ((props) => {
             <nav className={`mainNav mobile ${navActive ? "active" : ""}`}>
                 <i className="closeMenu fas fa-times" onClick={(e) => setNavActive(false)}></i>
                 <ul>
+                    <li>
+                        <Link href="/contact">
+                            <a className={router.pathname == "/contact" ? "active" : ""}>Contacto</a>
+                        </Link>
+                    </li>
+                    <li>
+                        <Link href="/help">
+                            <a className={router.pathname == "/help" ? "active" : ""}>Ayuda</a>
+                        </Link>
+                    </li>
                     {!props.user.token && <li>
                         <Link href="/signup">
                             <a className={router.pathname == "/signup" ? "active" : ""}>Registrarse</a>
@@ -114,26 +134,22 @@ const MainNav = ((props) => {
                         </Link>
                     </li>}
                     {props.user.token && <li>
-                        <ul id="accountBox">
-                            <li>
-                                <Link href={`/users/edit`}>
-                                    <a className={router.pathname == '/users/edit' ? "active" : ""}>Información de la cuenta</a>
-                                </Link>
-                            </li>
-                            <li>
-                                <Link href={`/users/favorites`}>
-                                    <a className={router.pathname == '/users/favorites' ? "active" : ""}>Favoritos</a>
-                                </Link>
-                            </li>
-                            <li>
-                                <Link href={`/users/my-businesses`}>
-                                    <a className={router.pathname == '/users/my-businesses' ? "active" : ""}>Mis negocios</a>
-                                </Link>
-                            </li>
-                            <li>
-                                <button onClick={(e) => onExit(e)}>Salir</button>
-                            </li>
-                        </ul>
+                        <Link href={`/users/edit`}>
+                            <a className={router.pathname == '/users/edit' ? "active" : ""}>Información de la cuenta</a>
+                        </Link>
+                    </li>}
+                    {props.user.token && <li>
+                        <Link href={`/users/favorites`}>
+                            <a className={router.pathname == '/users/favorites' ? "active" : ""}>Favoritos</a>
+                        </Link>
+                    </li>}
+                    {props.user.token && <li>
+                        <Link href={`/users/my-businesses`}>
+                            <a className={router.pathname == '/users/my-businesses' ? "active" : ""}>Mis negocios</a>
+                        </Link>
+                    </li>}
+                    {props.user.token && <li>
+                        <button onClick={(e) => onExit(e)}>Salir</button>
                     </li>}
                 </ul>
             </nav>

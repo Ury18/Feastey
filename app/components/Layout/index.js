@@ -10,10 +10,10 @@ import '@fortawesome/fontawesome-free/css/all.css'
 const Layout = ((props) => {
     const { contentClasses, className } = props
     useEffect(() => {
-        if(!props.user.token) {
+        if (!props.user.token) {
             Cookie.remove("authToken")
         }
-    },[])
+    }, [])
     return (
         <div className={`app ${className}`}>
             <Head>
@@ -26,7 +26,7 @@ const Layout = ((props) => {
                     {props.children}
                 </div>
             </div>
-            <Footer className= "footer"/>
+            <Footer />
         </div>
     )
 })

@@ -1,0 +1,35 @@
+.help {
+
+    img {
+        max-width: 100%;
+    }
+
+    section {
+        >div {
+            margin: 3em;
+            h2 {
+                margin-bottom: 1em;
+            }
+            h4 {
+                margin-bottom: .5em;
+            }
+
+            ol {
+                margin-bottom: 1em;
+
+                li {
+                    margin: .5em 0;
+                }
+            }
+        }
+    }
+
+    .fa-trash {
+        color: rgb(165, 46, 46);
+    }
+
+    .fa-check {
+        left: .5em;
+        color: rgb(35, 109, 35);
+    }
+}
