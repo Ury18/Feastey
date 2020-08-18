@@ -445,7 +445,7 @@ class CreateBusiness extends Component {
 
                     {errors && <p className="errors">{errors}</p>}
 
-                    <button type="submit">Send</button>
+                    <button type="submit">Guardar</button>
                 </form>
             </Layout>
         )
