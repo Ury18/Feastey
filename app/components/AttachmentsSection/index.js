@@ -25,11 +25,11 @@ class AttachmentsSection extends Component {
         newFiles.push(value)
         this.setState({ files: newFiles },
             () => {
-                if (uploadCallback && newFiles.length < 2) {
-                    uploadCallback(this.state)
-                } else {
+                // if (uploadCallback && newFiles.length < 2) {
+                //     // uploadCallback(this.state)
+                // } else {
                     updateCallback(index, this.state)
-                }
+                // }
             })
     }
 
@@ -63,8 +63,7 @@ class AttachmentsSection extends Component {
 
     setInputValue = (name, value) => {
         const { updateCallback, index } = this.props
-
-        if (name && value) {
+        if (name) {
             this.setState({ [name]: value }, () => {
                 if (updateCallback) {
                     updateCallback(index, this.state)
@@ -83,7 +82,7 @@ class AttachmentsSection extends Component {
         newFiles = files.map((item, index) => {
             return <FileUploader key={index} index={index} updateCallback={onUpdateFile} uploadCallback={onUploadFile} data={item} tempFileCallback={tempFileCallback} deleteCallback={onDeleteFile} />
         })
-
+        newFiles.push(<label className="newFileLabel">Nuevo archivo</label>)
         newFiles.push(<FileUploader updateCallback={onUpdateFile} uploadCallback={onUploadFile} tempFileCallback={tempFileCallback} deleteCallback={onDeleteFile} />)
         return newFiles
     }
@@ -93,7 +92,7 @@ class AttachmentsSection extends Component {
         const { setInputValue, renderFilesUploader } = this
         return (
             <div style={{ display: "flex", flexDirection: "column", marginBottom: "4em" }}>
-                <label>Nombre de la sección</label>
+                <label className="newFileLabel" style={{fontSize:"1.4em"}}>Nombre de la sección</label>
                 <input style={{ marginBottom: ".5em" }} type="text" value={name} name="name" onChange={e => setInputValue(e.target.name, e.target.value)} />
                 {renderFilesUploader()}
             </div >
