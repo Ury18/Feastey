@@ -88,7 +88,8 @@
     padding: 1em;
 
 
-    a {
+
+    a,button {
         font-size: 1.3em;
         position: relative;
         &:after {
@@ -104,6 +105,22 @@
         &:hover, &.active {
             &:after{
                 width: 100%;
+            }
+        }
+    }
+
+    button {
+        background-color: transparent !important;
+        border: none;
+        padding: 0;
+
+        &#registerButtonBox,&#accountBoxButton {
+            i {
+                font-size: 1em;
+                margin-right: .2em;
+            }
+            &:focus {
+                outline: none;
             }
         }
     }
