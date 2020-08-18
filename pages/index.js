@@ -8,7 +8,7 @@ import '../stylesheets/homePage.scss'
 const Index = (props) => {
     const { updateUserData } = props
     return (
-        <Layout className="home" contentClasses="no-padding-bottom">
+        <Layout className="home" contentClasses="no-padding-bottom no-padding-top">
             <Head>
                 <title>Bienvenido a Feastey</title>
                 <meta name="viewport" content="initial-scale=1.0, width=device-width" />
