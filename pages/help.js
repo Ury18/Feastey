@@ -21,7 +21,7 @@ const Help = (props) => {
                     <h2>Como crear una pagina de negocio</h2>
                     <ol>
                         <li>
-                            <p>Haz click sobre tu nombre de usuario en la esquina superior derecha o sobre el menú de navegación ( <i className="fas fa-bars"/> ) si estas en dispotivio móvil.</p>
+                            <p>Haz click sobre tu nombre de usuario en la esquina superior derecha o sobre el menú de navegación ( <i className="fas fa-bars"/> ) si estas en dispositivo móvil.</p>
                         </li>
                         <li>
                             <p>Haz click en <strong>"Mis Negocios".</strong></p>

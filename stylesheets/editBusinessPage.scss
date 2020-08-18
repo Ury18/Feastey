@@ -95,6 +95,18 @@ form {
 .stripeCardContainer {
     width: 20em !important;
     max-width: initial !important;
+    margin: 2em 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    >div {
+        width: 100%;
+        margin-bottom: 1em;
+        .StripeElement  {
+            margin-top: .5em !important;
+        }
+    }
 }
 
 .sections {

@@ -18,7 +18,12 @@
     justify-content: center;
     align-items: center;
     margin: auto;
-
+    min-width: 10em !important;
+    max-width: 12em !important;
+    width: auto;
+    @media (max-width: 670px) {
+        max-width: 9em !important;
+    }
     .discover_icon{
         margin-right: .2em;
         color: black;

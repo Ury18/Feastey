@@ -42,10 +42,10 @@ const VerifyUser = (props) => {
                 <link rel="canonical" href="" /> */}
             </Head>
             {verified && <div>
-                <h1>Cuenta Verificada</h1>
+                <h2>Cuenta Verificada</h2>
             </div>}
             {!verified && <div>
-                <h1>No se ha podido verificar correctamente</h1>
+                <h2>No se ha podido verificar correctamente</h2>
             </div>}
         </Layout>
     )

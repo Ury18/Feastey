@@ -42,6 +42,10 @@
         h1,h2 {
             color: #FFB135;
             margin: 0;
+
+            @media(max-width: 750px) {
+                text-align: center;
+            }
         }
 
         strong {
