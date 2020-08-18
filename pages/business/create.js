@@ -345,10 +345,12 @@ class CreateBusiness extends Component {
                 {busy && <div className="busy" />}
                 <form onSubmit={(e) => createBusiness(e)} style={{ maxWidth: "55em !important" }}>
                     <h1 style={{ textAlign: "center" }}>Crea tu negocio</h1>
-                    <p style={{ marginBottom: "3em"}}>
+                    <p style={{ marginBottom: "3em" }}>
                         Si necestitas ayuda para crear el perfil de tu negocio
                             <Link href="/help">
-                            <a style={{ color: "#ec9200 !important", fontWeight: "bold" }}> haz click aqui</a>
+                            <strong className="orange">
+                                <a> haz click aqui</a>
+                            </strong>
                         </Link>
                     </p>
                     <div className="info-field">
@@ -417,7 +419,7 @@ class CreateBusiness extends Component {
                         <p style={{ marginBottom: "1em", marginTop: "2em" }}>
                             Necesitas un catálogo profesional?
                             <Link href="/custom-catalogues">
-                                <a style={{color:"#ec9200 !important", fontWeight:"bold"}}> Contacta con nosotros</a>
+                                <a style={{ color: "#ec9200 !important", fontWeight: "bold" }}> Contacta con nosotros</a>
                             </Link>
                         </p>
                         <h2 style={{ marginBottom: "1em" }}>Secciones de archivos</h2>

@@ -127,7 +127,13 @@ form {
     }
 }
 
+.orange {
+    color: #ec9200;
+    * {
+        color: #ec9200
 
+    }
+}
 
 .priceList {
     display: flex;

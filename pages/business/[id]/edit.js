@@ -535,7 +535,9 @@ class EditBusiness extends Component {
                             <p style={{ marginBottom: "3em" }}>
                                 Si necestitas ayuda para crear el perfil de tu negocio
                                 <Link href="/help">
-                                    <a style={{ color: "#ec9200 !important", fontWeight: "bold" }}> haz click aqui</a>
+                                    <strong className="orange">
+                                        <a> haz click aqui</a>
+                                    </strong>
                                 </Link>
                             </p>
                             {/* <div style={{ display: "flex", flexDirection: "row", justifyContent: "space-between", alignItems: "center", marginBottom: "1.4em", width: "50%" }}>
@@ -624,7 +626,9 @@ class EditBusiness extends Component {
                             <p style={{ marginBottom: "3em" }}>
                                 Si necestitas ayuda para crear el perfil de tu negocio
                                 <Link href="/help">
-                                    <a style={{fontWeight: "bold" }}> haz click aqui</a>
+                                    <strong className="orange">
+                                        <a> haz click aqui</a>
+                                    </strong>
                                 </Link>
                             </p>
                             <div className="priceList">
