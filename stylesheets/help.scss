@@ -1,5 +1,13 @@
 .help {
 
+    h1 {
+        margin-left: 0;
+        font-size: 3em;
+        @media (max-width: 750px) {
+            font-size: 2em;
+        }
+    }
+
     img {
         max-width: 100%;
     }

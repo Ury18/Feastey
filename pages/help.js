@@ -16,12 +16,14 @@ const Help = (props) => {
                 <meta property="og:site_name" content={`${process.env.HOST}`} />
             </Head>
             <section>
-                <h1>Sección de Ayuda</h1>
+                <div>
+                    <h1>Sección de Ayuda</h1>
+                </div>
                 <div>
                     <h2>Como crear una pagina de negocio</h2>
                     <ol>
                         <li>
-                            <p>Haz click sobre tu nombre de usuario en la esquina superior derecha o sobre el menú de navegación ( <i className="fas fa-bars"/> ) si estas en dispositivo móvil.</p>
+                            <p>Haz click sobre tu nombre de usuario en la esquina superior derecha o sobre el menú de navegación ( <i className="fas fa-bars" /> ) si estas en dispositivo móvil.</p>
                         </li>
                         <li>
                             <p>Haz click en <strong>"Mis Negocios".</strong></p>
@@ -64,7 +66,7 @@ const Help = (props) => {
                             <p>Accede a la página de edición del negocio</p>
                         </li>
                         <li>
-                            <p>Modifica el nombre del archivo o imagen, aparecerá el símbolo de confirmación ( <i className="fas fa-check"/ > ) una vez modificado, pulsa en el para guardar los cambios</p>
+                            <p>Modifica el nombre del archivo o imagen, aparecerá el símbolo de confirmación ( <i className="fas fa-check" /> ) una vez modificado, pulsa en el para guardar los cambios</p>
                             <img src="/img/help/file-example.png" />
                         </li>
                     </ol>
@@ -105,7 +107,7 @@ const Help = (props) => {
                             <p>Haz click en la sección de dirección e introduce la dirección de tu negocio</p>
                         </li>
                         <li>
-                            <p>Una vez introducido, aparecerá el símbolo de confirmación ( <i className="fas fa-check"/> ), pulsa en el para confirmar tu dirección</p>
+                            <p>Una vez introducido, aparecerá el símbolo de confirmación ( <i className="fas fa-check" /> ), pulsa en el para confirmar tu dirección</p>
                         </li>
                         <li>
                             <p>Sigue rellenando la informmación necesaria y al llegar al final del formulario haz click en el botón <strong>"Guardar"</strong> para confirmar los ajustes.</p>
@@ -166,7 +168,7 @@ const Help = (props) => {
                     <h4>Eliminar la imagen de perfil de mi negocio.</h4>
                     <ol>
                         <li>
-                            <p>Haz click en el icono de la papelera ( <i className="fas fa-trash"/> ) para eliminar la Imagen de Perfil.</p>
+                            <p>Haz click en el icono de la papelera ( <i className="fas fa-trash" /> ) para eliminar la Imagen de Perfil.</p>
                         </li>
                         <li>
                             <p> Una vez eliminada la Imagen de Perfil, haz click en el botón <strong>"Guardar"</strong> al final del formulario, para confirmar los ajustes.</p>
@@ -192,7 +194,7 @@ const Help = (props) => {
                     <h4>Eliminar las Imagenes de la galería mi negocio.</h4>
                     <ol>
                         <li>
-                            <p>Haz click en el icono de la papelera ( <i className="fas fa-trash"/> ) para eliminar la imagen.</p>
+                            <p>Haz click en el icono de la papelera ( <i className="fas fa-trash" /> ) para eliminar la imagen.</p>
                         </li>
                         <li>
                             <p> Una vez eliminadas las imagenes, haz click en el botón <strong>"Guardar"</strong> al final del formulario, para confirmar los ajustes.</p>
@@ -242,7 +244,7 @@ const Help = (props) => {
                 <div>
                     <h2>Plan de suscripción</h2>
                     <h3>Por defecto se selecciona el Plan Gratuito</h3>
-                    <br/>
+                    <br />
                     <h4>Como cambiar de plan de suscripción de un negocio.</h4>
                     <ol>
                         <li>Desde la página de Edición del Negocio, haz click en la sección <strong>"Información de pago y suscripción"</strong> </li>
