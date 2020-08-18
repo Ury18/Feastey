@@ -1,32 +1,35 @@
 .footer {
-    display: flex;
     background-color: #222222;
-    // background-color: rgb(49, 49, 49);
-    // border-top: 1px solid #FFB135;
     border-top: 1px solid rgb(65, 65, 65);
     padding: 1em;
+    z-index: 2;
+
+    >div {
+    display: flex;
     align-items: center;
+    justify-content: center;
     position: relative;
 
     @media (max-width: 860px) {
         flex-direction: column;
     }
 
-    >div {
-        display: flex;
-        align-items: center;
-        flex-wrap: wrap;
-        justify-content: center;
-        flex: 1;
-        >* {
-            margin: .5em 1em;
+        >div {
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            justify-content: center;
+            flex: 1;
+            >* {
+                margin: .5em 1em;
+            }
+
+
         }
 
-
-    }
-
-    * {
-        color: white;
+        * {
+            color: white;
+        }
     }
 
     .home-link {
