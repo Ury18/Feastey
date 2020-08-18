@@ -15,7 +15,7 @@ const Layout = ((props) => {
         }
     }, [])
     return (
-        <div className={`app ${className}`}>
+        <div className={`app ${className}` || ""}>
             <Head>
                 <link rel="shortcut icon" href="/favicon/favicon.ico" />
                 {/* <script data-ad-client="ca-pub-1746929838201665" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script> */}
