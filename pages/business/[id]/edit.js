@@ -7,6 +7,7 @@ import FileUploader from '../../../app/components/FileUploader'
 import GoogleMap from '../../../app/components/GoogleMap'
 import { updateUserData } from '../../../app/redux/user/action'
 import Head from 'next/head'
+import Link from 'next/link'
 import { parseCookies } from '../../../app/middleware/parseCookies'
 
 //Rich Text
@@ -596,13 +597,19 @@ class EditBusiness extends Component {
                                 {renderImagesUploader()}
                             </div>
                             <div style={{ display: "flex", flexDirection: "column" }}>
-                                <h2 style={{ marginBottom: "1em", marginTop: "2em" }}>Secciones de archivos</h2>
+                                <p style={{ marginBottom: "1em", marginTop: "2em" }}>
+                                    Necesitas un catálogo profesional?
+                                    <Link href="/custom-catalogues">
+                                        <a style={{ color: "#ec9200 !important", fontWeight: "bold" }}> Contacta con nosotros</a>
+                                    </Link>
+                                </p>
+                                <h2 style={{ marginBottom: "1em" }}>Secciones de archivos</h2>
                                 {renderAttachmentsSection()}
                             </div>
 
                             {errors && <p className="errors">{errors}</p>}
 
-                            <button type="submit">Send</button>
+                            <button type="submit">Guardar</button>
                         </form>
                     }
                     {section == "payment" &&

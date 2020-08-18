@@ -20,6 +20,7 @@ import { Elements } from '@stripe/react-stripe-js';
 const stripePromise = loadStripe(process.env.STRIPE_PUBLIC_KEY);
 
 import '../../stylesheets/editBusinessPage.scss'
+import Link from 'next/link'
 
 class CreateBusiness extends Component {
 
@@ -39,7 +40,7 @@ class CreateBusiness extends Component {
         paymentMethodId: null,
         email: "",
         phone: "",
-        whatsapp:"",
+        whatsapp: "",
         twitter: "",
         instagram: "",
         subscriptionPlan: "free",
@@ -85,7 +86,7 @@ class CreateBusiness extends Component {
 
         const { name, description, location, images, attachments,
             deletedFiles, finalAddress, category, summary,
-            paymentMethodId, mainImage, email, phone,whatsapp, twitter, instagram, subscriptionPlan } = this.state
+            paymentMethodId, mainImage, email, phone, whatsapp, twitter, instagram, subscriptionPlan } = this.state
 
         const { id, token } = this.props.user
         let imageList = []
@@ -404,9 +405,16 @@ class CreateBusiness extends Component {
                         <label>Imagenes</label>
                         {renderImagesUploader()}
                     </div>
-
                     <div style={{ display: "flex", flexDirection: "column" }}>
-                        <h2 style={{ marginBottom: "1em", marginTop: "2em" }}>Secciones de archivos</h2>
+                    </div>
+                    <div style={{ display: "flex", flexDirection: "column" }}>
+                        <p style={{ marginBottom: "1em", marginTop: "2em" }}>
+                            Necesitas un catálogo profesional?
+                            <Link href="/custom-catalogues">
+                                <a style={{color:"#ec9200 !important", fontWeight:"bold"}}> Contacta con nosotros</a>
+                            </Link>
+                        </p>
+                        <h2 style={{ marginBottom: "1em" }}>Secciones de archivos</h2>
                         {renderAttachmentsSection()}
                     </div>
 
