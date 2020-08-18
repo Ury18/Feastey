@@ -27,6 +27,10 @@ const Business = new Schema({
             type: String
         },
 
+        whatsapp: {
+            type: String
+        }
+
     },
 
     name: {

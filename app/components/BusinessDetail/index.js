@@ -144,8 +144,9 @@ const Detail = ((props) => {
                     <img src={profileImage.url} alt={profileImage.name} />
                 </div>
                 {business.info && <div className="contactInfo_Container">
-                    {business.info.phone && <p><i class="fas fa-phone-alt" aria-hidden="true" /><a href={`tel:+${business.info.phone}`}>{business.info.phone}</a></p>}
                     {business.info.email && <p><i class="fas fa-envelope"></i><a href={`mailto:${business.info.email}`}>{business.info.email}</a></p>}
+                    {business.info.phone && <p><i class="fas fa-phone-alt" aria-hidden="true" /><a href={`tel:+${business.info.phone}`}>{business.info.phone}</a></p>}
+                    {business.info.whatsapp && <p><i class="fab fa-whatsapp" aria-hidden="true" /><a href={`tel:+${business.info.whatsapp}`}>{business.info.whatsapp}</a></p>}
                     {business.info.twitter && <p><i class="fab fa-twitter"></i><a target="_blank" href={`https://www.twitter.com/${business.info.twitter}`}>{business.info.twitter}</a></p>}
                     {business.info.instagram && <p><i class="fab fa-instagram-square"></i><a target="_blank" href={`https://www.instagram.com/${business.info.instagram}`}>{business.info.instagram}</a></p>}
                     {business.info.facebook && <p><i class="fab fa-facebook"></i><a target="_blank" href={`https://www.facebook.com/${business.info.facebook}`}>{business.info.facebook}</a></p>}

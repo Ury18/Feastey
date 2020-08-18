@@ -39,6 +39,7 @@ class CreateBusiness extends Component {
         paymentMethodId: null,
         email: "",
         phone: "",
+        whatsapp:"",
         twitter: "",
         instagram: "",
         subscriptionPlan: "",
@@ -84,7 +85,7 @@ class CreateBusiness extends Component {
 
         const { name, description, location, images, attachments,
             deletedFiles, finalAddress, category, summary,
-            paymentMethodId, mainImage, email, phone, twitter, instagram, subscriptionPlan } = this.state
+            paymentMethodId, mainImage, email, phone,whatsapp, twitter, instagram, subscriptionPlan } = this.state
 
         const { id, token } = this.props.user
         let imageList = []
@@ -133,6 +134,7 @@ class CreateBusiness extends Component {
                 phone,
                 twitter,
                 instagram,
+                whatsapp
             }
         }
 
@@ -353,6 +355,10 @@ class CreateBusiness extends Component {
                     <div className="info-field">
                         <label>Telefono</label>
                         <input onChange={(e) => setInputValue(e.target.name, e.target.value)} name="phone" type="tel" />
+                    </div>
+                    <div className="info-field">
+                        <label>WhatsApp</label>
+                        <input onChange={(e) => setInputValue(e.target.name, e.target.value)} name="whatsapp" type="tel" />
                     </div>
                     <div className="info-field">
                         <label>Twitter</label>

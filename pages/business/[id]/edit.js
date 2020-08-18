@@ -52,6 +52,7 @@ class EditBusiness extends Component {
         instagram: "",
         twitter: "",
         phone: "",
+        whatsapp: "",
         email: "",
         busy: false,
         section: "",
@@ -114,7 +115,7 @@ class EditBusiness extends Component {
         const { id, name, description, location,
             images, attachments, deletedFiles, finalAddress,
             category, summary, mainImage,
-            twitter, instagram, email, phone } = this.state
+            twitter, instagram, email, phone, whatsapp } = this.state
         const { user } = this.props
         const { token } = user
 
@@ -164,6 +165,7 @@ class EditBusiness extends Component {
                 phone,
                 twitter,
                 instagram,
+                whatsapp
             }
         }
 
@@ -495,7 +497,7 @@ class EditBusiness extends Component {
         const {
             name, location, address, errors, finalAddress,
             category, summary, descriptionEditorState, subscriptionPlan,
-            last4, mainImage, twitter, instagram, email, phone, busy, section, qr_codes
+            last4, mainImage, twitter, instagram, email, phone, whatsapp, busy, section, qr_codes
         } = this.state
 
         const {
@@ -544,6 +546,10 @@ class EditBusiness extends Component {
                             <div className="info-field">
                                 <label>Telefono</label>
                                 <input onChange={(e) => setInputValue(e.target.name, e.target.value)} name="phone" defaultValue={phone} type="tel" />
+                            </div>
+                            <div className="info-field">
+                                <label>WhatsApp</label>
+                                <input onChange={(e) => setInputValue(e.target.name, e.target.value)} name="whatsapp" defaultValue={whatsapp} type="tel" />
                             </div>
                             <div className="info-field">
                                 <label>Twitter</label>
