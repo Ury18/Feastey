@@ -19,7 +19,7 @@ const Index = (props) => {
                 <meta name="og:description" property="og:description" content="Bienvenido a Feastey - Descubre tu barrio" />
                 <meta property="og:site_name" content={`${process.env.HOST}`} />
             </Head>
-            <Discover/>
+            <Discover />
             <section className="white welcome">
                 <div>
                     <h1>Bienvenido a Feastey</h1>
@@ -74,8 +74,11 @@ const Index = (props) => {
                     <div>
                         <div>
                             <p>
-                                Con nuestro algoritmo de búsqueda, el usuario <strong>descubre los negocios en su proximidad.</strong>
-                                Consiguiendo atraer clientes cercanos y <strong>promoviendo el comercio local.</strong>
+                                Con nuestro algoritmo de búsqueda, el usuario
+                                <strong>
+                                    descubre los negocios en su proximidad
+                                </strong>. Consiguiendo atraer clientes cercanos y
+                                <strong> promoviendo el comercio local</strong>.
                             </p>
                             <p>
                                 Dispón de <strong>tu propia página</strong> donde exponer toda la
