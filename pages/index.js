@@ -75,7 +75,7 @@ const Index = (props) => {
                         <div>
                             <p>
                                 Con nuestro algoritmo de búsqueda, el usuario <strong>descubre los negocios en su proximidad.</strong>
-                                Consiguiendo atraer clientes cercanos y <strong>promoviendo el comercio de local.</strong>
+                                Consiguiendo atraer clientes cercanos y <strong>promoviendo el comercio local.</strong>
                             </p>
                             <p>
                                 Dispón de <strong>tu propia página</strong> donde exponer toda la
