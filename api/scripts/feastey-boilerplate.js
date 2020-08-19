@@ -94,7 +94,7 @@ module.exports = async () => {
 
 
         let modaCategory = {
-            name: "Moda"
+            name: "Moda y Calzado"
         }
         let moda = new Category(modaCategory)
         await moda.save()
