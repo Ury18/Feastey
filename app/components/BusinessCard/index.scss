@@ -148,7 +148,6 @@
         .businessCard_infoContainer_Summary{
             word-break: break-all;
             max-width: 90%;
-
         }
 
         .cardFooter {
@@ -171,6 +170,7 @@
             @media (max-width: 745px) {
                 padding-left: 0;
                 width: 88%;
+                position: relative;
             }
 
             .categories, .phone {
