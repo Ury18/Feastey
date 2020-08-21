@@ -52,7 +52,7 @@ module.exports = async () => {
 
 
         let esteticaCategory = {
-            name: "Estética"
+            name: "Estética y Peluquería"
         }
         let estetica = new Category(esteticaCategory)
         await estetica.save()
@@ -115,7 +115,7 @@ module.exports = async () => {
 
 
         let restauracionCategory = {
-            name:"Restauración y Bares"
+            name:"Restauración"
         }
         let restauracion = new Category(restauracionCategory)
         await restauracion.save()
