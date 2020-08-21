@@ -265,7 +265,7 @@ const Help = (props) => {
                     </ol>
                 </div>
 
-                <div>
+                <div id="pdf">
                     <h2>Como guardar un archivo en pdf</h2>
                     <h3>Para este ejemplo, usaremos Microsoft Word, si estas usando otro programa, el funcionamiento debería ser similar.</h3>
                     <ol>

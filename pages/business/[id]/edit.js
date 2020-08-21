@@ -611,7 +611,13 @@ class EditBusiness extends Component {
                                         <a style={{ color: "#ec9200 !important", fontWeight: "bold" }}> Contacta con nosotros</a>
                                     </Link>
                                 </p>
-                                <h2 style={{ marginBottom: "1em" }}>Secciones de archivos</h2>
+                                <h2 style={{ marginBottom: "1em", marginTop: "2em" }}>Secciones de archivos</h2>
+                                <p style={{ marginBottom: "1.5em", textAlign:"center"}}>
+                                    Los archivos deben ser imagenes o PDF.<br /> Si no sabes cómo guardar en PDF
+                                    <Link href="/help#pdf">
+                                        <a><strong className="orange"> haz click aqui</strong></a>
+                                    </Link>
+                                </p>
                                 {renderAttachmentsSection()}
                             </div>
 
@@ -660,7 +666,7 @@ class EditBusiness extends Component {
                                 </Elements>
                                 {errors && <p className="errors">{errors}</p>}
                             </div>
-                                <button type="submit">Guardar</button>
+                            <button type="submit">Guardar</button>
                         </form>
                     }
                     {section == "qrs" &&
