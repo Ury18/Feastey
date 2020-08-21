@@ -62,7 +62,7 @@ const LogIn = (props) => {
                     <input onChange={(e) => setEmail(e.target.value)} type="email" name="email" />
                 </div>
                 <div style={{ display: "flex", flexDirection: "column", marginBottom: "1em" }}>
-                    <label>Password</label>
+                    <label>Contraseña</label>
                     <input onChange={(e) => setPassword(e.target.value)} type="password" name="password" />
                     <Link href={`/password-reset-request`}>
                         <a>Recuperar contraseña</a>

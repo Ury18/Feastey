@@ -16,7 +16,7 @@ const Signup = (props) => {
     const [password, setPassword] = useState("")
     const [passwordConfirmation, setPasswordConfirmation] = useState("")
     const [errors, setErrors] = useState("")
-    const [role, setRole] = useState("user")
+    const [role, setRole] = useState("businessOwner")
 
     const registerUser = (e, data) => {
 
@@ -63,12 +63,12 @@ const Signup = (props) => {
             </Head>
             <form className="signup-form" onSubmit={(e) => registerUser(e, { username, email, password, passwordConfirmation, role })} style={{ maxWidth: "200px" }}>
                 <h2>Crea tu cuenta</h2>
-                <div className="roles">
+                {/* <div className="roles">
                     <p className={`${role == "user" ? "selected" : ""}`} onClick={e => setRole("user")}>Usuario</p>
                     <p className={`${role == "businessOwner" ? "selected" : ""}`} onClick={e => setRole("businessOwner")}>Profesional</p>
-                </div>
+                </div> */}
                 <div style={{ display: "flex", flexDirection: "column" }}>
-                    <label>Username</label>
+                    <label>Nombre</label>
                     <input onChange={(e) => setUsername(e.target.value)} type="text" name="text" required />
                 </div>
                 <div style={{ display: "flex", flexDirection: "column" }}>
@@ -76,11 +76,11 @@ const Signup = (props) => {
                     <input onChange={(e) => setEmail(e.target.value)} type="email" name="email" required />
                 </div>
                 <div style={{ display: "flex", flexDirection: "column" }}>
-                    <label>Password</label>
+                    <label>Contraseña</label>
                     <input onChange={(e) => setPassword(e.target.value)} type="password" name="password" required />
                 </div>
                 <div style={{ display: "flex", flexDirection: "column" }}>
-                    <label>Password Confirmation</label>
+                    <label>Confirmación de la Contraseña</label>
                     <input onChange={(e) => setPasswordConfirmation(e.target.value)} type="password" name="passwordConfirmation" required />
                 </div>
 
