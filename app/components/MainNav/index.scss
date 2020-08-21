@@ -77,6 +77,17 @@
     }
 }
 
+.button {
+    font-weight: 500 !important;
+    transition: all .2s ease !important;
+    &:hover {
+        color: #FFB135 !important;
+        &:after {
+            width: 0 !important;
+        }
+    }
+}
+
 .mainNav.mobile {
     display: none;
     background-color: white;

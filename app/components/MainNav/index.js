@@ -107,6 +107,11 @@ const MainNav = ((props) => {
                             </li>
                         </ul>}
                     </li>}
+                    {props.user.token && <li>
+                        <Link href={`/business/create`}>
+                            <a className="button" >Publicar negocio</a>
+                        </Link>
+                    </li>}
                 </ul>
             </nav>
             <i className="fas fa-bars button-mobile" aria-hidden="true" onClick={e => setNavActive(!navActive)} />
@@ -146,6 +151,11 @@ const MainNav = ((props) => {
                     {props.user.token && <li>
                         <Link href={`/users/my-businesses`}>
                             <a className={router.pathname == '/users/my-businesses' ? "active" : ""}>Mis negocios</a>
+                        </Link>
+                    </li>}
+                    {props.user.token && <li>
+                        <Link href={`/business/create`}>
+                            <a className={router.pathname == '/business/create' ? "active" : ""} >Publicar negocio</a>
                         </Link>
                     </li>}
                     {props.user.token && <li>
