@@ -239,19 +239,23 @@ logic = {
         }
 
         if (!data.subscriptionPlan) {
-            throw Error("Please select a valid subscription plan")
+            throw Error("Por favor, selecciona un plan de suscripción")
         }
 
         if (!data.category) {
-            throw Error("Please select a category")
+            throw Error("Por favor, selecciona una categoría")
         }
 
-        if (!data.location) {
-            throw Error("Please enter a valid address")
+        if (!data.address) {
+            throw Error("Por favor, introduce una dirección válida")
+        }
+
+        if (!data.location.coordinates) {
+            throw Error("Por favor, introduce una dirección válida")
         }
 
         if (creatorRole !== "admin" && data.subscriptionPlan !== "free") {
-            if (!data.paymentMethodId) throw Error("Please introduce a valid payment method")
+            if (!data.paymentMethodId) throw Error("Por favor, introduce un método de pago válido.")
         }
 
         //Delete empty attachments sections

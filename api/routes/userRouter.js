@@ -32,6 +32,7 @@ userRouter.route('/')
                     res.status(200).send(user)
                 })
                 .catch(({ message }) => {
+                    if (message == "User validation failed: email: is already in use") res.status(400).send({error: "Email en uso"})
                     res.status(400).send({ error: message })
                 })
         } catch ({ message }) {

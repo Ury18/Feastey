@@ -116,11 +116,11 @@ logic = {
                             if (user.isVerified) {
                                 return user
                             } else {
-                                throw Error("Email verifification pending")
+                                throw Error("Por favor, verifica tu email")
                             }
                         }
                         else {
-                            throw Error("Wrong Credentials")
+                            throw Error("Contraseña incorrecta")
                         }
                     })
                     .catch(({ message }) => {
@@ -128,6 +128,7 @@ logic = {
                     })
             })
             .catch(({ message }) => {
+                if (message == "Cannot read property 'password' of null") throw Error("No se ha podido encontrar ningun usuario con el email indicado")
                 throw Error(message)
             })
     },
@@ -167,7 +168,7 @@ logic = {
         }
 
         if (newPassword !== newPasswordConfirmation) {
-            throw Error("Missmatching passwords")
+            throw Error("Las contraseñas no coinciden")
         }
 
         return User.findById(userId)
@@ -250,7 +251,7 @@ logic = {
                                             })
                                     })
                             } else {
-                                throw Error("Wrong password")
+                                throw Error("Contraseña incorrecta")
                             }
                         })
                 } else if( tokenUserRole =="admin") {
