@@ -31,7 +31,7 @@ module.exports = async () => {
 
 
         let alimentacionCategory = {
-            name: "Almientación"
+            name: "Alimentación"
         }
         let alimentacion = new Category(alimentacionCategory)
         await alimentacion.save()
