@@ -9,10 +9,10 @@ const Help = (props) => {
                 <title>Sección de Ayuda - Feastey</title>
                 <meta name="viewport" content="initial-scale=1.0, width=device-width" />
                 <meta property="og:title" content="Sección de Ayuda" key="title" />
-                <meta name="description" content="Pagina de Ayuda donde consultar todo lo necesario para poner a punto la pagina de tu negocio." />
+                <meta name="description" content="Página de Ayuda donde consultar todo lo necesario para poner a punto la página de tu negocio." />
                 <meta property="og:type" content="website" />
                 <meta name="og:title" property="og:title" content="Sección de Ayuda" />
-                <meta name="og:description" property="og:description" content="Pagina de Ayuda donde consultar todo lo necesario para poner a punto la pagina de tu negocio." />
+                <meta name="og:description" property="og:description" content="Página de Ayuda donde consultar todo lo necesario para poner a punto la página de tu negocio." />
                 <meta property="og:site_name" content={`${process.env.HOST}`} />
             </Head>
             <section>
@@ -20,10 +20,10 @@ const Help = (props) => {
                     <h1>Sección de Ayuda</h1>
                 </div>
                 <div>
-                    <h2>Como crear una pagina de negocio</h2>
+                    <h2>Cómo crear una página de negocio</h2>
                     <ol>
                         <li>
-                            <p>Haz click sobre tu nombre de usuario en la esquina superior derecha o sobre el menú de navegación ( <i className="fas fa-bars" /> ) si estas en dispositivo móvil.</p>
+                            <p>Haz click sobre tu nombre de usuario en la esquina superior derecha o sobre el menú de navegación ( <i className="fas fa-bars" /> ) si estás en dispositivo móvil.</p>
                         </li>
                         <li>
                             <p>Haz click en <strong>"Mis Negocios".</strong></p>
@@ -42,10 +42,10 @@ const Help = (props) => {
                 </div>
 
                 <div>
-                    <h2>Como editar una pagina de negocio</h2>
+                    <h2>Cómo editar una página de negocio</h2>
                     <ol>
                         <li>
-                            <p>Haz click sobre tu nombre de usuario en la esquina superior derecha o sobre el menú de navegación ( <i className="fas fa-bars" /> ) si estas en dispotivio móvil.</p>
+                            <p>Haz click sobre tu nombre de usuario en la esquina superior derecha o sobre el menú de navegación ( <i className="fas fa-bars" /> ) si estás en dispositivo móvil.</p>
                         </li>
                         <li>
                             <p>Haz click en <strong>"Mis Negocios".</strong></p>
@@ -60,23 +60,23 @@ const Help = (props) => {
                 </div>
 
                 <div>
-                    <h2>Como cambiar el nombre de archivos e imagenes</h2>
+                    <h2>Cómo cambiar el nombre de archivos e imágenes</h2>
                     <ol>
                         <li>
                             <p>Accede a la página de edición del negocio</p>
                         </li>
                         <li>
-                            <p>Modifica el nombre del archivo o imagen, aparecerá el símbolo de confirmación ( <i className="fas fa-check" /> ) una vez modificado, pulsa en el para guardar los cambios</p>
+                            <p>Modifica el nombre del archivo o imagen, aparecerá el símbolo de confirmación ( <i className="fas fa-check" /> ) una vez modificado, pulsa en él para guardar los cambios</p>
                             <img src="/img/help/file-example.png" />
                         </li>
                     </ol>
                 </div>
 
                 <div>
-                    <h2>Como generar los códigos QR</h2>
+                    <h2>Cómo generar los códigos QR</h2>
                     <ol>
                         <li>
-                            <p>Haz click sobre tu nombre de usuario en la esquina superior derecha o sobre el menú de navegación ( <i className="fas fa-bars" /> ) si estas en dispotivio móvil.</p>
+                            <p>Haz click sobre tu nombre de usuario en la esquina superior derecha o sobre el menú de navegación ( <i className="fas fa-bars" /> ) si estás en dispositivo móvil.</p>
                         </li>
                         <li>
                             <p>Haz click en <strong>"Mis Negocios".</strong></p>
@@ -94,20 +94,20 @@ const Help = (props) => {
                             <p>Selecciona el idioma deseado para tus códigos QR y haz click en <strong>"Generar"</strong>.</p>
                         </li>
                         <li>
-                            <p>Para descargar un código QR, haz click derecho sobre el código, seguidamente haz click en <strong>"Guardar Imagen Como"</strong> y selecciona donde quieres guardar el código QR.</p>
+                            <p>Para descargar un código QR, haz click derecho sobre el código, seguidamente haz click en <strong>"Guardar Imagen Cómo"</strong> y selecciona donde quieres guardar el código QR.</p>
                         </li>
                     </ol>
                 </div>
 
                 <div>
-                    <h2>Como añadir y modificar la dirección del negocio</h2>
+                    <h2>Cómo añadir y modificar la dirección del negocio</h2>
                     <h4>Añadir la dirección a mi negocio.</h4>
                     <ol>
                         <li>
                             <p>Haz click en la sección de dirección e introduce la dirección de tu negocio</p>
                         </li>
                         <li>
-                            <p>Una vez introducido, aparecerá el símbolo de confirmación ( <i className="fas fa-check" /> ), pulsa en el para confirmar tu dirección</p>
+                            <p>Una vez introducido, aparecerá el símbolo de confirmación ( <i className="fas fa-check" /> ), pulsa en él para confirmar tu dirección</p>
                         </li>
                         <li>
                             <p>Sigue rellenando la informmación necesaria y al llegar al final del formulario haz click en el botón <strong>"Guardar"</strong> para confirmar los ajustes.</p>
@@ -119,7 +119,7 @@ const Help = (props) => {
                             <p>Haz click en la sección de dirección e introduce la nueva dirección de tu negocio</p>
                         </li>
                         <li>
-                            <p>Una vez introducido, aparecerá el símbolo de confirmación ( <i className="fas fa-check" /> ), pulsa en el para confirmar tu dirección</p>
+                            <p>Una vez introducido, aparecerá el símbolo de confirmación ( <i className="fas fa-check" /> ), pulsa en él para confirmar tu dirección</p>
                         </li>
                         <li>
                             <p>Haz click en el botón <strong>"Guardar"</strong> al final del formulario, para confirmar los ajustes.</p>
@@ -128,7 +128,7 @@ const Help = (props) => {
                 </div>
 
                 <div>
-                    <h2>Como añadir y modificar la descripción del negocio</h2>
+                    <h2>Cómo añadir y modificar la descripción del negocio</h2>
                     <h4>Añadir la descripción a mi negocio.</h4>
                     <ol>
                         <li>
@@ -151,7 +151,7 @@ const Help = (props) => {
                 </div>
 
                 <div>
-                    <h2>Como añadir y eliminar la imagen de perfil del negocio</h2>
+                    <h2>Cómo añadir y eliminar la imagen de perfil del negocio</h2>
                     <h4>Añadir la imagen de perfil de mi negocio.</h4>
                     <ol>
                         <li>
@@ -177,33 +177,33 @@ const Help = (props) => {
                 </div>
 
                 <div>
-                    <h2>Como añadir y eliminar imagenes de la galería</h2>
-                    <h4>Añadir imagenes a la galería de mi negocio.</h4>
+                    <h2>Cómo añadir y eliminar imágenes de la galería</h2>
+                    <h4>Añadir imágenes a la galería de mi negocio.</h4>
                     <ol>
                         <li>
-                            <p>Haz click en el botón <strong>"Seleccionar Archivo"</strong> (Puede cambiar según el idioma del navegador) en la sección de Galería de Imagenes.</p>
+                            <p>Haz click en el botón <strong>"Seleccionar Archivo"</strong> (Puede cambiar según el idioma del navegador) en la sección de Galería de Imágenes.</p>
                         </li>
                         <li>
                             <p>Selecciona la imagen que desees desde el explorador de archivos.</p>
                         </li>
                         <li>
-                            <p> Una vez añadidas las imagenes, simplemente sigue rellenando la información necesaria y al llegar al final del formulario haz click en el botón <strong>"Guardar"</strong> para confirmar los ajustes.</p>
+                            <p> Una vez añadidas las imágenes, simplemente sigue rellenando la información necesaria y al llegar al final del formulario haz click en el botón <strong>"Guardar"</strong> para confirmar los ajustes.</p>
                         </li>
                     </ol>
 
-                    <h4>Eliminar las Imagenes de la galería mi negocio.</h4>
+                    <h4>Eliminar las Imágenes de la galería mi negocio.</h4>
                     <ol>
                         <li>
                             <p>Haz click en el icono de la papelera ( <i className="fas fa-trash" /> ) para eliminar la imagen.</p>
                         </li>
                         <li>
-                            <p> Una vez eliminadas las imagenes, haz click en el botón <strong>"Guardar"</strong> al final del formulario, para confirmar los ajustes.</p>
+                            <p> Una vez eliminadas las imágenes, haz click en el botón <strong>"Guardar"</strong> al final del formulario, para confirmar los ajustes.</p>
                         </li>
                     </ol>
                 </div>
 
                 <div>
-                    <h2>Como añadir, eliminar o cambiar el titulo a una sección de archivos</h2>
+                    <h2>Cómo añadir, eliminar o cambiar el título a una sección de archivos</h2>
                     <h4>Añadir una sección de archivos a mi negocio.</h4>
                     <ol>
                         <li>
@@ -220,13 +220,13 @@ const Help = (props) => {
                         </li>
                     </ol>
 
-                    <h4>Cambiar el titulo de una sección de archivos de mi negocio.</h4>
+                    <h4>Cambiar el título de una sección de archivos de mi negocio.</h4>
                     <ol>
                         <li>
                             <p>Cambia el nombre de la sección</p>
                         </li>
                         <li>
-                            <p> Una vez cambiado el titulo de la sección de archivos, simplemente sigue rellenando la información necesaria y al llegar al final del formulario haz click en el botón <strong>"Guardar"</strong> para confirmar los ajustes.</p>
+                            <p> Una vez cambiado el título de la sección de archivos, simplemente sigue rellenando la información necesaria y al llegar al final del formulario haz click en el botón <strong>"Guardar"</strong> para confirmar los ajustes.</p>
                         </li>
                     </ol>
 
@@ -245,32 +245,32 @@ const Help = (props) => {
                     <h2>Plan de suscripción</h2>
                     <h3>Por defecto se selecciona el Plan Gratuito</h3>
                     <br />
-                    <h4>Como cambiar de plan de suscripción de un negocio.</h4>
+                    <h4>Cómo cambiar de plan de suscripción de un negocio.</h4>
                     <ol>
                         <li>Desde la página de Edición del Negocio, haz click en la sección <strong>"Información de pago y suscripción"</strong> </li>
                         <li>Selecciona el plan deseado</li>
                         <li>Introduce la información de pago en caso de no haberlo hecho previamente</li>
-                        <li>Haz click en <strong>"Confirmar metodo de pago"</strong> si es la primera vez que introduces dicha información</li>
+                        <li>Haz click en <strong>"Confirmar método de pago"</strong> si es la primera vez que introduces dicha información</li>
                         <li>Haz click en <strong>"Guardar"</strong></li>
                     </ol>
                 </div>
 
                 <div>
-                    <h2>Como cambiar el metodo de pago de un negocio</h2>
+                    <h2>Cómo cambiar el método de pago de un negocio</h2>
                     <ol>
                         <li>Desde la página de Edición del Negocio, haz click en la sección <strong>"Información de pago y suscripción"</strong> </li>
                         <li>Introduce la información de pago</li>
-                        <li>Haz click en <strong>"Confirmar metodo de pago"</strong></li>
+                        <li>Haz click en <strong>"Confirmar método de pago"</strong></li>
                         <li>Haz click en <strong>"Guardar"</strong></li>
                     </ol>
                 </div>
 
                 <div id="pdf">
-                    <h2>Como guardar un archivo en pdf</h2>
-                    <h3>Para este ejemplo, usaremos Microsoft Word, si estas usando otro programa, el funcionamiento debería ser similar.</h3>
+                    <h2>Cómo guardar un archivo en pdf</h2>
+                    <h3>Para este ejemplo, usaremos Microsoft Word, si estás usando otro programa, el funcionamiento debería ser similar.</h3>
                     <ol>
                         <li>Haz click en <strong>"Archivo"</strong> </li>
-                        <li>Haz click en <strong>"Guardar Como"</strong></li>
+                        <li>Haz click en <strong>"Guardar Cómo"</strong></li>
                         <li>Debajo del nombre, aparece una sección en la que se puede escoger el formato del archivo.</li>
                         <li>Haz click en el desplegable y selecciona <strong>".pdf"</strong></li>
                         <li>Haz click en <strong>"Guardar"</strong></li>

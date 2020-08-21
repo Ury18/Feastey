@@ -39,11 +39,11 @@ const Index = (props) => {
                         </div>
                         <div>
                             <img src="/img/home/google-noborder.png" />
-                            <p>Consigue un <strong>buen posicionamient en Google</strong> gracias a nuestro <strong>SEO</strong></p>
+                            <p>Consigue un <strong>buen posicionamiento en Google</strong> gracias a nuestro <strong>SEO</strong></p>
                         </div>
                         <div>
                             <img src="/img/home/24-7.png" />
-                            <p>Tus productos y servicios <strong>siempre accesibles</strong> las <strong>24 horas</strong> del dia los <strong>7 dias</strong> a la semana</p>
+                            <p>Tus productos y servicios <strong>siempre accesibles</strong> las <strong>24 horas</strong> del día los <strong>7 días</strong> a la semana</p>
                         </div>
                         <div>
                             <img src="/img/home/funnel.png" />
@@ -74,10 +74,8 @@ const Index = (props) => {
                     <div>
                         <div>
                             <p>
-                                Con nuestro algoritmo de búsqueda, el usuario
-                                <strong>
-                                    descubre los negocios en su proximidad
-                                </strong>. Consiguiendo atraer clientes cercanos y
+                                Con nuestro algoritmo de búsqueda, el
+                                usuario <strong>descubre los negocios en su proximidad</strong>. Consiguiendo atraer clientes cercanos y
                                 <strong> promoviendo el comercio local</strong>.
                             </p>
                             <p>
@@ -109,7 +107,7 @@ const Index = (props) => {
                         <div className="price">
                             <h3>Free</h3>
                             <div>
-                                <p>20 Imagenes</p>
+                                <p>20 Imágenes</p>
                                 <p>4 Archivos</p>
                             </div>
                             <h4>Gratis</h4>
@@ -123,7 +121,7 @@ const Index = (props) => {
                         <div className="price">
                             <h3>Plus</h3>
                             <div>
-                                <p>30 Imagenes</p>
+                                <p>30 Imágenes</p>
                                 <p>8 Archivos</p>
                             </div>
                             <h4>4.99€ / mes</h4>
@@ -131,7 +129,7 @@ const Index = (props) => {
                         <div className="price">
                             <h3>Premium</h3>
                             <div>
-                                <p>Imagenes Ilimitadas</p>
+                                <p>Imágenes Ilimitadas</p>
                                 <p>Archivos Ilimitados</p>
                             </div>
                             <h4>14.99€ / mes</h4>

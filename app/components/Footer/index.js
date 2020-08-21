@@ -14,12 +14,12 @@ export default ((props) => {
                 <div>
                     <Link href='/privacy-policy'>
                         <a>
-                            Politica de Privacidad
+                            Política de Privacidad
                     </a>
                     </Link>
                     <Link href='/terms-and-conditions'>
                         <a>
-                            Terminos y Condiciones
+                            Términos y Condiciones
                     </a>
                     </Link>
                     <a href="mailto:feastey@feastey.com">feastey@feastey.com</a>
