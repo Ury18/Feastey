@@ -18,10 +18,22 @@ const Layout = ((props) => {
         <div className={`app ${className}` || ""}>
             <Head>
                 <link rel="shortcut icon" href="/favicon/favicon.ico" />
+                {process.env.ENV == "production" && <script dangerouslySetInnerHTML={{
+                    __html:
+                        `(function(w,d,s,l,i){w[l] = w[l] || []{'gtm.start':
+                        new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+                        j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+                        'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+                        })(window,document,'script','dataLayer','GTM-PTSX94N');`
+                }}></script>}
                 {/* <script data-ad-client="ca-pub-1746929838201665" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script> */}
             </Head>
             <Header />
             <div className="content-container">
+                <noscript>
+                    {process.env.ENV == "production" && <iframe src="https://www.googletagmanager.com/ns.html?id=GTM-PTSX94N" height="0" width="0" style={{display:"none",visibility:"hidden"}}>
+                    </iframe>}
+                </noscript>
                 <div className={`content ${contentClasses || ""}`}>
                     {props.children}
                 </div>

@@ -10,6 +10,8 @@ module.exports = withCss(withSass(withImages({
         GOOGLE_MAPS_GEOCODE_URL: "https://maps.googleapis.com/maps/api/geocode/json?",
         FEASTEY_API_URL: "https://example.feastey.com/api",
         STRIPE_PUBLIC_KEY: "pk_...",
+        NODE_DEV: "production"
+
     },
     webpack: config => {
         config.module.rules.push(
