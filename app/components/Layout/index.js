@@ -18,7 +18,7 @@ const Layout = ((props) => {
         <div className={`app ${className}` || ""}>
             <Head>
                 <link rel="shortcut icon" href="/favicon/favicon.ico" />
-                {/* <script data-ad-client="ca-pub-1746929838201665" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script> */}
+                <script data-ad-client="ca-pub-3090102762545817" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
             </Head>
             <Header />
             <div className="content-container">
