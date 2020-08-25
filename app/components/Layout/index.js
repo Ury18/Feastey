@@ -30,10 +30,10 @@ const Layout = ((props) => {
             </Head>
             <Header />
             <div className="content-container">
-                <noscript>
+                {/* <noscript>
                     {process.env.ENV == "production" && <iframe src="https://www.googletagmanager.com/ns.html?id=GTM-PTSX94N" height="0" width="0" style={{display:"none",visibility:"hidden"}}>
                     </iframe>}
-                </noscript>
+                </noscript> */}
                 <div className={`content ${contentClasses || ""}`}>
                     {props.children}
                 </div>

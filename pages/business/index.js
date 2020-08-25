@@ -194,7 +194,7 @@ const AllBusiness = (props) => {
                 <div>
                     <label>Categoría</label>
                     <select name="category" defaultValue={category} onChange={(e) => setCategory(e.target.value)}>
-                        <option value={""}>Ninguna</option>
+                        <option value={""}>Todas</option>
                         {renderCategoriesOptions()}
                     </select>
                 </div>
