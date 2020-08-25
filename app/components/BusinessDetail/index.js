@@ -73,7 +73,7 @@ const Detail = ((props) => {
 
 
 
-            fetch(`${process.env.FEASTEY_API_URL}/users/${user.id}`, {
+            fetch(`/api/users/${user.id}`, {
                 method: "PUT",
                 headers: {
                     "content-type": "application/json",

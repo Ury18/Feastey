@@ -15,10 +15,6 @@ MyApp.getInitialProps = async ({ Component, ctx }) => {
     let pageProps;
     const cookie = parseCookies(ctx.req)
 
-    if (Component.getInitialProps) {
-        pageProps = await Component.getInitialProps(ctx)
-    }
-
     if (!process.browser) {
         var data = {}
 

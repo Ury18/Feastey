@@ -31,10 +31,6 @@ const Help = (props) => {
     )
 }
 
-Help.getInitialProps = async (ctx) => {
-    return {}
-}
-
 export default Help
 
 

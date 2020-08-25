@@ -36,7 +36,7 @@ class EditUser extends Component {
             username
         }
 
-        fetch(`${process.env.FEASTEY_API_URL}/users/${id}`, {
+        fetch(`/api/users/${id}`, {
             method: "PUT",
             headers: {
                 "content-type": "application/json",
@@ -72,7 +72,7 @@ class EditUser extends Component {
             email
         }
 
-        fetch(`${process.env.FEASTEY_API_URL}/users/change-email`, {
+        fetch(`/api/users/change-email`, {
             method: "PUT",
             headers: {
                 "content-type": "application/json",
@@ -109,7 +109,7 @@ class EditUser extends Component {
             newPasswordConfirmation
         }
 
-        fetch(`${process.env.FEASTEY_API_URL}/users/change-password`, {
+        fetch(`/api/users/change-password`, {
             method: "PUT",
             headers: {
                 "content-type": "application/json",
@@ -222,9 +222,9 @@ class EditUser extends Component {
 
 }
 
-EditUser.getInitialProps = async (ctx) => {
+export const getServerSideProps = async (ctx) => {
     const section = ctx.query.section || "info"
-    return { section }
+    return { props: {section} }
 }
 
 const mapDispatchToProps = (dispatch) => {

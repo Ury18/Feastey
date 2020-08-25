@@ -18,7 +18,7 @@ const MyBusinesses = (props) => {
     },[])
 
     const getMyBusinessesBusinesses = (myBusinesses) => {
-        fetch(`${process.env.FEASTEY_API_URL}/business/multiple-businesses`, {
+        fetch(`/api/business/multiple-businesses`, {
             method: "POST",
             headers: {
                 "content-type": "application/json"

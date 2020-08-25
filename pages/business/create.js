@@ -78,7 +78,7 @@ class CreateBusiness extends Component {
             }
         )
 
-        navigator.sendBeacon(`${process.env.FEASTEY_API_URL}/files/delete-multiple`, blob)
+        navigator.sendBeacon(`/api/files/delete-multiple`, blob)
     }
 
     createBusiness = (e) => {
@@ -146,7 +146,7 @@ class CreateBusiness extends Component {
 
         data.owner = id;
 
-        fetch(`${process.env.FEASTEY_API_URL}/business`, {
+        fetch(`/api/business`, {
             method: "POST",
             headers: {
                 "content-type": "application/json",
@@ -168,7 +168,7 @@ class CreateBusiness extends Component {
                         }
                     )
 
-                    navigator.sendBeacon(`${process.env.FEASTEY_API_URL}/files/delete-multiple`, blob)
+                    navigator.sendBeacon(`/api/files/delete-multiple`, blob)
 
                     Router.push(`/business/${res.id}`)
                 }
@@ -475,10 +475,10 @@ class CreateBusiness extends Component {
 
 }
 
-CreateBusiness.getInitialProps = async (ctx) => {
+export const getServerSideProps = async (ctx) => {
     let categories = await fetch(`${process.env.FEASTEY_API_URL}/categories`)
     categories = await categories.json()
-    return { categories }
+    return { props: {categories} }
 
 }
 

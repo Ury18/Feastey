@@ -25,7 +25,7 @@ const Signup = (props) => {
         if (data.password == data.passwordConfirmation) {
             setErrors("")
 
-            fetch(`${process.env.FEASTEY_API_URL}/users`, {
+            fetch(`/api/users`, {
                 method: "POST",
                 headers: {
                     "content-type": "application/json"
@@ -100,10 +100,6 @@ const Signup = (props) => {
             </form>
         </Layout>
     )
-}
-
-Signup.getInitialProps = async (ctx) => {
-    return {}
 }
 
 const mapDispatchToProps = (dispatch) => {

@@ -21,7 +21,7 @@ const ResetPassword = (props) => {
 
     const onSubmitForm = (e) => {
         e.preventDefault()
-        fetch(`${process.env.FEASTEY_API_URL}/users/change-password`, {
+        fetch(`/api/users/change-password`, {
             method: "PUT",
             headers: {
                 "authorization": `Bearer ${props.auth}`,
@@ -62,10 +62,10 @@ const ResetPassword = (props) => {
     )
 }
 
-ResetPassword.getInitialProps = async (ctx) => {
+export const getServerSideProps = async (ctx) => {
     const auth = ctx.query.auth || ""
     const encpass = ctx.query.encpass || ""
-    return { encpass, auth }
+    return { props: {encpass, auth} }
 }
 
 const mapDispatchToProps = (dispatch) => {

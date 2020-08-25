@@ -20,7 +20,7 @@ const LogIn = (props) => {
     const logIn = (e, data) => {
         e.preventDefault()
 
-        fetch(`${process.env.FEASTEY_API_URL}/users/authenticate`, {
+        fetch(`/api/users/authenticate`, {
             method: "POST",
             headers: {
                 "content-type": "application/json"
@@ -84,10 +84,6 @@ const LogIn = (props) => {
             </form>
         </Layout>
     )
-}
-
-LogIn.getInitialProps = async (ctx) => {
-    return {}
 }
 
 const mapDispatchToProps = (dispatch) => {

@@ -107,7 +107,7 @@ class EditBusiness extends Component {
             }
         )
 
-        navigator.sendBeacon(`${process.env.FEASTEY_API_URL}/files/delete-multiple`, blob)
+        navigator.sendBeacon(`/api/files/delete-multiple`, blob)
     }
 
     editBusiness = (e) => {
@@ -172,7 +172,7 @@ class EditBusiness extends Component {
 
         if (mainImage) data.mainImage = mainImage.id
 
-        fetch(`${process.env.FEASTEY_API_URL}/business/${id}`, {
+        fetch(`/api/business/${id}`, {
             method: "PUT",
             headers: {
                 "content-type": "application/json",
@@ -195,7 +195,7 @@ class EditBusiness extends Component {
                         }
                     )
 
-                    navigator.sendBeacon(`${process.env.FEASTEY_API_URL}/files/delete-multiple`, blob)
+                    navigator.sendBeacon(`/api/files/delete-multiple`, blob)
 
 
                     Router.push(`/business/${res.id}`)
@@ -219,7 +219,7 @@ class EditBusiness extends Component {
             paymentMethodId,
         }
 
-        fetch(`${process.env.FEASTEY_API_URL}/business/${id}`, {
+        fetch(`/api/business/${id}`, {
             method: "PUT",
             headers: {
                 "content-type": "application/json",
@@ -253,7 +253,7 @@ class EditBusiness extends Component {
             businessId: id
         }
 
-        fetch(`${process.env.FEASTEY_API_URL}/business/generate-qrs`, {
+        fetch(`/api/business/generate-qrs`, {
             method: "POST",
             headers: {
                 "content-type": "application/json",
@@ -696,7 +696,7 @@ class EditBusiness extends Component {
 
 }
 
-EditBusiness.getInitialProps = async (ctx) => {
+export const getServerSideProps = async (ctx) => {
     const cookie = parseCookies(ctx.req)
     const res = await fetch(`${process.env.FEASTEY_API_URL}/business/${ctx.query.id}`,
         {
@@ -710,7 +710,7 @@ EditBusiness.getInitialProps = async (ctx) => {
 
     const section = ctx.query.section || "business"
 
-    return { business, categories, section }
+    return { props: {business, categories, section} }
 }
 
 const mapDispatchToProps = (dispatch) => {

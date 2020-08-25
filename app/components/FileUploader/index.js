@@ -33,7 +33,7 @@ const FileUploader = ((props) => {
         formData.append('file', file)
         formData.append('name', file.name)
 
-        fetch(`${process.env.FEASTEY_API_URL}/files`, {
+        fetch(`/api/files`, {
             method: "POST",
             headers: {
                 "authorization": `Bearer ${token}`
@@ -86,7 +86,7 @@ const FileUploader = ((props) => {
     function updateFile(e) {
         e.preventDefault()
 
-        fetch(`${process.env.FEASTEY_API_URL}/files/${id}`, {
+        fetch(`/api/files/${id}`, {
             method: "PUT",
             headers: {
                 "authorization": `Bearer ${token}`,

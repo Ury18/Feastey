@@ -19,7 +19,7 @@ const ResetPasswordRequest = (props) => {
 
     const onSubmitForm = (e) => {
         e.preventDefault()
-        fetch(`${process.env.FEASTEY_API_URL}/users/change-pass-request`, {
+        fetch(`/api/users/change-pass-request`, {
             method: "POST",
             headers: {
                 "content-type": "application/json"
@@ -55,10 +55,6 @@ const ResetPasswordRequest = (props) => {
 
         </Layout>
     )
-}
-
-ResetPasswordRequest.getInitialProps = async (ctx) => {
-    return {}
 }
 
 const mapDispatchToProps = (dispatch) => {

@@ -14,9 +14,9 @@ const VerifyUser = (props) => {
         if (props.verifiedUser) {
             console.log(props.verifiedUser)
             Cookie.set("authToken", props.verifiedUser.token)
-            updateUserData({ ...props.verifiedUser})
+            updateUserData({ ...props.verifiedUser })
         }
-    },[])
+    }, [])
 
     return (
         <Layout contentClasses="centered">
@@ -51,7 +51,7 @@ const VerifyUser = (props) => {
     )
 }
 
-VerifyUser.getInitialProps = async (ctx) => {
+export const getServerSideProps = async (ctx) => {
 
     const auth = ctx.query.auth || ""
     let res = await fetch(`${process.env.FEASTEY_API_URL}/users/verify`, {
@@ -61,9 +61,9 @@ VerifyUser.getInitialProps = async (ctx) => {
     })
     res = await res.json()
     if (res.error) {
-        return { verified: false }
+        return { props: { verified: false } }
     } else {
-        return { verifiedUser: res ,verified: true }
+        return { props: { verifiedUser: res, verified: true } }
     }
 }
 

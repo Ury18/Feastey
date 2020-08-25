@@ -50,10 +50,6 @@ const CustomCatalogues = (props) => {
     )
 }
 
-CustomCatalogues.getInitialProps = async (ctx) => {
-    return {}
-}
-
 export default CustomCatalogues
 
 

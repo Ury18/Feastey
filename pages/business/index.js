@@ -12,6 +12,7 @@ const AllBusiness = (props) => {
     const [businesses, setBusinesses] = useState(businessList)
     const [location, setLocation] = useState()
     const [category, setCategory] = useState(props.queryCategory)
+    const [categories, setCategories] = useState([])
     const [distance, setDistance] = useState(props.queryDistance)
     const [address, setAddress] = useState("")
     const [tempAddress, setTempAddress] = useState("")
@@ -21,15 +22,22 @@ const AllBusiness = (props) => {
     const [showFilters, setShowFilters] = useState(false)
 
     useEffect(() => {
+        // getCategories()
         getBusinessesByDistance(null, true)
     }, [])
+
+    const getCategories = async () => {
+        let categories = await fetch(`/api/categories`)
+        categories = await categories.json()
+        setCategories(categories)
+    }
 
     const loadMore = async (e) => {
         e.preventDefault()
         let newPage = parseFloat(page) + 1
         newPage = page + 1
 
-        let res = await fetch(`${process.env.FEASTEY_API_URL}/business/geobusiness`, {
+        let res = await fetch(`/api/business/geobusiness`, {
             method: "POST",
             headers: {
                 "content-type": "application/json"
@@ -83,7 +91,7 @@ const AllBusiness = (props) => {
 
             setLocation(newLocation)
 
-            let res = await fetch(`${process.env.FEASTEY_API_URL}/business/geobusiness`, {
+            let res = await fetch(`/api/business/geobusiness`, {
                 method: "POST",
                 headers: {
                     "content-type": "application/json"
@@ -136,8 +144,6 @@ const AllBusiness = (props) => {
     }
 
     const renderCategoriesOptions = () => {
-        const { categories } = props
-
         return categories.map((item) => {
             let selected = false
             if (item.id == category) {
@@ -225,13 +231,13 @@ const AllBusiness = (props) => {
     )
 }
 
-AllBusiness.getInitialProps = async (ctx) => {
+export const getServerSideProps = async (ctx) => {
     const queryPage = parseFloat(ctx.query.page) || 1
     const queryDistance = parseFloat(ctx.query.distance) || 5
     const queryCategory = ctx.query.category || ""
     let categories = await fetch(`${process.env.FEASTEY_API_URL}/categories`)
     categories = await categories.json()
-    return { queryPage, queryDistance, queryCategory, categories }
+    return { props: {queryPage, queryDistance, queryCategory, categories }}
 }
 
 export default AllBusiness

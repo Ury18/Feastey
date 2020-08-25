@@ -27,13 +27,13 @@ const Business = (props) => {
     )
 }
 
-Business.getInitialProps = async (ctx) => {
+export const getServerSideProps = async (ctx) => {
     const res = await fetch(`${process.env.FEASTEY_API_URL}/business/${ctx.query.id}`)
     let business = await res.json()
     business.images = business.images.reverse()
     if(business.stripe) delete business.stripe
 
-    return { business }
+    return { props: {business} }
 }
 
 export default Business
