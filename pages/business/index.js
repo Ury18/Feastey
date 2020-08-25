@@ -26,8 +26,8 @@ const AllBusiness = (props) => {
 
     const loadMore = async (e) => {
         e.preventDefault()
-        // let newPage = parseFloat(page) + 1
-        let newPage = page + 1
+        let newPage = parseFloat(page) + 1
+        newPage = page + 1
 
         let res = await fetch(`${process.env.FEASTEY_API_URL}/business/geobusiness`, {
             method: "POST",
