@@ -32,7 +32,7 @@ const LogIn = (props) => {
                 if (res.error) {
                     setErrors(res.error)
                 } else {
-                    Cookie.set("authToken", res.token)
+                    Cookie.set("authToken", res.token, {expires: 1})
                     console.log(res)
                     updateUserData({ ...res })
                     router.push('/')

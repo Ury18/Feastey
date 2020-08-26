@@ -2,7 +2,6 @@ import Layout from '../app/components/Layout'
 import { useState, useEffect } from 'react'
 import { connect } from 'react-redux'
 import { updateUserData } from '../app/redux/user/action'
-import { useRouter } from 'next/router'
 import Cookie from "js-cookie"
 import Head from 'next/head'
 
@@ -13,7 +12,7 @@ const VerifyUser = (props) => {
     useEffect(() => {
         if (props.verifiedUser) {
             console.log(props.verifiedUser)
-            Cookie.set("authToken", props.verifiedUser.token)
+            Cookie.set("authToken", props.verifiedUser.token, { expires: 1 })
             updateUserData({ ...props.verifiedUser })
         }
     }, [])
