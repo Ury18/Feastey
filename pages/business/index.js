@@ -5,6 +5,8 @@ import Router from 'next/router'
 import Head from 'next/head'
 import '../../stylesheets/searchForm.scss'
 import Cookie from "js-cookie"
+import { connect } from 'react-redux'
+import { updateUserData } from '../../app/redux/user/action'
 
 const AllBusiness = (props) => {
     const { businessList } = props
@@ -27,7 +29,7 @@ const AllBusiness = (props) => {
         let isPolicyAccepted = Cookie.get("policyAccepted")
         let isLocationAccepted = Cookie.get("locationAccepted")
 
-        if (isPolicyAccepted || isLocationAccepted) {
+        if (props.user.token || isPolicyAccepted || isLocationAccepted) {
             setPolicyAccepted(true)
             getBusinessesByDistance(null, true)
         }
@@ -263,5 +265,7 @@ export const getServerSideProps = async (ctx) => {
     return { props: { queryPage, queryDistance, queryCategory, categories } }
 }
 
-export default AllBusiness
-
+const mapDispatchToProps = (dispatch) => {
+    return { updateUserData: (data) => { dispatch(updateUserData({ ...data })) } }
+}
+export default connect((state => state), mapDispatchToProps)(AllBusiness)
