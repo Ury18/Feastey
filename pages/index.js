@@ -38,7 +38,7 @@ const Index = (props) => {
                             <p>Totalmente <strong>GRATIS</strong></p>
                         </div>
                         <div>
-                            <img src="/img/home/google-noborder.png" />
+                            <img src="/img/home/SEO1st.png" />
                             <p>Consigue un <strong>buen posicionamiento en Google</strong> gracias a nuestro <strong>SEO</strong></p>
                         </div>
                         <div>
