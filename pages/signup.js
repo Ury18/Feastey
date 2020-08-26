@@ -17,6 +17,7 @@ const Signup = (props) => {
     const [passwordConfirmation, setPasswordConfirmation] = useState("")
     const [errors, setErrors] = useState("")
     const [role, setRole] = useState("businessOwner")
+    const [policyAccepted, setPolicyAccepted] = useState(false)
 
     const registerUser = (e, data) => {
 
@@ -82,6 +83,22 @@ const Signup = (props) => {
                 <div style={{ display: "flex", flexDirection: "column" }}>
                     <label>Confirmación de la Contraseña</label>
                     <input onChange={(e) => setPasswordConfirmation(e.target.value)} type="password" name="passwordConfirmation" required />
+                </div>
+
+                <div className="policies">
+                    <input onChange={(e) => setPolicyAccepted(e.target.checked)} type="checkbox" name="policyAccepted" required={true} />
+                    <p>He leido y acepto la
+                        <Link href="/privacy-policy">
+                            <a>
+                                <strong> Política de Privacidad </strong>
+                            </a>
+                        </Link>
+                        y los <Link href="/terms-and-conditions">
+                            <a>
+                                <strong > Términos y Condiciones</strong>
+                            </a>
+                        </Link>
+                    </p>
                 </div>
 
                 {errors && <p className="errors">{errors}</p>}

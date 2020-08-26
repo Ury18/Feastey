@@ -2,7 +2,10 @@
     background-color: white;
     padding: 2em;
     border-radius: 1em;
-
+    margin-bottom: 2em;
+    .errors {
+        margin-bottom: 1em;
+    }
 
     input {
         margin-bottom: 1em;
@@ -13,7 +16,27 @@
         color: #383838;
         margin-bottom: 1em;
     }
+    .policies {
+        display: flex;
+        flex-direction: row;
+        justify-content: flex-start;
+        align-items: center;
+        margin-bottom: 1em;
+        min-width: 17em;
+        input {
+            margin-right: 1em;
+            min-width: auto;
+            width: 5em ;
+        }
 
+       strong {
+            color: #ec9200;
+            transition: color .2s ease;
+            &:hover {
+                color: black;
+            }
+        }
+    }
     .alt-message {
         margin-top: 1em;
         text-align: center;
