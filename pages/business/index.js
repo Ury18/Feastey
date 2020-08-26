@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react'
 import Router from 'next/router'
 import Head from 'next/head'
 import '../../stylesheets/searchForm.scss'
+import Cookie from "js-cookie"
 
 const AllBusiness = (props) => {
     const { businessList } = props
@@ -20,16 +21,23 @@ const AllBusiness = (props) => {
     const [errors, setErrors] = useState("")
     const [nextPage, setNextpage] = useState("")
     const [showFilters, setShowFilters] = useState(false)
+    const [policyAccepted, setPolicyAccepted] = useState(false)
 
     useEffect(() => {
-        // getCategories()
-        getBusinessesByDistance(null, true)
+        let isPolicyAccepted = Cookie.get("policyAccepted")
+        let isLocationAccepted = Cookie.get("locationAccepted")
+
+        if (isPolicyAccepted || isLocationAccepted) {
+            setPolicyAccepted(true)
+            getBusinessesByDistance(null, true)
+        }
     }, [])
 
-    const getCategories = async () => {
-        let categories = await fetch(`/api/categories`)
-        categories = await categories.json()
-        setCategories(categories)
+    const acceptLocationPermissions = (e)=> {
+        e.preventDefault()
+        Cookie.set("locationAccepted", true, { expires: 99999 })
+        setPolicyAccepted(true)
+        getBusinessesByDistance(null, true)
     }
 
     const loadMore = async (e) => {
@@ -165,6 +173,21 @@ const AllBusiness = (props) => {
                 <meta name="og:description" property="og:description" content="Descubre tu zona y conoce todos los negocios locales que te rodean! - Feastey" />
                 <meta property="og:site_name" content={`${process.env.HOST}`} />
             </Head>
+
+            {!policyAccepted && <div className="location-agree">
+                <div>
+                    <p>
+                        Feastey necesita utilizar tu ubicación para encontrar los negocios que tienes a tu alrededor.
+                        No compartimos esa información con nadie, ni tampoco la almacenamos, solo la ultilizamos para
+                        mejorar tu experiéncia.
+                        Por favor, otorga permisos a Feastey para acceder a la ubicación de tu navegador.
+                    </p>
+                    <form onSubmit={e => acceptLocationPermissions(e)}>
+                        <button type="submit" className="button" >Aceptar</button>
+                    </form>
+                </div>
+            </div>}
+
             <form className="searchForm">
                 <div>
                     <label>Categoría</label>
@@ -237,7 +260,7 @@ export const getServerSideProps = async (ctx) => {
     const queryCategory = ctx.query.category || ""
     let categories = await fetch(`${process.env.FEASTEY_API_URL}/categories`)
     categories = await categories.json()
-    return { props: {queryPage, queryDistance, queryCategory, categories }}
+    return { props: { queryPage, queryDistance, queryCategory, categories } }
 }
 
 export default AllBusiness
