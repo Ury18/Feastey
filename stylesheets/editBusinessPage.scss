@@ -81,7 +81,7 @@ form {
     padding-bottom: 2em;
 
     @media (max-width: 1000px) {
-        padding: 0;
+        padding: 1em;
     }
 
 }
@@ -224,6 +224,10 @@ form {
         right: -1.5em;
         cursor: pointer;
     }
+}
+
+.pro-card {
+    font-size: 1.3em;
 }
 
 label {

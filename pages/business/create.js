@@ -416,7 +416,7 @@ class CreateBusiness extends Component {
                     <div style={{ display: "flex", flexDirection: "column" }}>
                     </div>
                     <div style={{ display: "flex", flexDirection: "column" }}>
-                        <p style={{ marginBottom: "1em", marginTop: "2em" }}>
+                        <p className="pro-card" style={{ marginBottom: "1em", marginTop: "2em" }}>
                             Necesitas un catálogo profesional?
                             <Link href="/custom-catalogues">
                                 <a style={{ color: "#ec9200 !important", fontWeight: "bold" }}> Contacta con nosotros</a>
