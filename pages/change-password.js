@@ -3,7 +3,6 @@ import { useState, useEffect } from 'react'
 import { connect } from 'react-redux'
 import { updateUserData } from '../app/redux/user/action'
 import { useRouter } from 'next/router'
-import Cookie from "js-cookie"
 
 const ResetPassword = (props) => {
     const router = useRouter()
