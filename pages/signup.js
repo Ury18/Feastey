@@ -38,6 +38,7 @@ const Signup = (props) => {
                     if (res.error) {
                         setErrors(res.error)
                     } else {
+                        Cookie.set("policyAccepted", true, { expires: 99999 })
                         router.push('/please-verify-user')
                     }
                 })
