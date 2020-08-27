@@ -138,9 +138,11 @@
 
             >p {
                 display: flex;
-                justify-content: space-between;
                 padding-right: 1em;
                 margin: .5em 0;
+                i {
+                    margin: 0 .5em;
+                }
             }
         }
     }
