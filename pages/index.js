@@ -55,7 +55,7 @@ const Index = (props) => {
             <section className="dark qr-section">
                 <div>
                     <div>
-                        <h2>Teconlogía QR</h2>
+                        <h2>Tecnología QR</h2>
                         <p>
                             ¡Te facilitamos los <strong>códigos QR</strong> de tu negocio!<br />
                             <br />
