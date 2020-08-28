@@ -4,16 +4,20 @@ import { connect } from 'react-redux'
 import { updateUserData } from '../app/redux/user/action'
 import Cookie from "js-cookie"
 import Head from 'next/head'
+import { useRouter } from 'next/router'
 
 const VerifyUser = (props) => {
+    const router = useRouter()
 
     const [verified, setVerified] = useState(props.verified)
 
     useEffect(() => {
         if (props.verifiedUser) {
             console.log(props.verifiedUser)
-            Cookie.set("authToken", props.verifiedUser.token, { expires: 1 })
-            updateUserData({ ...props.verifiedUser })
+
+            setTimeout(() => {
+                router.push('/login')
+            }, 3000)
         }
     }, [])
 

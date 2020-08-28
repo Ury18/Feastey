@@ -5,6 +5,7 @@ import { updateUserData } from '../app/redux/user/action'
 import { useRouter } from 'next/router'
 import Head from 'next/head'
 import Link from 'next/link'
+import Cookie from "js-cookie"
 import '../stylesheets/signupForm.scss'
 
 const Signup = (props) => {
