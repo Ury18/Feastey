@@ -525,7 +525,7 @@ class EditBusiness extends Component {
                     <div className="sections">
                         <a href="#" className={`section ${section == "business" ? "selected" : ""}`} style={{ cursor: "pointer" }} name="business" onClick={e => setSection(e)}>Negocio</a>
                         <a href="#" className={`section ${section == "payment" ? "selected" : ""}`} style={{ cursor: "pointer" }} name="payment" onClick={e => setSection(e)}>Información de pago y suscripción</a>
-                        <a href="#" className={`section ${section == "qrs" ? "selected" : ""}`} style={{ cursor: "pointer" }} name="qrs" onClick={e => setSection(e)}>Codigos QR</a>
+                        <a href="#" className={`section ${section == "qrs" ? "selected" : ""}`} style={{ cursor: "pointer" }} name="qrs" onClick={e => setSection(e)}>Códigos QR</a>
                     </div>
 
                     {busy && <div className="busy" />}
@@ -606,7 +606,7 @@ class EditBusiness extends Component {
                             </div>
                             <div style={{ display: "flex", flexDirection: "column" }}>
                             <p className="pro-card" style={{ marginBottom: "1em", marginTop: "2em" }}>
-                                    Necesitas un catálogo profesional?
+                                    ¿Necesitas un catálogo profesional?
                                     <Link href="/custom-catalogues">
                                         <a style={{ color: "#ec9200 !important", fontWeight: "bold" }}> Contacta con nosotros</a>
                                     </Link>
@@ -671,7 +671,7 @@ class EditBusiness extends Component {
                     }
                     {section == "qrs" &&
                         <form onSubmit={e => generateQrs(e)}>
-                            <p style={{ marginTop: "2em", marginBottom: "2em" }}>Selecciona el idioma que desees y haz click en generar para obtener los codigos QR de tu negocio.</p>
+                            <p style={{ marginTop: "2em", marginBottom: "2em" }}>Selecciona el idioma que desees y haz click en generar para obtener los códigos QR de tu negocio.</p>
                             <div className="qr-generator-section">
                                 <div>
                                     <label>Idioma</label>
