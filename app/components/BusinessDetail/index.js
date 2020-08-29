@@ -128,56 +128,66 @@ const Detail = ((props) => {
 
     return (
         <div className="BusinessDetail_MainContainer">
-            <div className="col1">
-                {(business.owner == user.id)
-                    &&
+            {(business.owner == user.id)
+                &&
+                <div className="owner-options">
                     <Link href={`/business/${business.id}/edit`}>
-                        <a className="edit-button">Editar Pagina</a>
+                        <a className="button">Editar Pagina</a>
                     </Link>
-                }
-                <div className="title-container mobile">
-                    <h2 className="title">{business.name}</h2>
-                    <a className="location-icon" href="#map"><i className="fas fa-map-marker-alt" aria-hidden="true" /></a>
+                    <Link href={`/business/${business.id}/edit?section=payment`}>
+                        <a className="button">Información de pago</a>
+                    </Link>
+                    <Link href={`/business/${business.id}/edit?section=qrs`}>
+                        <a className="button">Códigos QR</a>
+                    </Link>
                 </div>
-                <p className="address mobile">{business.address}</p>
-                <div className="coverImage">
-                    <img src={profileImage.url} alt={profileImage.name} />
+            }
+            <div className="cols">
+                <div className="col1">
+                    <div className="title-container mobile">
+                        <h2 className="title">{business.name}</h2>
+                        <a className="location-icon" href="#map"><i className="fas fa-map-marker-alt" aria-hidden="true" /></a>
+                    </div>
+                    <p className="address mobile">{business.address}</p>
+                    <div className="coverImage">
+                        <img src={profileImage.url} alt={profileImage.name} />
+                    </div>
+                    {business.info && <div className="contactInfo_Container">
+                        {business.info.email && <p><i className="fas fa-envelope"></i><a href={`mailto:${business.info.email}`}>{business.info.email}</a></p>}
+                        {business.info.phone && <p><i className="fas fa-phone-alt" aria-hidden="true" /><a href={`tel:${business.info.phone}`}>{business.info.phone}</a></p>}
+                        {business.info.whatsapp && <p><i className="fab fa-whatsapp" aria-hidden="true" /><a href={`tel:${business.info.whatsapp}`}>{business.info.whatsapp}</a></p>}
+                        {business.info.twitter && <p><i className="fab fa-twitter"></i><a target="_blank" href={`https://www.twitter.com/${business.info.twitter}`}>{business.info.twitter}</a></p>}
+                        {business.info.instagram && <p><i className="fab fa-instagram-square"></i><a target="_blank" href={`https://www.instagram.com/${business.info.instagram}`}>{business.info.instagram}</a></p>}
+                        {business.info.facebook && <p><i className="fab fa-facebook"></i><a target="_blank" href={`https://www.facebook.com/${business.info.facebook}`}>{business.info.facebook}</a></p>}
+                    </div>}
                 </div>
-                {business.info && <div className="contactInfo_Container">
-                    {business.info.email && <p><i className="fas fa-envelope"></i><a href={`mailto:${business.info.email}`}>{business.info.email}</a></p>}
-                    {business.info.phone && <p><i className="fas fa-phone-alt" aria-hidden="true" /><a href={`tel:${business.info.phone}`}>{business.info.phone}</a></p>}
-                    {business.info.whatsapp && <p><i className="fab fa-whatsapp" aria-hidden="true" /><a href={`tel:${business.info.whatsapp}`}>{business.info.whatsapp}</a></p>}
-                    {business.info.twitter && <p><i className="fab fa-twitter"></i><a target="_blank" href={`https://www.twitter.com/${business.info.twitter}`}>{business.info.twitter}</a></p>}
-                    {business.info.instagram && <p><i className="fab fa-instagram-square"></i><a target="_blank" href={`https://www.instagram.com/${business.info.instagram}`}>{business.info.instagram}</a></p>}
-                    {business.info.facebook && <p><i className="fab fa-facebook"></i><a target="_blank" href={`https://www.facebook.com/${business.info.facebook}`}>{business.info.facebook}</a></p>}
-                </div>}
-            </div>
-            <div className="col2">
-                <div className="titleAndFavSection_Container">
-                    <h2 className="title">{business.name}</h2>
-                    <a className="location-icon" href="#map"><i className="fas fa-map-marker-alt" aria-hidden="true" /></a>
-                    <div className="titleIcons">
-                        {/* <p>200</p>
+                <div className="col2">
+                    <div className="titleAndFavSection_Container">
+                        <h2 className="title">{business.name}</h2>
+                        <a className="location-icon" href="#map"><i className="fas fa-map-marker-alt" aria-hidden="true" /></a>
+                        <div className="titleIcons">
+                            {/* <p>200</p>
                         <img className="BusinessDetailLikeIcon" src={'/img/feastey_likeIcon.png'} /> */}
 
-                        <img onClick={(e) => onToggleFav()} className="BusinessDetailFavIcon" src={isFaved ? favedImage : unfavedImage} alt="favorite button" />
+                            <img onClick={(e) => onToggleFav()} className="BusinessDetailFavIcon" src={isFaved ? favedImage : unfavedImage} alt="favorite button" />
+                        </div>
                     </div>
-                </div>
-                <p className="address">{business.address}</p>
+                    <p className="address">{business.address}</p>
 
-                <div className="description" dangerouslySetInnerHTML={{ __html: business.description }} />
+                    <div className="description" dangerouslySetInnerHTML={{ __html: business.description }} />
 
-                <ul className="section_Container">
-                    {renderAttachmentsList()}
-                </ul>
-                <div className="gallery_Container">
-                    {galleryImages.length > 0 && <ImageGallery items={galleryImages} showPlayButton={false} />}
-                </div>
-                <div id="map" className="map-container">
-                    <div className="directions">
-                        <a className="directions-link">Como llegar</a>
+                    <ul className="section_Container">
+                        {renderAttachmentsList()}
+                    </ul>
+                    <div className="gallery_Container">
+                        {galleryImages.length > 0 && <ImageGallery items={galleryImages} showPlayButton={false} />}
                     </div>
-                    <GoogleMap className="map" lng={business.location.coordinates[0]} lat={business.location.coordinates[1]} />
+                    <div id="map" className="map-container">
+                        <div className="directions">
+                            <a className="directions-link">Como llegar</a>
+                        </div>
+                        <GoogleMap className="map" lng={business.location.coordinates[0]} lat={business.location.coordinates[1]} />
+                    </div>
                 </div>
             </div>
         </div>

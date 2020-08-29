@@ -132,9 +132,23 @@ form {
     flex-wrap: wrap;
     text-align: center;
 
+    width: 100%;
+    background-color: white;
+    padding: 1em 0em;
+
+    @media (max-width: 570px) {
+        flex-direction: column;
+    }
+
+
     a {
         margin: .3em 1em;
         position: relative;
+
+        @media (max-width: 570px) {
+            margin: .5em 0;
+
+        }
 
         &:after {
             content: "";
@@ -203,6 +217,14 @@ form {
     display: flex;
     align-items: flex-end;
     margin-bottom: 2em;
+
+    @media (max-width: 495px) {
+        display: block;
+        button {
+            margin-top: .5em;
+        }
+    }
+
     >div {
         label {
             margin-bottom: .1em !important;
