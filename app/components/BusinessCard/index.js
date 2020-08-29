@@ -123,8 +123,8 @@ const BusinessCard = (props) => {
                 <p className="address">{address}</p>
                 {summary && <p className="businessCard_infoContainer_Summary">{summary}</p>}
                 <div className="cardFooter">
-                    {business.info && business.info.phone && <p className="phone"><i className="fas fa-phone-alt" aria-hidden="true" /><a href={`tel:+${business.info.phone}`}>{business.info.phone}</a></p>}
-                    {business.info && business.info.whatsapp && <p className="phone"><i className="fab fa-whatsapp" aria-hidden="true" /><a href={`tel:+${business.info.whatsapp}`}>{business.info.whatsapp}</a></p>}
+                    {business.info && business.info.phone && <p className="phone"><i className="fas fa-phone-alt" aria-hidden="true" /><a href={`tel:${business.info.phone}`}>{business.info.phone}</a></p>}
+                    {business.info && business.info.whatsapp && <p className="phone"><i className="fab fa-whatsapp" aria-hidden="true" /><a href={`tel:${business.info.whatsapp}`}>{business.info.whatsapp}</a></p>}
                     <p className="categories"><span>{category.name}</span></p>
                     {/* <div className="likesContainer">
                         <p>200</p>
