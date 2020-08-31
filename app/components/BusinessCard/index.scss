@@ -34,9 +34,9 @@
         }
 
         .businessCard_img {
-            background-color: black;
             height: 17em;
             width: 17em;
+            object-fit: contain;
 
             @media (max-width: 745px) {
                 width: 100%;
