@@ -161,11 +161,13 @@ logic = {
 
         let userId = "";
 
-        if (tokenUserRole == "admin") {
-            userId = user
-        } else {
-            userId = tokenUserId
-        }
+        // if (tokenUserRole == "admin") {
+        //     userId = user
+        // } else {
+        //     userId = tokenUserId
+        // }
+
+        userId = tokenUserId
 
         if (newPassword !== newPasswordConfirmation) {
             throw Error("Las contraseñas no coinciden")
@@ -223,11 +225,13 @@ logic = {
 
         let userId = "";
 
-        if (tokenUserRole == "admin") {
-            userId = user
-        } else {
-            userId = tokenUserId
-        }
+        // if (tokenUserRole == "admin") {
+        //     userId = user.id || tokenUserId
+        // } else {
+        //     userId = tokenUserId
+        // }
+
+        userId = tokenUserId
 
         return User.findById(userId).populate("myBusinesses")
             .then(async (user) => {
@@ -236,10 +240,13 @@ logic = {
                         .then(async (match) => {
                             if (match) {
                                 user.email = email
+                                let usedMail = await User.find({ email })
+                                console.log(usedMail)
+                                if (usedMail.length > 0) throw Error("Email en uso")
                                 await user.myBusinesses.forEach(async (business) => {
-                                        await stripeHelper.changeSubscriberEmail(business.stripe.customerId, email)
-                                        return business
-                                    })
+                                    await stripeHelper.changeSubscriberEmail(business.stripe.customerId, email)
+                                    return business
+                                })
                                 return user.save()
                                     .then(user => {
                                         return User.findById(user._id).select('-__v').lean()
@@ -254,9 +261,9 @@ logic = {
                                 throw Error("Contraseña incorrecta")
                             }
                         })
-                } else if( tokenUserRole =="admin") {
+                } else if (tokenUserRole == "admin") {
                     user.email = email
-                    await user.myBusinesses.forEach(async (business)  => {
+                    await user.myBusinesses.forEach(async (business) => {
                         let res = await stripeHelper.changeSubscriberEmail(business.stripe.customerId, email)
                         console.log(res)
                         return res
