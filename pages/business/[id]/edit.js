@@ -54,6 +54,7 @@ class EditBusiness extends Component {
         twitter: "",
         phone: "",
         whatsapp: "",
+        website:"",
         email: "",
         busy: false,
         section: "",
@@ -116,7 +117,7 @@ class EditBusiness extends Component {
         const { id, name, description, location,
             images, attachments, deletedFiles, finalAddress,
             category, summary, mainImage,
-            twitter, instagram, email, phone, whatsapp } = this.state
+            twitter, instagram, email, phone, whatsapp,website } = this.state
         const { user } = this.props
         const { token } = user
 
@@ -166,7 +167,8 @@ class EditBusiness extends Component {
                 phone,
                 twitter,
                 instagram,
-                whatsapp
+                whatsapp,
+                website
             }
         }
 
@@ -498,7 +500,7 @@ class EditBusiness extends Component {
         const {
             name, location, address, errors, finalAddress,
             category, summary, descriptionEditorState, subscriptionPlan,
-            last4, mainImage, twitter, instagram, email, phone, whatsapp, busy, section, qr_codes
+            last4, mainImage, twitter, instagram, email, phone, whatsapp,website, busy, section, qr_codes
         } = this.state
 
         const {
@@ -567,6 +569,10 @@ class EditBusiness extends Component {
                             <div className="info-field">
                                 <label>Instagram</label>
                                 <input onChange={(e) => setInputValue(e.target.name, e.target.value)} name="instagram" defaultValue={instagram} type="text" />
+                            </div>
+                            <div className="info-field">
+                                <label>Página Web</label>
+                                <input onChange={(e) => setInputValue(e.target.name, e.target.value)} name="website" defaultValue={website} type="url" />
                             </div>
                             <div className="info-field">
                                 <label>Resumen</label>

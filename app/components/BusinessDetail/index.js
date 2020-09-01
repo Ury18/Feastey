@@ -159,6 +159,7 @@ const Detail = ((props) => {
                         {business.info.twitter && <p><i className="fab fa-twitter"></i><a target="_blank" href={`https://www.twitter.com/${business.info.twitter}`}>{business.info.twitter}</a></p>}
                         {business.info.instagram && <p><i className="fab fa-instagram-square"></i><a target="_blank" href={`https://www.instagram.com/${business.info.instagram}`}>{business.info.instagram}</a></p>}
                         {business.info.facebook && <p><i className="fab fa-facebook"></i><a target="_blank" href={`https://www.facebook.com/${business.info.facebook}`}>{business.info.facebook}</a></p>}
+                        {business.info.website && <p><i className="fas fa-globe"></i><a target="_blank" href={business.info.website}>{business.info.website}</a></p>}
                     </div>}
                 </div>
                 <div className="col2">

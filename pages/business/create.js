@@ -43,6 +43,7 @@ class CreateBusiness extends Component {
         whatsapp: "",
         twitter: "",
         instagram: "",
+        website: "",
         subscriptionPlan: "free",
         busy: false
     }
@@ -86,7 +87,7 @@ class CreateBusiness extends Component {
 
         const { name, description, location, images, attachments,
             deletedFiles, finalAddress, category, summary,
-            paymentMethodId, mainImage, email, phone, whatsapp, twitter, instagram, subscriptionPlan } = this.state
+            paymentMethodId, mainImage, email, phone, whatsapp, twitter, instagram, website, subscriptionPlan } = this.state
 
         const { id, token } = this.props.user
         let imageList = []
@@ -135,7 +136,8 @@ class CreateBusiness extends Component {
                 phone,
                 twitter,
                 instagram,
-                whatsapp
+                whatsapp,
+                website
             }
         }
 
@@ -378,6 +380,10 @@ class CreateBusiness extends Component {
                         <input onChange={(e) => setInputValue(e.target.name, e.target.value)} name="instagram" type="text" />
                     </div>
                     <div className="info-field">
+                        <label>Página Web</label>
+                        <input onChange={(e) => setInputValue(e.target.name, e.target.value)} name="website" type="url" />
+                    </div>
+                    <div className="info-field">
                         <label>Resumen</label>
                         <textarea onChange={(e) => setInputValue(e.target.name, e.target.value)} name="summary" type="text" required />
                     </div>
@@ -422,9 +428,9 @@ class CreateBusiness extends Component {
                                 <a style={{ color: "#ec9200 !important", fontWeight: "bold" }}> Contacta con nosotros</a>
                             </Link>
                         </p>
-                        <h2 style={{ marginBottom: "1em", marginTop:"2em" }}>Secciones de archivos</h2>
+                        <h2 style={{ marginBottom: "1em", marginTop: "2em" }}>Secciones de archivos</h2>
                         <p style={{ marginBottom: "1.5em", textAlign: "center" }}>
-                            Los archivos deben ser imagenes o PDF.<br/> Si no sabes cómo guardar en PDF
+                            Los archivos deben ser imagenes o PDF.<br /> Si no sabes cómo guardar en PDF
                             <Link href="/help#pdf">
                                 <a><strong className="orange"> haz click aqui</strong></a>
                             </Link>
@@ -478,7 +484,7 @@ class CreateBusiness extends Component {
 export const getServerSideProps = async (ctx) => {
     let categories = await fetch(`${process.env.FEASTEY_API_URL}/categories`)
     categories = await categories.json()
-    return { props: {categories} }
+    return { props: { categories } }
 
 }
 
