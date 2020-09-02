@@ -185,3 +185,23 @@ form  {
         }
     }
 }
+
+i {
+    color: #FFB135 !important;
+
+    &.fa-whatsapp {
+        color: #56C863 !important;
+    }
+
+    &.fa-twitter {
+        color: #00A4ED !important;
+    }
+
+    &.fa-instagram {
+        color:  #E70052 !important;
+    }
+
+    &.fa-whatsapp {
+        color: green !important;
+    }
+}
