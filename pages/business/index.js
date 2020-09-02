@@ -31,6 +31,7 @@ const AllBusiness = (props) => {
 
         if (props.user.token || isPolicyAccepted || isLocationAccepted) {
             setPolicyAccepted(true)
+            setCategories(props.categories)
             getBusinessesByDistance(null, true)
         }
     }, [])
