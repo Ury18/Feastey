@@ -200,7 +200,20 @@ logic = {
             if (business.qr_codes[i].language == lang) throw Error("You already have these qrs")
         }
 
-        if (business.qr_codes.length == 0) {
+
+
+        let file1 = await this.generateBusinessQrById(business._id, business.owner, "sticker-qr-template", "sticker", lang, 1200, { x: 180, y: 460 })
+        let file2 = await this.generateBusinessQrById(business._id, business.owner, "sticker-qr-template-white", "sticker-white", lang, 1200, { x: 180, y: 460 })
+        let file3 = await this.generateBusinessQrById(business._id, business.owner, "table2-qr-template", "normal2", lang)
+
+        let newQrs = {
+            language: lang,
+            files: [file1.id, file2.id, file3.id]
+        }
+
+        business.qr_codes.push(newQrs)
+
+        if (business.qr_codes.length == 1) {
 
             let file = await this.generateBusinessQrById(business._id, business.owner, "table-qr-template", "normal", null)
             let newQrs = {
@@ -211,17 +224,6 @@ logic = {
             business.qr_codes.push(newQrs)
 
         }
-
-        let file1 = await this.generateBusinessQrById(business._id, business.owner, "table2-qr-template", "normal2", lang)
-        let file2 = await this.generateBusinessQrById(business._id, business.owner, "sticker-qr-template", "sticker", lang, 1200, { x: 180, y: 460 })
-        let file3 = await this.generateBusinessQrById(business._id, business.owner, "sticker-qr-template-white", "sticker-white", lang, 1200, { x: 180, y: 460 })
-
-        let newQrs = {
-            language: lang,
-            files: [file1.id, file2.id, file3.id]
-        }
-
-        business.qr_codes.push(newQrs)
 
         business = await business.save()
         business = Business.findById(business._id).populate("qr_codes.files").select('-__v').lean()
