@@ -8,7 +8,14 @@ businessRouter.route('/')
         try {
             logic.getBusiness()
                 .then((businesses) => {
-                    res.json(businesses)
+                    let newBusinesses = []
+                    businesses.forEach(element => {
+                        newBusinesses.push({
+                            name: element.name,
+                            id: element.id
+                        })
+                    })
+                    res.json(newBusinesses)
                 })
                 .catch(({ message }) => {
                     res.status(400).json({ error: message })
