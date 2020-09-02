@@ -33,14 +33,14 @@
 
     .discover_icon{
         margin-right: .2em;
-        color: black;
+        color: black !important;
         font-size: 1.2em;
         transition: color .2s ease;
     }
 
     &:hover {
         .discover_icon {
-            color: #FFB135;
+            color: #FFB135 !important
         }
     }
 
