@@ -54,7 +54,7 @@ class EditBusiness extends Component {
         twitter: "",
         phone: "",
         whatsapp: "",
-        website:"",
+        website: "",
         email: "",
         busy: false,
         section: "",
@@ -117,7 +117,7 @@ class EditBusiness extends Component {
         const { id, name, description, location,
             images, attachments, deletedFiles, finalAddress,
             category, summary, mainImage,
-            twitter, instagram, email, phone, whatsapp,website } = this.state
+            twitter, instagram, email, phone, whatsapp, website } = this.state
         const { user } = this.props
         const { token } = user
 
@@ -479,8 +479,14 @@ class EditBusiness extends Component {
         const { qr_codes } = this.state
 
         return qr_codes.map(element => {
+            let title = element.language;
+
+            if (element.language == "es") title = "Español"
+            if (element.language == "multilingual") title = "Multiidioma"
+
+
             return <div className="qr-section-container">
-                <label>{element.language}</label>
+                <label>{title}</label>
                 <div>
                     {element.files.map(file => {
                         return <img src={file.url} />
@@ -500,7 +506,7 @@ class EditBusiness extends Component {
         const {
             name, location, address, errors, finalAddress,
             category, summary, descriptionEditorState, subscriptionPlan,
-            last4, mainImage, twitter, instagram, email, phone, whatsapp,website, busy, section, qr_codes
+            last4, mainImage, twitter, instagram, email, phone, whatsapp, website, busy, section, qr_codes
         } = this.state
 
         const {
@@ -611,14 +617,14 @@ class EditBusiness extends Component {
                                 {renderImagesUploader()}
                             </div>
                             <div style={{ display: "flex", flexDirection: "column" }}>
-                            <p className="pro-card" style={{ marginBottom: "1em", marginTop: "2em" }}>
+                                <p className="pro-card" style={{ marginBottom: "1em", marginTop: "2em" }}>
                                     ¿Necesitas un catálogo profesional?
                                     <Link href="/custom-catalogues">
                                         <a style={{ color: "#ec9200 !important", fontWeight: "bold" }}> Contacta con nosotros</a>
                                     </Link>
                                 </p>
                                 <h2 style={{ marginBottom: "1em", marginTop: "2em" }}>Secciones de archivos</h2>
-                                <p style={{ marginBottom: "1.5em", textAlign:"center"}}>
+                                <p style={{ marginBottom: "1.5em", textAlign: "center" }}>
                                     Los archivos deben ser imagenes o PDF.<br /> Si no sabes cómo guardar en PDF
                                     <Link href="/help#pdf">
                                         <a><strong className="orange"> haz click aqui</strong></a>
@@ -690,6 +696,17 @@ class EditBusiness extends Component {
                             </div>
                             {errors && <p className="errors">{errors}</p>}
                             {qr_codes.length > 0 && <h2>Tus Códigos QR</h2>}
+                            {qr_codes.length > 0 && <div style={{margin:"2em 0"}}>
+                                <h3 style={{ marginBottom:"0.5em", fontSize: "2em", textAlign: "center" }}><strong className="orange">¡NECESITAMOS TU AYUDA!</strong></h3>
+                                <p style={{textAlign:"center", fontSize:"1.2em"}}>
+                                    Te pedimos que nos ayudes a darnos a conocer.
+                                </p>
+                                <p style={{textAlign:"center", fontSize:"1.2em"}}>Coloca uno de los códigos QR en la entrada de tu negocio.</p>
+                                <p style={{textAlign:"center", fontSize:"1.2em"}}>
+                                    ¡Cuanta más gente use <strong className="orange">Feastey</strong>, más gente podrá descubrirte a ti y a los negocios de tu zona!
+                                </p>
+                            </div>
+                            }
                             {qr_codes.length > 0 && <p style={{ marginTop: "1em" }}><strong>Haz click derecho</strong> sobre el código QR y selecciona <strong>"Guardar imagen como"</strong> para descargar el código</p>}
                             {qr_codes.length > 0 && renderQrs()}
                         </form>
@@ -716,7 +733,7 @@ export const getServerSideProps = async (ctx) => {
 
     const section = ctx.query.section || "business"
 
-    return { props: {business, categories, section} }
+    return { props: { business, categories, section } }
 }
 
 const mapDispatchToProps = (dispatch) => {
