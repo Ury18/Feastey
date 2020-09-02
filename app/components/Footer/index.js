@@ -24,6 +24,11 @@ export default ((props) => {
                     </Link>
                     <a href="mailto:feastey@feastey.com">feastey@feastey.com</a>
                 </div>
+                <Link href='/all-businesses'>
+                    <a className="all-businesses">
+                        Todos los negocios
+                    </a>
+                </Link>
             </div>
         </footer>
     )
