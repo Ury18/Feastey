@@ -27,7 +27,7 @@ const Index = (props) => {
                         En Feastey creemos que la <strong>columna vertebral de la economía</strong> de un país está formada por <strong>autónomos y pequeñas empresas.</strong><br />
                         Sin embargo, son los más desfavorecidos a la hora de tener opciones sostenibles para promover su negocio en internet.<br />
                         <br />
-                        Feastey nace con el objetivo de dar una solucíon a este problema y de promover el comercio de proximidad,
+                        Feastey nace con el objetivo de dar una solución a este problema y de promover el comercio de proximidad,
                         ofreciendo a las pequeñas empresas la posibilidad de disponer de su propio espacio en la red,
                         donde mostrar sus productos y servicios de manera totalmente <strong>GRATUITA</strong>.
                     </p>
