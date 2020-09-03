@@ -216,9 +216,12 @@ class EditBusiness extends Component {
 
         this.setState({ errors: "", busy: true })
 
+        let newPaymentMethodId = paymentMethodId;
+        if (subscriptionPlan == "free") newPaymentMethodId = null
+
         let data = {
             subscriptionPlan,
-            paymentMethodId,
+            paymentMethodId: newPaymentMethodId,
         }
 
         fetch(`/api/business/${id}`, {
@@ -612,10 +615,6 @@ class EditBusiness extends Component {
                                 {mainImage && renderMainImageUploader()}
                                 {!mainImage && renderMainImageUploaderEmpty()}
                             </div>
-                            <div style={{ display: "flex", flexDirection: "column", marginBottom: "2.4em" }}>
-                                <label>Imagenes</label>
-                                {renderImagesUploader()}
-                            </div>
                             <div style={{ display: "flex", flexDirection: "column" }}>
                                 <p className="pro-card" style={{ marginBottom: "1em", marginTop: "2em" }}>
                                     ¿Necesitas un catálogo profesional?
@@ -631,6 +630,10 @@ class EditBusiness extends Component {
                                     </Link>
                                 </p>
                                 {renderAttachmentsSection()}
+                            </div>
+                            <div style={{ display: "flex", flexDirection: "column", marginBottom: "2.4em" }}>
+                                <label>Imagenes</label>
+                                {renderImagesUploader()}
                             </div>
 
                             {errors && <p className="errors">{errors}</p>}
@@ -672,10 +675,10 @@ class EditBusiness extends Component {
                             {renderPlanWarning()}
                             <div className="payment-info">
                                 {last4 && <p>Tarjeta en uso actualmente: **** **** **** {last4}</p>}
-                                <h2>Cambiar Tarjeta</h2>
-                                <Elements stripe={stripePromise}>
+                                {subscriptionPlan !== "free" && <h2>Cambiar Tarjeta</h2>}
+                                {subscriptionPlan !== "free" && <Elements stripe={stripePromise}>
                                     <PaymentInfoForm onSubmit={(paymentMethodId) => this.setState({ paymentMethodId })} />
-                                </Elements>
+                                </Elements>}
                                 {errors && <p className="errors">{errors}</p>}
                             </div>
                             <button type="submit">Guardar</button>
@@ -696,13 +699,13 @@ class EditBusiness extends Component {
                             </div>
                             {errors && <p className="errors">{errors}</p>}
                             {qr_codes.length > 0 && <h2>Tus Códigos QR</h2>}
-                            {qr_codes.length > 0 && <div style={{margin:"2em 0"}}>
-                                <h3 style={{ marginBottom:"0.5em", fontSize: "2em", textAlign: "center" }}><strong className="orange">¡NECESITAMOS TU AYUDA!</strong></h3>
-                                <p style={{textAlign:"center", fontSize:"1.2em"}}>
+                            {qr_codes.length > 0 && <div style={{ margin: "2em 0" }}>
+                                <h3 style={{ marginBottom: "0.5em", fontSize: "2em", textAlign: "center" }}><strong className="orange">¡NECESITAMOS TU AYUDA!</strong></h3>
+                                <p style={{ textAlign: "center", fontSize: "1.2em" }}>
                                     Te pedimos que nos ayudes a darnos a conocer.
                                 </p>
-                                <p style={{textAlign:"center", fontSize:"1.2em"}}>Coloca uno de los códigos QR en la entrada de tu negocio.</p>
-                                <p style={{textAlign:"center", fontSize:"1.2em"}}>
+                                <p style={{ textAlign: "center", fontSize: "1.2em" }}>Coloca uno de los códigos QR en la entrada de tu negocio.</p>
+                                <p style={{ textAlign: "center", fontSize: "1.2em" }}>
                                     ¡Cuanta más gente use <strong className="orange">Feastey</strong>, más gente podrá descubrirte a ti y a los negocios de tu zona!
                                 </p>
                             </div>

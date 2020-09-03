@@ -119,6 +119,9 @@ class CreateBusiness extends Component {
             coordinates: location
         }
 
+        let newPaymentMethodId = paymentMethodId;
+        if (subscriptionPlan == "free") newPaymentMethodId = null
+
         let data = {
             name,
             description,
@@ -129,7 +132,7 @@ class CreateBusiness extends Component {
             attachments: attachmentsClean,
             category,
             ownerEmail: this.props.user.email,
-            paymentMethodId,
+            paymentMethodId: newPaymentMethodId,
             subscriptionPlan,
             info: {
                 email,
@@ -415,12 +418,6 @@ class CreateBusiness extends Component {
                         {mainImage && renderMainImageUploader()}
                         {!mainImage && renderMainImageUploaderEmpty()}
                     </div>
-                    <div style={{ display: "flex", flexDirection: "column", marginBottom: "2.4em" }}>
-                        <label>Imagenes</label>
-                        {renderImagesUploader()}
-                    </div>
-                    <div style={{ display: "flex", flexDirection: "column" }}>
-                    </div>
                     <div style={{ display: "flex", flexDirection: "column" }}>
                         <p className="pro-card" style={{ marginBottom: "1em", marginTop: "2em" }}>
                             Necesitas un catálogo profesional?
@@ -436,6 +433,10 @@ class CreateBusiness extends Component {
                             </Link>
                         </p>
                         {renderAttachmentsSection()}
+                    </div>
+                    <div style={{ display: "flex", flexDirection: "column", marginBottom: "2.4em" }}>
+                        <label>Imagenes</label>
+                        {renderImagesUploader()}
                     </div>
 
                     <h2 style={{ marginBottom: ".5em" }}>Escoge tu plan</h2>
@@ -467,9 +468,9 @@ class CreateBusiness extends Component {
                     </div>
 
 
-                    <Elements stripe={stripePromise}>
+                    {subscriptionPlan !=="free" && <Elements stripe={stripePromise}>
                         <PaymentInfoForm onSubmit={(paymentMethodId) => this.setState({ paymentMethodId })} />
-                    </Elements>
+                    </Elements>}
 
                     {errors && <p className="errors">{errors}</p>}
 
