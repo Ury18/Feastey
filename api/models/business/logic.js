@@ -465,6 +465,7 @@ logic = {
 
             if(business.planDowngrade) {
                 if(business.newSubscriptionPlan !== subscriptionPlan) {
+                    let stripePlan = await stripeHelper.changeSubscriptionPrice(business.stripe.subscriptionId, priceId)
                     business.planDowngrade = false
                     business.newSubscriptionPlan = subscriptionPlan
                     business.stripe.priceId = priceId
