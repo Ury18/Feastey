@@ -8,7 +8,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    justify-content: space-between;
+    justify-content: center;
     align-items: center;
     position: fixed;
     top: 0;
@@ -19,5 +19,23 @@
     .logo {
         max-width: 200px;
         max-width: 120px;
+    }
+
+    .logo-link {
+        margin: auto;
+        margin-left: 0;
+    }
+
+    .discover_button {
+        margin: auto;
+
+        i {
+            color: inherit !important;
+            margin-right: 5px;
+        }
+
+        &:hover {
+            color: #FFB135 !important;
+        }
     }
 }

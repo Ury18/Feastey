@@ -10,38 +10,40 @@
         padding: 5em 0 !important;
     }
 }
+.content {
 
-.discover_button{
-    border: 1px solid black;
-    font-size: 2em;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin: auto;
-    min-width: 10em !important;
-    max-width: 12em !important;
-    width: auto;
+    .discover_button{
+        border: 1px solid black;
+        font-size: 2em;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin: auto;
+        min-width: 10em !important;
+        max-width: 12em !important;
+        width: auto;
 
-    @media (max-width: 670px) {
-        max-width: 9em !important;
-    }
-
-    @media (max-width: 428px) {
-        font-size: 1.5em !important;
-        max-width: 80%;
-    }
-
-    .discover_icon{
-        margin-right: .2em;
-        color: black !important;
-        font-size: 1.2em;
-        transition: color .2s ease;
-    }
-
-    &:hover {
-        .discover_icon {
-            color: #FFB135 !important
+        @media (max-width: 670px) {
+            max-width: 9em !important;
         }
-    }
 
+        @media (max-width: 428px) {
+            font-size: 1.5em !important;
+            max-width: 80%;
+        }
+
+        .discover_icon{
+            margin-right: .2em;
+            color: black !important;
+            font-size: 1.2em;
+            transition: color .2s ease;
+        }
+
+        &:hover {
+            .discover_icon {
+                color: #FFB135 !important
+            }
+        }
+
+    }
 }
