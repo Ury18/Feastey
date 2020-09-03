@@ -394,9 +394,9 @@ logic = {
             let { paymentMethodId, subscriptionPlan } = data
             if (data.subscriptionPlan) delete data.subscriptionPlan
             if (data.paymentMethodId) delete data.paymentMethodId
+            let priceId = subscriptionPlan == "free" ? process.env.STRIPE_PRICE_FREE : subscriptionPlan == "plus" ? process.env.STRIPE_PRICE_PLUS : process.env.STRIPE_PRICE_PREMIUM
 
             if (paymentMethodId) {
-                let priceId = subscriptionPlan == "free" ? process.env.STRIPE_PRICE_FREE : subscriptionPlan == "plus" ? process.env.STRIPE_PRICE_PLUS : process.env.STRIPE_PRICE_PREMIUM
 
                 if (business.stripe.paymentMethodId !== paymentMethodId) {
                     let customer = await stripeHelper.changePaymentMethod(business.stripe.customerId, business.stripe.paymentMethodId, paymentMethodId)
@@ -445,6 +445,29 @@ logic = {
 
                         business.stripe.priceId = priceId
                     }
+                }
+            } else {
+                if (business.subscriptionPlan !== subscriptionPlan) {
+                    let stripePlan = await stripeHelper.changeSubscriptionPrice(business.stripe.subscriptionId, priceId)
+                    if (stripePlan.plan.id == priceId) {
+
+                        if (subscriptionPlan == "free") {
+                            business.planDowngrade = true
+                            business.newSubscriptionPlan = subscriptionPlan
+                        } else {
+                            throw Error("Introduce un metodo de pago")
+                        }
+
+                        business.stripe.priceId = priceId
+                    }
+                }
+            }
+
+            if(business.planDowngrade) {
+                if(business.newSubscriptionPlan !== subscriptionPlan) {
+                    business.planDowngrade = false
+                    business.newSubscriptionPlan = subscriptionPlan
+                    business.stripe.priceId = priceId
                 }
             }
 
