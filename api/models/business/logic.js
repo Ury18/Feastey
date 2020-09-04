@@ -447,7 +447,7 @@ logic = {
                     }
                 }
             } else {
-                if (business.subscriptionPlan !== subscriptionPlan) {
+                if (subscriptionPlan && business.subscriptionPlan !== subscriptionPlan) {
                     let stripePlan = await stripeHelper.changeSubscriptionPrice(business.stripe.subscriptionId, priceId)
                     if (stripePlan.plan.id == priceId) {
 
@@ -463,7 +463,7 @@ logic = {
                 }
             }
 
-            if(business.planDowngrade) {
+            if(business.planDowngrade && subscriptionPlan) {
                 if(business.newSubscriptionPlan !== subscriptionPlan) {
                     let stripePlan = await stripeHelper.changeSubscriptionPrice(business.stripe.subscriptionId, priceId)
                     business.planDowngrade = false
