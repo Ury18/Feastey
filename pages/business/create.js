@@ -388,7 +388,7 @@ class CreateBusiness extends Component {
                     </div>
                     <div className="info-field">
                         <label>Resumen</label>
-                        <textarea onChange={(e) => setInputValue(e.target.name, e.target.value)} name="summary" type="text" required />
+                        <textarea onChange={(e) => setInputValue(e.target.name, e.target.value)} name="summary" type="text"/>
                     </div>
                     <div className="info-field">
                         <label>Categoría</label>
