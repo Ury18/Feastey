@@ -19,7 +19,8 @@ const Layout = ((props) => {
             <Head>
                 <link rel="shortcut icon" href="/favicon/favicon.ico" />
                 {process.env.ENV == "production" && <script data-ad-client="ca-pub-3090102762545817" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>}
-                {process.env.ENV == "production" && <script type="text/javascript"> var infolinks_pid = 3285589; var infolinks_wsid = 0; </script> && <script type="text/javascript" src="http://resources.infolinks.com/js/infolinks_main.js"></script>}
+                {process.env.ENV == "production" && <script type="text/javascript"> var infolinks_pid = 3285589; var infolinks_wsid = 0; </script>}
+                {process.env.ENV == "production" && <script type="text/javascript" src="http://resources.infolinks.com/js/infolinks_main.js"></script>}
                 {/* {process.env.ENV == "production" && <script dangerouslySetInnerHTML={{
                     __html:
                         `(function(w,d,s,l,i){w[l] = w[l] || []{'gtm.start':
