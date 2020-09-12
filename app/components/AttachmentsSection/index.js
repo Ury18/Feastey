@@ -25,11 +25,7 @@ class AttachmentsSection extends Component {
         newFiles.push(value)
         this.setState({ files: newFiles },
             () => {
-                if (uploadCallback && newFiles.length == 1) {
-                    uploadCallback(this.state)
-                } else {
-                    updateCallback(index, this.state)
-                }
+                updateCallback(index, this.state)
             })
     }
 
@@ -61,6 +57,13 @@ class AttachmentsSection extends Component {
 
     }
 
+    onDeleteSection = (e) => {
+        e.preventDefault()
+        const { deleteSectionCallback, index } = this.props
+        const { files } = this.state
+        if (deleteSectionCallback) deleteSectionCallback(index, files)
+    }
+
     setInputValue = (name, value) => {
         const { updateCallback, index } = this.props
         if (name) {
@@ -89,10 +92,11 @@ class AttachmentsSection extends Component {
 
     render() {
         const { name } = this.state
-        const { setInputValue, renderFilesUploader } = this
+        const { setInputValue, renderFilesUploader, onDeleteSection } = this
         return (
             <div style={{ display: "flex", flexDirection: "column", marginBottom: "4em" }}>
-                <label className="newFileLabel" style={{fontSize:"1.4em"}}>Nombre de la sección</label>
+                <p className="delete-section" onClick={e => onDeleteSection(e)}>Eliminar Sección</p>
+                <label className="newFileLabel" style={{ fontSize: "1.4em" }}>Nombre de la sección</label>
                 <input style={{ marginBottom: ".5em" }} type="text" value={name} name="name" onChange={e => setInputValue(e.target.name, e.target.value)} />
                 {renderFilesUploader()}
             </div >

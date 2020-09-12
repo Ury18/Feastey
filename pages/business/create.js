@@ -304,17 +304,36 @@ class CreateBusiness extends Component {
         return newImages
     }
 
+    addNewAttachmentSection = (e) => {
+        e.preventDefault()
+        const { attachments } = this.state
+        attachments.push({
+            name: "",
+            files: []
+        })
+        this.setState({attachments})
+    }
+
+    onDeleteSection = (index, files) => {
+        let { deletedFiles, attachments } = this.state
+        attachments.splice(index, 1)
+        files.forEach(file => {
+            deletedFiles.push(file.id)
+        })
+        this.setState({deletedFiles, attachments})
+    }
+
     renderAttachmentsSection = () => {
         const { attachments } = this.state
-        const { onUpdateAttachment, onUploadAttachment, onDeleteAttachment } = this
+        const { onUpdateAttachment, onUploadAttachment, addNewTempFile, onDeleteAttachment, addNewAttachmentSection, onDeleteSection } = this
 
         let newAttachments = []
 
         newAttachments = attachments.map((item, index) => {
-            return <AttachmentsSection key={index} index={index} updateCallback={onUpdateAttachment} uploadCallback={onUploadAttachment} data={item} deleteCallback={onDeleteAttachment} />
+            return <AttachmentsSection key={index} index={index} updateCallback={onUpdateAttachment} uploadCallback={onUploadAttachment} tempFileCallback={addNewTempFile} deleteCallback={onDeleteAttachment} deleteSectionCallback={onDeleteSection} data={item} />
         })
 
-        newAttachments.push(<AttachmentsSection updateCallback={onUpdateAttachment} uploadCallback={onUploadAttachment} deleteCallback={onDeleteAttachment} />)
+        newAttachments.push(<button style={{ alignSelf: "center", marginBottom: "2em" }} onClick={e => addNewAttachmentSection(e)}>Añadir sección de archivos</button>)
         return newAttachments
     }
 
@@ -413,11 +432,6 @@ class CreateBusiness extends Component {
                             <Editor toolbar={toolbar} onEditorStateChange={onDescriptionChange} />
                         </div>
                     </div>
-                    <div style={{ display: "flex", flexDirection: "column", marginBottom: "2.4em" }}>
-                        <label>Imagen de perfil</label>
-                        {mainImage && renderMainImageUploader()}
-                        {!mainImage && renderMainImageUploaderEmpty()}
-                    </div>
                     <div style={{ display: "flex", flexDirection: "column" }}>
                         <p className="pro-card" style={{ marginBottom: "1em", marginTop: "2em" }}>
                             Necesitas un catálogo profesional?
@@ -433,6 +447,11 @@ class CreateBusiness extends Component {
                             </Link>
                         </p>
                         {renderAttachmentsSection()}
+                    </div>
+                    <div style={{ display: "flex", flexDirection: "column", marginBottom: "2.4em" }}>
+                        <label>Imagen de perfil</label>
+                        {mainImage && renderMainImageUploader()}
+                        {!mainImage && renderMainImageUploaderEmpty()}
                     </div>
                     <div style={{ display: "flex", flexDirection: "column", marginBottom: "2.4em" }}>
                         <label>Imagenes</label>

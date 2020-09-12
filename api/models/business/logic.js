@@ -260,14 +260,6 @@ logic = {
             if (!data.paymentMethodId) throw Error("Por favor, introduce un método de pago válido.")
         }
 
-        //Delete empty attachments sections
-        let newAttachments = []
-
-        for (var i = 0; i < data.attachments.length; i++) {
-            if (data.attachments[i].files.length !== 0) newAttachments.push(data.attachments[i])
-        }
-
-        data.attachments = newAttachments
 
         //Check that it's not surpassing maximum files and images depending on plan
         if (data.subscriptionPlan == "free" || data.subscriptionPlan == "plus") {
@@ -470,18 +462,6 @@ logic = {
                     business.newSubscriptionPlan = subscriptionPlan
                     business.stripe.priceId = priceId
                 }
-            }
-
-            if (data.attachments) {
-
-                //Delete empty attachments sections
-                let newAttachments = []
-
-                for (var i = 0; i < data.attachments.length; i++) {
-                    if (data.attachments[i].files.length !== 0) newAttachments.push(data.attachments[i])
-                }
-
-                data.attachments = newAttachments
             }
 
             //Check that it's not surpassing maximum files and images depending on plan

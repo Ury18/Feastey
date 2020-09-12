@@ -96,10 +96,14 @@ const Detail = ((props) => {
     const renderAttachmentsList = () => {
         const { attachments } = business
         return attachments.map(attachment => {
-            return <li>
+            if(attachment.files.length > 0) {
+
+                return <li>
                 <h2>{attachment.name}</h2>
                 <ul>{renderAttachmentFiles(attachment.files)}</ul>
             </li>
+            }
+            return
         })
     }
 
