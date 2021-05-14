@@ -136,7 +136,7 @@ const AllBusiness = (props) => {
             window.navigator.geolocation.getCurrentPosition(success, error, options)
         } else {
             if (address !== tempAddress) {
-                fetch(`https://cors-anywhere.herokuapp.com/${process.env.GOOGLE_MAPS_GEOCODE_URL}address=${tempAddress}&key=${process.env.GOOGLE_MAPS_KEY}`, {
+                fetch(`${process.env.GOOGLE_MAPS_GEOCODE_URL}address=${tempAddress}&key=${process.env.GOOGLE_MAPS_KEY}`, {
                     headers: {
                         "content-type": "application/json"
                     }

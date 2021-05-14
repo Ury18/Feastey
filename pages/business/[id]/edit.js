@@ -418,7 +418,7 @@ class EditBusiness extends Component {
 
         e.preventDefault()
 
-        fetch(`https://cors-anywhere.herokuapp.com/${process.env.GOOGLE_MAPS_GEOCODE_URL}address=${address}&key=${process.env.GOOGLE_MAPS_KEY}`, {
+        fetch(`${process.env.GOOGLE_MAPS_GEOCODE_URL}address=${address}&key=${process.env.GOOGLE_MAPS_KEY}`, {
             headers: {
                 "content-type": "application/json"
             }
