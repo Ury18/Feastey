@@ -148,6 +148,9 @@ const AllBusiness = (props) => {
                         setAddress(tempAddress)
                         success(geolocation)
                     })
+                    .catch(e => {
+                        console.log(e);
+                    })
             } else {
                 success(location)
             }
