@@ -419,9 +419,6 @@ class EditBusiness extends Component {
         e.preventDefault()
 
         fetch(`${process.env.GOOGLE_MAPS_GEOCODE_URL}address=${address}&key=${process.env.GOOGLE_MAPS_KEY}`, {
-            headers: {
-                "content-type": "application/json"
-            }
         })
             .then(response => response.json())
             .then(response => {

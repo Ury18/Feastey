@@ -137,9 +137,6 @@ const AllBusiness = (props) => {
         } else {
             if (address !== tempAddress) {
                 fetch(`${process.env.GOOGLE_MAPS_GEOCODE_URL}address=${tempAddress}&key=${process.env.GOOGLE_MAPS_KEY}`, {
-                    headers: {
-                        "content-type": "application/json"
-                    }
                 })
                     .then(response => response.json())
                     .then(response => {
